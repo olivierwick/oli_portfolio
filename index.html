@@ -977,27 +977,27 @@ const INDEX_ITEMS = ['Alle', '3D', 'Motion', 'Typo', 'Coding', 'Video'];
 
 const GRID_IMAGES = [
   // 0 – work-all-along
-  { type: 'video', src: '/all_along_the_white_line.mp4', title: 'All along the white line', thumb: '/all_along_the_white_line.png', workId: 'work-all-along' },
+  { type: 'video', src: './all_along_the_white_line.mp4', title: 'All along the white line', thumb: './all_along_the_white_line.png', workId: 'work-all-along' },
   { type: 'empty' },
   // 2 – work-plakate
-  { type: 'video', src: '/netz.mp4',                     title: 'Netz',                     thumb: '/netz_thumb.png',              workId: 'work-plakate' },
+  { type: 'video', src: './netz.mp4',                     title: 'Netz',                     thumb: './netz_thumb.png',              workId: 'work-plakate' },
   { type: 'empty' },
   // 4 – work-pointcloud
-  { type: 'video', src: '/kopf.mp4',                     title: 'pointcloud.xyz',           thumb: '/pointcloud_thumb.png',        workId: 'work-pointcloud' },
+  { type: 'video', src: './kopf.mp4',                     title: 'pointcloud.xyz',           thumb: './pointcloud_thumb.png',        workId: 'work-pointcloud' },
   { type: 'empty' },
   // 6 – work-emerald-barrel
-  { type: 'video', src: '/TheEmeraldBarrel.mp4',         title: 'The emerald barrell',      thumb: '/the_emerald_barrell.png',     workId: 'work-emerald-barrel' },
-  { type: '3d',    fbxPath: '/billiardkreide.fbx',       title: '',                         manualTextures: [],                    workId: 'work-emerald-barrel', scrollToId: 'wrap-billiardkreide', gridZoom: 1.2, extraLights: [{ type: 'ambient', color: 0xffffff, intensity: 3 }] },
-  { type: '3d',    fbxPath: '/zigaretten.fbx',           title: '',                         keepPivot: true, rotation: [0, -2.35, 0], rotAxis: 'y', manualTextures: { 'Material.001': '/images.png', 'Material.002': '/images.png', 'Material.003': '/images.png', 'Material.004': '/tabak.jpg', 'Material.005': '/cigarette_pixel.png' }, workId: 'work-emerald-barrel', scrollToId: 'wrap-zigaretten', gridZoom: 2.0 },
+  { type: 'video', src: './TheEmeraldBarrel.mp4',         title: 'The emerald barrell',      thumb: './the_emerald_barrell.png',     workId: 'work-emerald-barrel' },
+  { type: '3d',    fbxPath: './billiardkreide.fbx',       title: '',                         manualTextures: [],                    workId: 'work-emerald-barrel', scrollToId: 'wrap-billiardkreide', gridZoom: 1.2, extraLights: [{ type: 'ambient', color: 0xffffff, intensity: 3 }] },
+  { type: '3d',    fbxPath: './zigaretten.fbx',           title: '',                         keepPivot: true, rotation: [0, -2.35, 0], rotAxis: 'y', manualTextures: { 'Material.001': './images.png', 'Material.002': './images.png', 'Material.003': './images.png', 'Material.004': './tabak.jpg', 'Material.005': './cigarette_pixel.png' }, workId: 'work-emerald-barrel', scrollToId: 'wrap-zigaretten', gridZoom: 2.0 },
   { type: 'empty' },
   // 10 – work-ueberall-bauen
-  { type: 'video', src: '/überall_bauen_mockup.mov',     title: '',                         thumb: '/überall_bauen_thumb.png',     workId: 'work-ueberall-bauen' },
-  { type: 'video', src: '/überall_bauen2.mp4',           title: 'Überall bauen',            thumb: '/überall_bauen_thumb2.png',    workId: 'work-ueberall-bauen', scrollToId: 'ueberall-video' },
+  { type: 'video', src: './überall_bauen_mockup.mov',     title: '',                         thumb: './überall_bauen_thumb.png',     workId: 'work-ueberall-bauen' },
+  { type: 'video', src: './überall_bauen2.mp4',           title: 'Überall bauen',            thumb: './überall_bauen_thumb2.png',    workId: 'work-ueberall-bauen', scrollToId: 'ueberall-video' },
   { type: 'empty' },
   // 13 – work-zwischen-asphalt
-  { type: 'video', src: '/zwischen_asphalt_und_beton.mp4', title: 'Zwischen Asphalt und Beton', thumb: '/zwischen_asphalt_und_beton_thumb.png', aspectRatio: '16/9', workId: 'work-zwischen-asphalt' },
-  { type: 'image', src: '/zaub_dok1.png',                title: '',                         workId: 'work-zwischen-asphalt', scrollToId: 'zaub-dok1' },
-  { type: 'image', src: '/zaub_dok3.png',                title: '',                         workId: 'work-zwischen-asphalt', scrollToId: 'zaub-dok3' },
+  { type: 'video', src: './zwischen_asphalt_und_beton.mp4', title: 'Zwischen Asphalt und Beton', thumb: './zwischen_asphalt_und_beton_thumb.png', aspectRatio: '16/9', workId: 'work-zwischen-asphalt' },
+  { type: 'image', src: './zaub_dok1.png',                title: '',                         workId: 'work-zwischen-asphalt', scrollToId: 'zaub-dok1' },
+  { type: 'image', src: './zaub_dok3.png',                title: '',                         workId: 'work-zwischen-asphalt', scrollToId: 'zaub-dok3' },
 ];
 
 const navPrimary    = document.getElementById('navPrimary');
@@ -1514,7 +1514,7 @@ document.addEventListener('click', (e) => {
   const isMuted = video.muted;
   video.muted = !isMuted;
   btn.dataset.muted = (!isMuted).toString();
-  btn.src = isMuted ? '/ton_an.png' : '/ton_aus.png';
+  btn.src = isMuted ? './ton_an.png' : './ton_aus.png';
 });
 
 function cleanHoverBars() {
@@ -1643,7 +1643,7 @@ function openVideoFullscreen(src, sourceVideo) {
   if (sourceVideo) sourceVideo.pause();
   fullscreenVideo.src = src;
   fullscreenVideo.muted = false;
-  fullscreenTonBtn.src = '/ton_an.png';
+  fullscreenTonBtn.src = './ton_an.png';
   const hasTon = TON_VIDEOS.some(name => src.includes(name));
   fullscreenTonBtn.style.display = hasTon ? '' : 'none';
   videoOverlay.classList.add('active');
@@ -1657,7 +1657,7 @@ function openVideoFullscreen(src, sourceVideo) {
     fullscreenVideo.currentTime = startTime;
     fullscreenVideo.play().catch(() => {
       fullscreenVideo.muted = true;
-      fullscreenTonBtn.src = '/ton_aus.png';
+      fullscreenTonBtn.src = './ton_aus.png';
       fullscreenVideo.play();
     });
   };
@@ -1717,7 +1717,7 @@ if (window.matchMedia('(hover: hover)').matches) {
 fullscreenTonBtn.addEventListener('click', (e) => {
   e.stopPropagation();
   fullscreenVideo.muted = !fullscreenVideo.muted;
-  fullscreenTonBtn.src = fullscreenVideo.muted ? '/ton_aus.png' : '/ton_an.png';
+  fullscreenTonBtn.src = fullscreenVideo.muted ? './ton_aus.png' : './ton_an.png';
 });
 videoClose.addEventListener('click', (e) => { e.stopPropagation(); closeVideoFullscreen(); });
 
@@ -2053,7 +2053,7 @@ document.addEventListener('touchstart', () => {
       tonBtn.addEventListener('click', (e) => {
         e.stopPropagation();
         video.muted = !video.muted;
-        tonBtn.src = video.muted ? '/ton_aus.png' : '/ton_an.png';
+        tonBtn.src = video.muted ? './ton_aus.png' : './ton_an.png';
       });
     }
   });
@@ -2086,7 +2086,7 @@ document.addEventListener('touchstart', () => {
   let lastSrc = null;
 
   function updateKopfSrc() {
-    const src = window.innerWidth > 1024 ? '/kopf2.mp4' : '/kopf.mp4';
+    const src = window.innerWidth > 1024 ? './kopf2.mp4' : './kopf.mp4';
     if (src === lastSrc) return;
     lastSrc = src;
     video.querySelectorAll('source').forEach(s => { s.src = src; });
@@ -2236,7 +2236,7 @@ document.addEventListener('touchstart', () => {
       window.addEventListener('resize', onResize);
 
       const loader = new FBXLoader();
-      loader.setResourcePath('/');
+      loader.setResourcePath('./');
       loader.load(fbxPath, (obj) => {
         if (keepPivot && !isGrid) {
           const box = new THREE.Box3().setFromObject(obj);
@@ -2333,7 +2333,7 @@ document.addEventListener('touchstart', () => {
     window._initFBXViewer = initFBXViewer;
 
     const canvasBk = document.getElementById('canvas-billiardkreide');
-    if (canvasBk) initFBXViewer(canvasBk, null, '/billiardkreide.fbx', {
+    if (canvasBk) initFBXViewer(canvasBk, null, './billiardkreide.fbx', {
       manualTextures: [],
       rotation: [0, -0.7, 0],
       viewerZoom: 1.2,
@@ -2345,15 +2345,15 @@ document.addEventListener('touchstart', () => {
     });
 
     const canvasZig = document.getElementById('canvas-zigaretten');
-    if (canvasZig) initFBXViewer(canvasZig, null, '/zigaretten.fbx', {
+    if (canvasZig) initFBXViewer(canvasZig, null, './zigaretten.fbx', {
       keepPivot: true,
       rotation: [0, -2.35, 0],
       manualTextures: {
-        'Material.001': '/images.png',
-        'Material.002': '/images.png',
-        'Material.003': '/images.png',
-        'Material.004': '/tabak.jpg',
-        'Material.005': '/cigarette_pixel.png',
+        'Material.001': './images.png',
+        'Material.002': './images.png',
+        'Material.003': './images.png',
+        'Material.004': './tabak.jpg',
+        'Material.005': './cigarette_pixel.png',
       },
       viewerZoom: 2.2,
       mobileViewerZoom: 2.0,
