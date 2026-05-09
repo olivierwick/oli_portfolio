@@ -2005,6 +2005,18 @@ document.addEventListener('touchstart', () => {
 
 (function () {
   if (window.matchMedia('(hover: hover)').matches) return;
+  let _activeWrapper = null;
+  function stopWrapper(w) {
+    if (!w) return;
+    const v = w.querySelector('video');
+    const th = w.querySelector('.video-thumb');
+    clearTimeout(w._playDelay);
+    w.classList.remove('playing');
+    w.classList.add('idle');
+    if (th) th.style.opacity = '1';
+    if (v) { v.pause(); v.currentTime = 0; }
+    if (_activeWrapper === w) _activeWrapper = null;
+  }
   document.querySelectorAll('.video-wrapper').forEach(wrapper => {
     const video = wrapper.querySelector('video');
     const thumb = wrapper.querySelector('.video-thumb');
@@ -2012,7 +2024,7 @@ document.addEventListener('touchstart', () => {
     video.muted = true; video.loop = true; video.load();
     const expandBtn = wrapper.querySelector('.expand-btn');
     const tonBtn    = wrapper.querySelector('.ton-btn');
-    let _playDelay = null;
+    wrapper._playDelay = null;
     let _idleTimer = null;
     const IDLE_MS = 5000;
 
@@ -2030,17 +2042,20 @@ document.addEventListener('touchstart', () => {
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
-          _playDelay = setTimeout(() => {
+          wrapper._playDelay = setTimeout(() => {
+            if (_activeWrapper && _activeWrapper !== wrapper) stopWrapper(_activeWrapper);
+            _activeWrapper = wrapper;
             if (thumb) thumb.style.opacity = '0';
             video.play().catch(() => {});
             wrapper.classList.add('playing');
             showControls();
           }, 1000);
         } else {
-          clearTimeout(_playDelay);
+          clearTimeout(wrapper._playDelay);
           hideControls();
           if (thumb) thumb.style.opacity = '1';
           video.pause(); video.currentTime = 0;
+          if (_activeWrapper === wrapper) _activeWrapper = null;
         }
       });
     }, { threshold: 0.4 });
