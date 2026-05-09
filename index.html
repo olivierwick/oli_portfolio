@@ -1084,7 +1084,7 @@ function renderBigItems() {
 }
 
 function positionNavSecondary() {
-  if (window.innerWidth <= 1024) return;
+  if (window.innerWidth <= 880) { navSecondary.style.top = ''; return; }
   const primaryRect = navPrimary.getBoundingClientRect();
   const footerRect  = footerLeft.getBoundingClientRect();
   const secH        = navSecondary.offsetHeight;
@@ -2037,6 +2037,7 @@ document.addEventListener('touchstart', () => {
     const v = w.querySelector('video');
     const th = w.querySelector('.video-thumb');
     clearTimeout(w._playDelay);
+    if (w._canplayHandler && v) { v.removeEventListener('canplay', w._canplayHandler); w._canplayHandler = null; }
     w.classList.remove('playing');
     w.classList.add('idle');
     if (th) th.style.opacity = '1';
@@ -2071,13 +2072,24 @@ document.addEventListener('touchstart', () => {
           wrapper._playDelay = setTimeout(() => {
             if (_activeWrapper && _activeWrapper !== wrapper) stopWrapper(_activeWrapper);
             _activeWrapper = wrapper;
-            if (thumb) thumb.style.opacity = '0';
             video.play().catch(() => {});
             wrapper.classList.add('playing');
             showControls();
+            if (thumb) {
+              if (video.readyState >= 3) {
+                thumb.style.opacity = '0';
+              } else {
+                wrapper._canplayHandler = () => {
+                  if (_activeWrapper === wrapper) thumb.style.opacity = '0';
+                  wrapper._canplayHandler = null;
+                };
+                video.addEventListener('canplay', wrapper._canplayHandler, { once: true });
+              }
+            }
           }, 1000);
         } else {
           clearTimeout(wrapper._playDelay);
+          if (wrapper._canplayHandler) { video.removeEventListener('canplay', wrapper._canplayHandler); wrapper._canplayHandler = null; }
           hideControls();
           if (thumb) thumb.style.opacity = '1';
           video.pause(); video.currentTime = 0;
