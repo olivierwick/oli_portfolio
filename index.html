@@ -828,7 +828,7 @@ body.mode-index .grid-item:hover .grid-item-inner .grid-thumb { opacity: 1; }
             <video loop muted playsinline style="width:100%; height:100%; object-fit:cover;">
               <source src="./all_along_the_white_line.mp4" type="video/mp4">
             </video>
-            <img class="video-thumb" src="./all_along_the_white_line_thumb.jpg" alt="">
+            <img class="video-thumb" src="./all_along_the_white_line.png" alt="">
             <img class="expand-btn" src="./pfeil.png" alt="Vergrössern"
                  data-type="video" data-src="./all_along_the_white_line.mp4">
             <img class="ton-btn" src="./ton_aus.png" data-muted="true" alt="Ton">
@@ -971,7 +971,7 @@ const INDEX_ITEMS = ['Alle', '3D', 'Motion', 'Typo', 'Coding', 'Video'];
 
 const GRID_IMAGES = [
   // 0 – work-all-along
-  { type: 'video', src: './all_along_the_white_line.mp4', title: 'All along the white line', thumb: './all_along_the_white_line_thumb.jpg', workId: 'work-all-along' },
+  { type: 'video', src: './all_along_the_white_line.mp4', title: 'All along the white line', thumb: './all_along_the_white_line.png', workId: 'work-all-along' },
   { type: 'empty' },
   // 2 – work-plakate
   { type: 'video', src: './netz.mp4',                     title: 'Netz',                     thumb: './netz_thumb.png',              workId: 'work-plakate' },
@@ -1441,7 +1441,7 @@ function startGridSequencer() {
   playNext();
 }
 
-function switchToBig(targetWorkId) {
+function switchToBig(targetWorkId, scrollToTarget) {
   stopGridSequencer();
   window._gridCleanups.forEach(fn => { try { fn(); } catch(e){} });
   window._gridCleanups = [];
@@ -1476,6 +1476,13 @@ function switchToBig(targetWorkId) {
         targetLink._activeBars = targetLink._navBars;
         targetLink._navBars = [];
         targetLink.classList.add('work-active');
+      }
+      if (scrollToTarget) {
+        const el = document.getElementById(activeWorkId);
+        if (el) {
+          const top = el.getBoundingClientRect().top + window.scrollY - SCROLL_OFFSET;
+          window.scrollTo({ top: Math.max(0, top), behavior: 'instant' });
+        }
       }
       _scrollingToWork = false;
     }, delay);
@@ -2017,7 +2024,9 @@ window.addEventListener('scroll', () => {
 }, { passive: true });
 
 history.scrollRestoration = 'manual';
-switchToBig();
+const _landingWorks = BIG_ITEMS.filter(it => it.workId && it.workId !== 'work-info-kontakt');
+const _landingWorkId = _landingWorks[Math.floor(Math.random() * _landingWorks.length)].workId;
+switchToBig(_landingWorkId, true);
 observeWorkBlocks();
 initProgressBars();
 
@@ -2037,7 +2046,7 @@ document.addEventListener('touchstart', () => {
     const v = w.querySelector('video');
     const th = w.querySelector('.video-thumb');
     clearTimeout(w._playDelay);
-    if (w._canplayHandler && v) { v.removeEventListener('playing', w._canplayHandler); w._canplayHandler = null; }
+    if (w._canplayHandler && v) { v.removeEventListener('canplay', w._canplayHandler); w._canplayHandler = null; }
     w.classList.remove('playing');
     w.classList.add('idle');
     if (th) th.style.opacity = '1';
@@ -2076,16 +2085,20 @@ document.addEventListener('touchstart', () => {
             wrapper.classList.add('playing');
             showControls();
             if (thumb) {
-              wrapper._canplayHandler = () => {
-                if (_activeWrapper === wrapper) thumb.style.opacity = '0';
-                wrapper._canplayHandler = null;
-              };
-              video.addEventListener('playing', wrapper._canplayHandler, { once: true });
+              if (video.readyState >= 3) {
+                thumb.style.opacity = '0';
+              } else {
+                wrapper._canplayHandler = () => {
+                  if (_activeWrapper === wrapper) thumb.style.opacity = '0';
+                  wrapper._canplayHandler = null;
+                };
+                video.addEventListener('canplay', wrapper._canplayHandler, { once: true });
+              }
             }
           }, 1000);
         } else {
           clearTimeout(wrapper._playDelay);
-          if (wrapper._canplayHandler) { video.removeEventListener('playing', wrapper._canplayHandler); wrapper._canplayHandler = null; }
+          if (wrapper._canplayHandler) { video.removeEventListener('canplay', wrapper._canplayHandler); wrapper._canplayHandler = null; }
           hideControls();
           if (thumb) thumb.style.opacity = '1';
           video.pause(); video.currentTime = 0;
