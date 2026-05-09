@@ -2037,10 +2037,13 @@ const _showPage = () => {
   if (el) el.scrollIntoView({ behavior: 'instant', block: 'start' });
   document.body.style.opacity = '';
 };
-document.fonts.ready.then(() => {
-  requestAnimationFrame(() => requestAnimationFrame(_showPage));
-});
-setTimeout(_showPage, 1000);
+document.fonts.load('1em NimbusRoman')
+  .then(() => {
+    void document.body.offsetHeight; // force reflow so NimbusRoman metrics are applied before measuring scroll
+    requestAnimationFrame(() => requestAnimationFrame(_showPage));
+  })
+  .catch(() => requestAnimationFrame(_showPage));
+setTimeout(_showPage, 1200);
 initProgressBars();
 
 // Touch-Cleanup: einmalig, entfernt alle spawned Bars beim nächsten Touch
