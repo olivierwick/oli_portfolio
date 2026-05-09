@@ -2028,8 +2028,19 @@ history.scrollRestoration = 'manual';
 const _landingWorks = BIG_ITEMS.filter(it => it.workId && it.workId !== 'work-info-kontakt');
 const _landingWorkId = _landingWorks[Math.floor(Math.random() * _landingWorks.length)].workId;
 switchToBig(_landingWorkId, true);
-requestAnimationFrame(() => { document.body.style.opacity = ''; });
 observeWorkBlocks();
+let _pageShown = false;
+const _showPage = () => {
+  if (_pageShown) return; _pageShown = true;
+  const el = document.getElementById(_landingWorkId);
+  if (el) {
+    const top = el.getBoundingClientRect().top + window.scrollY - SCROLL_OFFSET;
+    window.scrollTo({ top: Math.max(0, top), behavior: 'instant' });
+  }
+  document.body.style.opacity = '';
+};
+document.fonts.ready.then(_showPage);
+setTimeout(_showPage, 1000);
 initProgressBars();
 
 // Touch-Cleanup: einmalig, entfernt alle spawned Bars beim nächsten Touch
