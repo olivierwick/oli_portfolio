@@ -782,7 +782,7 @@ body.mode-index .grid-item:hover .grid-item-inner .grid-thumb { opacity: 1; }
 }
   </style>
 </head>
-<body>
+<body style="opacity:0">
 
   <!-- Image fullscreen -->
   <div class="fullscreen-overlay" id="imgOverlay">
@@ -1460,7 +1460,15 @@ function switchToBig(targetWorkId, scrollToTarget) {
   setActiveNavBtn('big');
   _scrollingToWork = true;
   clearTimeout(_scrollEndTimer);
-  window.scrollTo(0, 0);
+  if (scrollToTarget && targetWorkId) {
+    const el = document.getElementById(targetWorkId);
+    if (el) {
+      const top = el.getBoundingClientRect().top + window.scrollY - SCROLL_OFFSET;
+      window.scrollTo({ top: Math.max(0, top), behavior: 'instant' });
+    }
+  } else {
+    window.scrollTo(0, 0);
+  }
   renderBigItems();
   navPrimary.classList.add('has-active');
   applySkewListeners();
@@ -1476,13 +1484,6 @@ function switchToBig(targetWorkId, scrollToTarget) {
         targetLink._activeBars = targetLink._navBars;
         targetLink._navBars = [];
         targetLink.classList.add('work-active');
-      }
-      if (scrollToTarget) {
-        const el = document.getElementById(activeWorkId);
-        if (el) {
-          const top = el.getBoundingClientRect().top + window.scrollY - SCROLL_OFFSET;
-          window.scrollTo({ top: Math.max(0, top), behavior: 'instant' });
-        }
       }
       _scrollingToWork = false;
     }, delay);
@@ -2027,6 +2028,7 @@ history.scrollRestoration = 'manual';
 const _landingWorks = BIG_ITEMS.filter(it => it.workId && it.workId !== 'work-info-kontakt');
 const _landingWorkId = _landingWorks[Math.floor(Math.random() * _landingWorks.length)].workId;
 switchToBig(_landingWorkId, true);
+requestAnimationFrame(() => { document.body.style.opacity = ''; });
 observeWorkBlocks();
 initProgressBars();
 
