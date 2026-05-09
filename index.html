@@ -1692,13 +1692,18 @@ function closeVideoFullscreen() {
   cancelAnimationFrame(fsInvertRaf);
   fsInvertRaf = null;
   fullscreenVideo.style.filter = '';
-  if (currentSourceVideo) currentSourceVideo.currentTime = fullscreenVideo.currentTime;
+  const resumeTime = fullscreenVideo.currentTime;
+  const srcVideo   = currentSourceVideo;
   videoOverlay.classList.remove('active');
   document.body.style.overflow = '';
   fullscreenVideo.pause();
   fullscreenVideo.src = '';
   fsProgressFill.style.width = '0%';
   currentSourceVideo = null;
+  if (srcVideo) {
+    srcVideo.currentTime = resumeTime;
+    srcVideo.play().catch(() => {});
+  }
 }
 
 let fsRafId;
@@ -1898,9 +1903,9 @@ window.addEventListener('resize', () => {
   const widthChanged = window.innerWidth !== _prevResizeWidth;
   _prevResizeWidth = window.innerWidth;
   if (!isAbove1024 && _wasAbove1024 && currentMode === 'index') {
-    // Save current active filter before resetting
     const activeLink = navIndex.querySelector('a.index-active');
     _savedIndexFilter = activeLink ? activeLink.textContent : null;
+    renderGridView();
     filterGrid('Alle');
     navIndex.querySelectorAll('a').forEach(a => {
       (a._activeBars || []).forEach(b => b.remove()); a._activeBars = [];
@@ -1913,19 +1918,21 @@ window.addEventListener('resize', () => {
       first._navBars = [];
       first.classList.add('index-active');
     }
-  } else if (isAbove1024 && !_wasAbove1024 && currentMode === 'index' && _savedIndexFilter && _savedIndexFilter !== 'Alle') {
-    // Restore saved filter
-    filterGrid(_savedIndexFilter);
-    navIndex.querySelectorAll('a').forEach(a => {
-      (a._activeBars || []).forEach(b => b.remove()); a._activeBars = [];
-      a.classList.remove('index-active');
-    });
-    const target = [...navIndex.querySelectorAll('a')].find(a => a.textContent === _savedIndexFilter);
-    if (target) {
-      spawnBars(target, { cls: 'nav-active-bar' });
-      target._activeBars = target._navBars;
-      target._navBars = [];
-      target.classList.add('index-active');
+  } else if (isAbove1024 && !_wasAbove1024 && currentMode === 'index') {
+    renderGridView();
+    if (_savedIndexFilter && _savedIndexFilter !== 'Alle') {
+      filterGrid(_savedIndexFilter);
+      navIndex.querySelectorAll('a').forEach(a => {
+        (a._activeBars || []).forEach(b => b.remove()); a._activeBars = [];
+        a.classList.remove('index-active');
+      });
+      const target = [...navIndex.querySelectorAll('a')].find(a => a.textContent === _savedIndexFilter);
+      if (target) {
+        spawnBars(target, { cls: 'nav-active-bar' });
+        target._activeBars = target._navBars;
+        target._navBars = [];
+        target.classList.add('index-active');
+      }
     }
     _savedIndexFilter = null;
   }
