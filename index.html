@@ -193,6 +193,7 @@ body:has(.footer-links a:hover) .nav-active-bar { opacity: 0; }
   flex-direction: column;
   gap: 0;
   align-items: flex-end;
+  scroll-margin-top: 5px;
 }
 
 .work-description {
@@ -2033,13 +2034,12 @@ let _pageShown = false;
 const _showPage = () => {
   if (_pageShown) return; _pageShown = true;
   const el = document.getElementById(_landingWorkId);
-  if (el) {
-    const top = el.getBoundingClientRect().top + window.scrollY - SCROLL_OFFSET;
-    window.scrollTo({ top: Math.max(0, top), behavior: 'instant' });
-  }
+  if (el) el.scrollIntoView({ behavior: 'instant', block: 'start' });
   document.body.style.opacity = '';
 };
-document.fonts.ready.then(_showPage);
+document.fonts.ready.then(() => {
+  requestAnimationFrame(() => requestAnimationFrame(_showPage));
+});
 setTimeout(_showPage, 1000);
 initProgressBars();
 
