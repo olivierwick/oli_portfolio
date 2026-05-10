@@ -855,7 +855,7 @@ body.mode-index .grid-item:hover .grid-item-inner .grid-thumb { opacity: 1; }
 
         <!-- pointcloud.xyz -->
         <div class="work-block" id="work-pointcloud">
-          <div class="video-wrapper" style="width:75%; margin-top:0; aspect-ratio:16/9; overflow:hidden;">
+          <div class="video-wrapper" style="width:75%; margin-top:0; aspect-ratio:1/1; overflow:hidden;">
             <video id="kopf-video" loop muted playsinline style="width:100%;height:100%;object-fit:cover;">
               <source src="./kopf2.mp4" type="video/mp4">
             </video>
@@ -2051,29 +2051,24 @@ const _showPage = () => {
     _removeCover();
   });
 };
-const _windowLoad = new Promise(r => {
-  if (document.readyState === 'complete') r();
-  else window.addEventListener('load', r, { once: true });
-});
-Promise.all([
-  document.fonts.load('1em NimbusRoman').catch(() => {}),
-  _windowLoad
-]).then(() => {
-  void document.body.offsetHeight;
-  let _prevTop = null, _stableCount = 0;
-  const _waitStable = () => {
-    if (_pageShown) return;
+document.fonts.load('1em NimbusRoman')
+  .then(() => {
     void document.body.offsetHeight;
-    const el = document.getElementById(_landingWorkId);
-    const curTop = el ? Math.round(el.getBoundingClientRect().top) : null;
-    if (curTop !== null && curTop === _prevTop) {
-      if (++_stableCount >= 2) { _showPage(); return; }
-    } else { _stableCount = 0; _prevTop = curTop; }
+    let _prevTop = null, _stableCount = 0;
+    const _waitStable = () => {
+      if (_pageShown) return;
+      void document.body.offsetHeight;
+      const el = document.getElementById(_landingWorkId);
+      const curTop = el ? Math.round(el.getBoundingClientRect().top) : null;
+      if (curTop !== null && curTop === _prevTop) {
+        if (++_stableCount >= 2) { _showPage(); return; }
+      } else { _stableCount = 0; _prevTop = curTop; }
+      requestAnimationFrame(_waitStable);
+    };
     requestAnimationFrame(_waitStable);
-  };
-  requestAnimationFrame(_waitStable);
-}).catch(() => _showPage());
-setTimeout(_showPage, 3000);
+  })
+  .catch(() => _showPage());
+setTimeout(_showPage, 1200);
 initProgressBars();
 
 // Touch-Cleanup: einmalig, entfernt alle spawned Bars beim nächsten Touch
