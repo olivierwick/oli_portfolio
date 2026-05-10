@@ -2042,21 +2042,30 @@ const _showPage = () => {
   void document.body.offsetHeight;
   const top = el.getBoundingClientRect().top + window.scrollY - SCROLL_OFFSET;
   window.scrollTo({ top: Math.max(0, top), behavior: 'instant' });
-  let _frames = 3;
-  const _finish = () => {
+  requestAnimationFrame(() => {
     void document.body.offsetHeight;
     const drift = el.getBoundingClientRect().top - SCROLL_OFFSET;
     if (Math.abs(drift) > 1) window.scrollTo({ top: window.scrollY + drift, behavior: 'instant' });
-    if (--_frames > 0) { requestAnimationFrame(_finish); } else { document.body.style.opacity = ''; }
-  };
-  requestAnimationFrame(_finish);
+    document.body.style.opacity = '';
+  });
 };
 document.fonts.load('1em NimbusRoman')
   .then(() => {
     void document.body.offsetHeight;
-    requestAnimationFrame(() => requestAnimationFrame(_showPage));
+    let _prevTop = null, _stableCount = 0;
+    const _waitStable = () => {
+      if (_pageShown) return;
+      void document.body.offsetHeight;
+      const el = document.getElementById(_landingWorkId);
+      const curTop = el ? Math.round(el.getBoundingClientRect().top) : null;
+      if (curTop !== null && curTop === _prevTop) {
+        if (++_stableCount >= 2) { _showPage(); return; }
+      } else { _stableCount = 0; _prevTop = curTop; }
+      requestAnimationFrame(_waitStable);
+    };
+    requestAnimationFrame(_waitStable);
   })
-  .catch(() => requestAnimationFrame(_showPage));
+  .catch(() => _showPage());
 setTimeout(_showPage, 1200);
 initProgressBars();
 
