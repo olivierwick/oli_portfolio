@@ -335,7 +335,7 @@ body.mode-index .grid-item:hover .grid-item-inner .grid-thumb { opacity: 1; }
   touch-action: none;
 }
 .fbx-viewer-wrap:active { cursor: grabbing; }
-.fbx-viewer-wrap canvas { display: block; width: 100% !important; height: auto; }
+.fbx-viewer-wrap canvas { display: block; width: 100% !important; height: auto; aspect-ratio: 16/9; }
 #wrap-zigaretten {
   overflow: hidden;
   padding-top: 40px;
@@ -855,8 +855,8 @@ body.mode-index .grid-item:hover .grid-item-inner .grid-thumb { opacity: 1; }
 
         <!-- pointcloud.xyz -->
         <div class="work-block" id="work-pointcloud">
-          <div class="video-wrapper" style="width:75%; margin-top:0;">
-            <video id="kopf-video" loop muted playsinline>
+          <div class="video-wrapper" style="width:75%; margin-top:0; aspect-ratio:16/9; overflow:hidden;">
+            <video id="kopf-video" loop muted playsinline style="width:100%;height:100%;object-fit:cover;">
               <source src="./kopf2.mp4" type="video/mp4">
             </video>
             <img class="video-thumb" src="./pointcloud_thumb.png" alt="">
@@ -868,8 +868,8 @@ body.mode-index .grid-item:hover .grid-item-inner .grid-thumb { opacity: 1; }
 
         <!-- The Emerald Barrel -->
         <div class="work-block" id="work-emerald-barrel">
-          <div class="video-wrapper" style="margin-top:0;">
-            <video loop muted playsinline>
+          <div class="video-wrapper" style="margin-top:0; aspect-ratio:16/9; overflow:hidden;">
+            <video loop muted playsinline style="width:100%;height:100%;object-fit:cover;">
               <source src="./TheEmeraldBarrel.mp4" type="video/mp4">
             </video>
             <img class="video-thumb" src="./the_emerald_barrell.png" alt="">
@@ -888,8 +888,8 @@ body.mode-index .grid-item:hover .grid-item-inner .grid-thumb { opacity: 1; }
 
         <!-- Überall bauen, nirgendwo leben -->
         <div class="work-block" id="work-ueberall-bauen">
-          <div class="video-wrapper" style="margin-top:0; width:100%;">
-            <video loop muted playsinline>
+          <div class="video-wrapper" style="margin-top:0; width:100%; aspect-ratio:16/9; overflow:hidden;">
+            <video loop muted playsinline style="width:100%;height:100%;object-fit:cover;">
               <source src="./überall_bauen_mockup.mov" type="video/quicktime">
               <source src="./überall_bauen_mockup.mov" type="video/mp4">
             </video>
@@ -898,8 +898,8 @@ body.mode-index .grid-item:hover .grid-item-inner .grid-thumb { opacity: 1; }
                  data-type="video" data-src="./überall_bauen_mockup.mov">
           </div>
           <div class="work-description">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2024<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Moving Graphics<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Dozent*in: <a class="inline-link" href="https://www.dirkkoy.com/">Dirk Koy</a><br>Die Arbeit geht auf die Verdrängung autonomer Räume in der Stadt Basel ein. Daraus ist eine Serie entstanden, die Orte zeigt, die vor einer Bebauung stehen. Darunter das Lysbüchelareal, der Wagenplatz sowie das DB-Areal.</div>
-          <div class="video-wrapper" id="ueberall-video" style="margin-top:26px; width: 50%;">
-            <video loop muted playsinline>
+          <div class="video-wrapper" id="ueberall-video" style="margin-top:26px; width: 50%; aspect-ratio:16/9; overflow:hidden;">
+            <video loop muted playsinline style="width:100%;height:100%;object-fit:cover;">
               <source src="./überall_bauen2.mp4" type="video/mp4">
             </video>
             <img class="video-thumb" src="./überall_bauen_thumb2.png" alt="">
@@ -910,8 +910,8 @@ body.mode-index .grid-item:hover .grid-item-inner .grid-thumb { opacity: 1; }
 
         <!-- Zwischen Asphalt und Beton -->
         <div class="work-block" id="work-zwischen-asphalt">
-          <div class="video-wrapper" style="margin-top:0;">
-            <video loop muted playsinline>
+          <div class="video-wrapper" style="margin-top:0; aspect-ratio:16/9; overflow:hidden;">
+            <video loop muted playsinline style="width:100%;height:100%;object-fit:cover;">
               <source src="./zwischen_asphalt_und_beton.mp4" type="video/mp4">
             </video>
             <img class="video-thumb" src="./zwischen_asphalt_und_beton_thumb.png" alt="">
@@ -2051,24 +2051,29 @@ const _showPage = () => {
     _removeCover();
   });
 };
-document.fonts.load('1em NimbusRoman')
-  .then(() => {
+const _windowLoad = new Promise(r => {
+  if (document.readyState === 'complete') r();
+  else window.addEventListener('load', r, { once: true });
+});
+Promise.all([
+  document.fonts.load('1em NimbusRoman').catch(() => {}),
+  _windowLoad
+]).then(() => {
+  void document.body.offsetHeight;
+  let _prevTop = null, _stableCount = 0;
+  const _waitStable = () => {
+    if (_pageShown) return;
     void document.body.offsetHeight;
-    let _prevTop = null, _stableCount = 0;
-    const _waitStable = () => {
-      if (_pageShown) return;
-      void document.body.offsetHeight;
-      const el = document.getElementById(_landingWorkId);
-      const curTop = el ? Math.round(el.getBoundingClientRect().top) : null;
-      if (curTop !== null && curTop === _prevTop) {
-        if (++_stableCount >= 2) { _showPage(); return; }
-      } else { _stableCount = 0; _prevTop = curTop; }
-      requestAnimationFrame(_waitStable);
-    };
+    const el = document.getElementById(_landingWorkId);
+    const curTop = el ? Math.round(el.getBoundingClientRect().top) : null;
+    if (curTop !== null && curTop === _prevTop) {
+      if (++_stableCount >= 2) { _showPage(); return; }
+    } else { _stableCount = 0; _prevTop = curTop; }
     requestAnimationFrame(_waitStable);
-  })
-  .catch(() => _showPage());
-setTimeout(_showPage, 1200);
+  };
+  requestAnimationFrame(_waitStable);
+}).catch(() => _showPage());
+setTimeout(_showPage, 3000);
 initProgressBars();
 
 // Touch-Cleanup: einmalig, entfernt alle spawned Bars beim nächsten Touch
