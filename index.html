@@ -828,7 +828,7 @@ body.mode-index .grid-item:hover .grid-item-inner .grid-thumb { opacity: 1; }
         <!-- All along the white line -->
         <div class="work-block" id="work-all-along">
           <div class="video-wrapper" style="margin-top:0; aspect-ratio:16/9; overflow:hidden;">
-            <video loop muted playsinline style="width:100%; height:100%; object-fit:cover;">
+            <video loop muted playsinline style="width:100%; height:100%; object-fit:cover;" data-start-time="30">
               <source src="./all_along_the_white_line.mp4" type="video/mp4">
             </video>
             <img class="video-thumb" src="./all_along_the_white_line.png" alt="">
@@ -1529,9 +1529,10 @@ if (window.matchMedia('(hover: hover)').matches) {
     wrapper.addEventListener('mouseenter', () => {
       if (lastActiveWrapper && lastActiveWrapper !== wrapper) {
         const prevVideo = lastActiveWrapper.querySelector('video');
-        if (prevVideo) { prevVideo.pause(); prevVideo.currentTime = 0; }
+        if (prevVideo) { prevVideo.pause(); prevVideo.currentTime = +(prevVideo.dataset.startTime || 0); }
       }
       lastActiveWrapper = wrapper;
+      if (video.currentTime === 0 && video.dataset.startTime) video.currentTime = +video.dataset.startTime;
       video.play().catch(() => {});
     });
     wrapper.addEventListener('mouseleave', () => { video.pause().catch?.(() => {}); });
@@ -2071,6 +2072,12 @@ document.fonts.load('1em NimbusRoman')
 setTimeout(_showPage, 1200);
 initProgressBars();
 
+document.querySelectorAll('.video-wrapper video[data-start-time]').forEach(v => {
+  const t = +v.dataset.startTime;
+  if (v.readyState >= 1) { v.currentTime = t; }
+  else v.addEventListener('loadedmetadata', () => { v.currentTime = t; }, { once: true });
+});
+
 // Touch-Cleanup: einmalig, entfernt alle spawned Bars beim nächsten Touch
 document.addEventListener('touchstart', () => {
   document.querySelectorAll('.nav-primary a, .inline-link').forEach(link => {
@@ -2091,7 +2098,7 @@ document.addEventListener('touchstart', () => {
     w.classList.remove('playing');
     w.classList.add('idle');
     if (th) th.style.opacity = '1';
-    if (v) { v.pause(); v.currentTime = 0; }
+    if (v) { v.pause(); v.currentTime = +(v.dataset.startTime || 0); }
     if (_activeWrapper === w) _activeWrapper = null;
   }
   document.querySelectorAll('.video-wrapper').forEach(wrapper => {
@@ -2122,6 +2129,7 @@ document.addEventListener('touchstart', () => {
           wrapper._playDelay = setTimeout(() => {
             if (_activeWrapper && _activeWrapper !== wrapper) stopWrapper(_activeWrapper);
             _activeWrapper = wrapper;
+            if (video.currentTime === 0 && video.dataset.startTime) video.currentTime = +video.dataset.startTime;
             video.play().catch(() => {});
             wrapper.classList.add('playing');
             showControls();
@@ -2142,7 +2150,7 @@ document.addEventListener('touchstart', () => {
           if (wrapper._canplayHandler) { video.removeEventListener('canplay', wrapper._canplayHandler); wrapper._canplayHandler = null; }
           hideControls();
           if (thumb) thumb.style.opacity = '1';
-          video.pause(); video.currentTime = 0;
+          video.pause(); video.currentTime = +(video.dataset.startTime || 0);
           if (_activeWrapper === wrapper) _activeWrapper = null;
         }
       });
