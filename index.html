@@ -2028,19 +2028,28 @@ window.addEventListener('scroll', () => {
 
 history.scrollRestoration = 'manual';
 const _landingWorks = BIG_ITEMS.filter(it => it.workId && it.workId !== 'work-info-kontakt');
-const _landingWorkId = _landingWorks[Math.floor(Math.random() * _landingWorks.length)].workId;
+const _lastLandingId = localStorage.getItem('lastLandingWork');
+const _landingPool = _landingWorks.filter(it => it.workId !== _lastLandingId);
+const _landingWorkId = (_landingPool.length > 0 ? _landingPool : _landingWorks)[Math.floor(Math.random() * (_landingPool.length > 0 ? _landingPool : _landingWorks).length)].workId;
+localStorage.setItem('lastLandingWork', _landingWorkId);
 switchToBig(_landingWorkId, false);
 observeWorkBlocks();
 let _pageShown = false;
 const _showPage = () => {
   if (_pageShown) return; _pageShown = true;
   const el = document.getElementById(_landingWorkId);
-  if (el) {
+  if (!el) { document.body.style.opacity = ''; return; }
+  void document.body.offsetHeight;
+  const top = el.getBoundingClientRect().top + window.scrollY - SCROLL_OFFSET;
+  window.scrollTo({ top: Math.max(0, top), behavior: 'instant' });
+  let _frames = 3;
+  const _finish = () => {
     void document.body.offsetHeight;
-    const top = el.getBoundingClientRect().top + window.scrollY - SCROLL_OFFSET;
-    window.scrollTo({ top: Math.max(0, top), behavior: 'instant' });
-  }
-  document.body.style.opacity = '';
+    const drift = el.getBoundingClientRect().top - SCROLL_OFFSET;
+    if (Math.abs(drift) > 1) window.scrollTo({ top: window.scrollY + drift, behavior: 'instant' });
+    if (--_frames > 0) { requestAnimationFrame(_finish); } else { document.body.style.opacity = ''; }
+  };
+  requestAnimationFrame(_finish);
 };
 document.fonts.load('1em NimbusRoman')
   .then(() => {
