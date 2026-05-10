@@ -784,7 +784,8 @@ body.mode-index .grid-item:hover .grid-item-inner .grid-thumb { opacity: 1; }
 }
   </style>
 </head>
-<body style="opacity:0.001">
+<body>
+<div id="_page_cover" style="position:fixed;inset:0;background:#fff;z-index:2147483647;pointer-events:none;"></div>
 
   <!-- Image fullscreen -->
   <div class="fullscreen-overlay" id="imgOverlay">
@@ -2035,10 +2036,11 @@ localStorage.setItem('lastLandingWork', _landingWorkId);
 switchToBig(_landingWorkId, false);
 observeWorkBlocks();
 let _pageShown = false;
+const _removeCover = () => { document.getElementById('_page_cover')?.remove(); };
 const _showPage = () => {
   if (_pageShown) return; _pageShown = true;
   const el = document.getElementById(_landingWorkId);
-  if (!el) { document.body.style.opacity = ''; return; }
+  if (!el) { _removeCover(); return; }
   void document.body.offsetHeight;
   const top = el.getBoundingClientRect().top + window.scrollY - SCROLL_OFFSET;
   window.scrollTo({ top: Math.max(0, top), behavior: 'instant' });
@@ -2046,7 +2048,7 @@ const _showPage = () => {
     void document.body.offsetHeight;
     const drift = el.getBoundingClientRect().top - SCROLL_OFFSET;
     if (Math.abs(drift) > 1) window.scrollTo({ top: window.scrollY + drift, behavior: 'instant' });
-    document.body.style.opacity = '';
+    _removeCover();
   });
 };
 document.fonts.load('1em NimbusRoman')
