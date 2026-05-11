@@ -286,19 +286,13 @@ body.mode-index .grid-item:hover .grid-item-inner .grid-thumb { opacity: 1; }
   z-index: 2;
   position: absolute;
   bottom: 12px; left: 4px;
-  width: 50px; height: auto;
+  width: 60px; height: auto;
   cursor: pointer;
   mix-blend-mode: difference;
   filter: brightness(0) invert(1);
 }
 .ton-btn {
-  z-index: 2;
-  position: absolute;
-  bottom: 12px; right: 4px;
-  width: 34px; height: auto;
-  cursor: pointer;
-  mix-blend-mode: difference;
-  filter: brightness(0) invert(1);
+  display: none;
 }
 
 .video-progress-track {
@@ -376,11 +370,11 @@ body.mode-index .grid-item:hover .grid-item-inner .grid-thumb { opacity: 1; }
 }
 .fullscreen-overlay.active { display: flex; align-items: center; justify-content: center; }
 #fullscreenImg { max-width: 100vw; max-height: 100vh; width: auto; height: auto; display: block; cursor: default; }
-#fullscreenVideo { max-width: 100vw; max-height: 100vh; width: auto; height: auto; display: block; cursor: default; }
+#fullscreenVideo { width: 100vw; height: 100vh; max-width: none; max-height: none; object-fit: contain; display: block; cursor: default; }
 
 .fullscreen-close-x {
   position: absolute; bottom: 12px; left: 4px;
-  width: 34px; height: auto;
+  width: 60px; height: auto;
   cursor: pointer; opacity: 0.7;
   z-index: 100000; background: none; border: none; padding: 0;
   mix-blend-mode: difference;
@@ -391,15 +385,22 @@ body.mode-index .grid-item:hover .grid-item-inner .grid-thumb { opacity: 1; }
 #imgOverlay .fullscreen-close-x {
   position: absolute; bottom: 4px; left: 4px;
 }
-.fullscreen-ton-btn {
+.fullscreen-controls-br {
   position: absolute; bottom: 12px; right: 4px;
-  width: 34px; height: auto;
-  cursor: pointer; opacity: 0.7; z-index: 100000;
-  background: none; border: none; padding: 0;
+  display: flex; flex-direction: column; align-items: flex-end;
+  gap: 0; z-index: 100000;
   mix-blend-mode: difference;
-  filter: brightness(0) invert(1);
 }
-.fullscreen-ton-btn:hover { opacity: 1; }
+.fullscreen-ton-btn,
+.fullscreen-pause-btn {
+  cursor: pointer; opacity: 0.7;
+  background: none; border: none; padding: 0;
+  font-family: Helvetica, Arial, sans-serif;
+  font-size: 30px; line-height: 1;
+  color: #fff;
+}
+.fullscreen-ton-btn:hover,
+.fullscreen-pause-btn:hover { opacity: 1; }
 
 #fsVideoWrap, #fsImgWrap {
   position: relative; display: inline-block; line-height: 0;
@@ -419,9 +420,10 @@ body.mode-index .grid-item:hover .grid-item-inner .grid-thumb { opacity: 1; }
 }
 .fs-progress-track:hover .fs-progress-fill { background: rgba(255, 255, 255, 1); }
 
-.fullscreen-ton-btn  { transition: opacity 0.5s ease; }
+.fullscreen-ton-btn,
+.fullscreen-pause-btn { transition: opacity 0.5s ease; }
 #videoOverlay.idle .fullscreen-close-x,
-#videoOverlay.idle .fullscreen-ton-btn,
+#videoOverlay.idle .fullscreen-controls-br,
 #videoOverlay.idle .fs-progress-track { opacity: 0 !important; pointer-events: none; }
 #videoOverlay.idle { cursor: none; }
 
@@ -586,23 +588,22 @@ body.mode-index .grid-item:hover .grid-item-inner .grid-thumb { opacity: 1; }
   }
   #fullscreenVideo {
     display: block !important;
-    max-width: 100vw !important; max-height: 100vh !important;
-    width: auto !important; height: auto !important;
+    width: 100vw !important; height: 100vh !important;
+    max-width: none !important; max-height: none !important;
     object-fit: contain !important;
   }
   .fullscreen-close-x {
-    width: 34px !important; padding: 0 !important;
-    bottom: 12px !important; left: 4px !important;
+    padding: 0 !important;
     z-index: 100001 !important;
   }
   #imgOverlay .fullscreen-close-x {
     position: absolute !important; bottom: 4px !important; left: 4px !important;
   }
-  .fullscreen-ton-btn {
-    width: 34px !important; padding: 0 !important;
-    bottom: 12px !important; right: 4px !important;
+  .fullscreen-controls-br {
     z-index: 100001 !important;
   }
+  .fullscreen-ton-btn,
+  .fullscreen-pause-btn { padding: 0 !important; }
   #videoOverlay.idle { cursor: auto !important; }
 
 @media (max-width: 1024px) and (orientation: landscape) {
@@ -700,14 +701,14 @@ body.mode-index .grid-item:hover .grid-item-inner .grid-thumb { opacity: 1; }
   .work-block::before {
     display: block !important; text-align: left !important;
     margin-bottom: 5px !important; width: 100% !important;
-    line-height: 37px !important;
+    line-height: 1 !important;
   }
   #work-all-along::before         { content: "All along the white line"; font-size: 37px; }
   #work-pointcloud::before        { content: "pointcloud.xyz";            font-size: 37px; }
   #work-plakate::before           { content: "Netz";                      font-size: 37px; }
   #work-emerald-barrel::before    { content: "The Emerald Barrel";          font-size: 37px; }
   #work-ueberall-bauen::before    { content: "Überall bauen,\A nirgendwo leben"; white-space: pre-wrap; font-size: 37px; }
-  #work-zwischen-asphalt::before  { content: "Zwischen Asphalt und Beton";  font-size: 37px; }
+  #work-zwischen-asphalt::before  { content: "Zwischen Asphalt\A und Beton"; white-space: pre-wrap; font-size: 37px; }
   #work-info-kontakt::before      { display: none !important; }
 
   .work-description,
@@ -754,7 +755,6 @@ body.mode-index .grid-item:hover .grid-item-inner .grid-thumb { opacity: 1; }
   .video-wrapper.playing:not(.idle) .expand-btn,
   .video-wrapper.playing:not(.idle) .ton-btn { opacity: 0.7 !important; }
   .img-wrapper .expand-btn { opacity: 0.7 !important; pointer-events: all !important; bottom: 4px !important; }
-  .expand-btn,
   .ton-btn { width: 34px !important; height: auto !important; }
 }
 
@@ -780,7 +780,8 @@ body.mode-index .grid-item:hover .grid-item-inner .grid-thumb { opacity: 1; }
   .expand-btn,
   .ton-btn { width: 26px !important; height: auto !important; }
   .fullscreen-close-x { width: 26px !important; }
-  .fullscreen-ton-btn  { width: 26px !important; }
+  .fullscreen-ton-btn,
+  .fullscreen-pause-btn { font-size: 26px !important; }
 }
   </style>
 </head>
@@ -803,7 +804,10 @@ body.mode-index .grid-item:hover .grid-item-inner .grid-thumb { opacity: 1; }
         <div class="fs-progress-fill" id="fsProgressFill"></div>
       </div>
       <img class="fullscreen-close-x" id="videoClose" src="./leave.png" alt="Schliessen">
-      <img class="fullscreen-ton-btn" id="fullscreenTonBtn" src="./ton_an.png" alt="Ton">
+      <div class="fullscreen-controls-br">
+        <button class="fullscreen-ton-btn" id="fullscreenTonBtn">TON</button>
+        <button class="fullscreen-pause-btn" id="fullscreenPauseBtn">PAUSE</button>
+      </div>
     </div>
   </div>
 
@@ -1515,7 +1519,13 @@ function switchToIndex() {
 }
 
 document.getElementById('btnBig').addEventListener('click', (e) => {
-  e.preventDefault(); if (currentMode === 'big') return; switchToBig();
+  e.preventDefault(); if (currentMode === 'big') return;
+  const _works = BIG_ITEMS.filter(it => it.workId && it.workId !== 'work-info-kontakt');
+  const _last  = localStorage.getItem('lastLandingWork');
+  const _pool  = _works.filter(it => it.workId !== _last);
+  const _pick  = (_pool.length > 0 ? _pool : _works)[Math.floor(Math.random() * (_pool.length > 0 ? _pool.length : _works.length))];
+  if (_pick) localStorage.setItem('lastLandingWork', _pick.workId);
+  switchToBig(_pick ? _pick.workId : null, true);
 });
 document.getElementById('btnIndex').addEventListener('click', (e) => {
   e.preventDefault(); if (currentMode === 'index') return; switchToIndex();
@@ -1672,16 +1682,36 @@ function pcInvertState(t) {
   return t < 2.5 || Math.floor((t - 2.5) / 10) % 2 !== 0;
 }
 
+function positionFSControls() {
+  const vw = window.innerWidth, vh = window.innerHeight;
+  const iw = fullscreenVideo.videoWidth  || vw;
+  const ih = fullscreenVideo.videoHeight || vh;
+  const scale = Math.min(vw / iw, vh / ih);
+  const offsetY = Math.round((vh - ih * scale) / 2);
+  const offsetX = Math.round((vw - iw * scale) / 2);
+  fsProgressTrack.style.bottom = offsetY + 'px';
+  fsProgressTrack.style.left   = offsetX + 'px';
+  fsProgressTrack.style.right  = offsetX + 'px';
+  videoClose.style.bottom             = (offsetY + 12) + 'px';
+  videoClose.style.left               = (offsetX + 4)  + 'px';
+  document.querySelector('.fullscreen-controls-br').style.bottom = (offsetY + 12) + 'px';
+  document.querySelector('.fullscreen-controls-br').style.right  = (offsetX + 4)  + 'px';
+}
+window.addEventListener('resize', positionFSControls);
+fullscreenVideo.addEventListener('loadedmetadata', positionFSControls);
+
 function openVideoFullscreen(src, sourceVideo) {
   currentSourceVideo = sourceVideo || null;
   const startTime = sourceVideo ? sourceVideo.currentTime : 0;
   if (sourceVideo) sourceVideo.pause();
   fullscreenVideo.src = src;
   fullscreenVideo.muted = false;
-  fullscreenTonBtn.src = './ton_an.png';
+  fullscreenTonBtn.textContent = 'STUMM';
+  fullscreenPauseBtn.textContent = 'PAUSE';
   const hasTon = TON_VIDEOS.some(name => src.includes(name));
   fullscreenTonBtn.style.display = hasTon ? '' : 'none';
   videoOverlay.classList.add('active');
+  positionFSControls();
   fsResetIdle();
   document.body.style.overflow = 'hidden';
 
@@ -1692,7 +1722,7 @@ function openVideoFullscreen(src, sourceVideo) {
     fullscreenVideo.currentTime = startTime;
     fullscreenVideo.play().catch(() => {
       fullscreenVideo.muted = true;
-      fullscreenTonBtn.src = './ton_aus.png';
+      fullscreenTonBtn.textContent = 'TON';
       fullscreenVideo.play();
     });
   };
@@ -1757,7 +1787,13 @@ if (window.matchMedia('(hover: hover)').matches) {
 fullscreenTonBtn.addEventListener('click', (e) => {
   e.stopPropagation();
   fullscreenVideo.muted = !fullscreenVideo.muted;
-  fullscreenTonBtn.src = fullscreenVideo.muted ? './ton_aus.png' : './ton_an.png';
+  fullscreenTonBtn.textContent = fullscreenVideo.muted ? 'TON' : 'STUMM';
+});
+const fullscreenPauseBtn = document.getElementById('fullscreenPauseBtn');
+fullscreenPauseBtn.addEventListener('click', (e) => {
+  e.stopPropagation();
+  if (fullscreenVideo.paused) { fullscreenVideo.play(); fullscreenPauseBtn.textContent = 'PAUSE'; }
+  else { fullscreenVideo.pause(); fullscreenPauseBtn.textContent = 'START'; }
 });
 videoClose.addEventListener('click', (e) => { e.stopPropagation(); closeVideoFullscreen(); });
 
