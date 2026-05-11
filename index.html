@@ -537,7 +537,7 @@ body.mode-index .grid-item:hover .grid-item-inner .grid-thumb { opacity: 1; }
    * FIX: Exclude .video-thumb and .grid-thumb from opacity:1 !important
    * so that JS can set their opacity to 0 when videos play via scroll.
    */
-  *:not(.video-thumb):not(.grid-thumb):not(.expand-btn):not(.ton-btn):not(.video-progress-track):not(.video-progress-fill):not(.fullscreen-close-x):not(.fullscreen-ton-btn):not(.fs-progress-track):not(.fs-progress-fill):not(.nav-active-bar):not(.nav-hover-bar) {
+  *:not(.video-thumb):not(.grid-thumb):not(.expand-btn):not(.ton-btn):not(.video-progress-track):not(.video-progress-fill):not(.fullscreen-close-x):not(.fullscreen-ton-btn):not(.fullscreen-pause-btn):not(.fs-progress-track):not(.fs-progress-fill):not(.nav-active-bar):not(.nav-hover-bar) {
     filter: none !important;
     opacity: 1 !important;
     transition: none !important;
@@ -777,11 +777,11 @@ body.mode-index .grid-item:hover .grid-item-inner .grid-thumb { opacity: 1; }
   #mobile-bottom-fill { height: calc(84px + env(safe-area-inset-bottom)); }
   .nav-secondary a::after { opacity: 0 !important; }
   .info-contact-link:hover::after { opacity: 0 !important; }
-  .expand-btn,
+  .expand-btn { width: 40px !important; }
   .ton-btn { width: 26px !important; height: auto !important; }
-  .fullscreen-close-x { width: 26px !important; }
+  .fullscreen-close-x { width: 40px !important; }
   .fullscreen-ton-btn,
-  .fullscreen-pause-btn { font-size: 26px !important; }
+  .fullscreen-pause-btn { font-size: 20px !important; }
 }
   </style>
 </head>
@@ -1683,7 +1683,8 @@ function pcInvertState(t) {
 }
 
 function positionFSControls() {
-  const vw = window.innerWidth, vh = window.innerHeight;
+  const vw = fullscreenVideo.clientWidth  || window.innerWidth;
+  const vh = fullscreenVideo.clientHeight || window.innerHeight;
   const iw = fullscreenVideo.videoWidth  || vw;
   const ih = fullscreenVideo.videoHeight || vh;
   const scale = Math.min(vw / iw, vh / ih);
@@ -1754,14 +1755,14 @@ function fsTick() {
     fsProgressFill.style.width = (fullscreenVideo.currentTime / fullscreenVideo.duration * 100) + '%';
   fsRafId = requestAnimationFrame(fsTick);
 }
-fullscreenVideo.addEventListener('play',  () => { cancelAnimationFrame(fsRafId); fsRafId = requestAnimationFrame(fsTick); });
-fullscreenVideo.addEventListener('pause', () => cancelAnimationFrame(fsRafId));
+fullscreenVideo.addEventListener('play',  () => { cancelAnimationFrame(fsRafId); fsRafId = requestAnimationFrame(fsTick); fsResetIdle(); });
+fullscreenVideo.addEventListener('pause', () => { cancelAnimationFrame(fsRafId); clearTimeout(fsIdleTimer); videoOverlay.classList.remove('idle'); });
 
 let fsIdleTimer;
 function fsResetIdle() {
   videoOverlay.classList.remove('idle');
   clearTimeout(fsIdleTimer);
-  fsIdleTimer = setTimeout(() => videoOverlay.classList.add('idle'), 5000);
+  if (!fullscreenVideo.paused) fsIdleTimer = setTimeout(() => videoOverlay.classList.add('idle'), 5000);
 }
 videoOverlay.addEventListener('touchstart', fsResetIdle, { passive: true });
 if (window.matchMedia('(hover: hover)').matches) {
@@ -1774,7 +1775,9 @@ if (window.matchMedia('(hover: hover)').matches) {
   function fsSeek(clientX) {
     if (!fullscreenVideo.duration) return;
     const rect = fsProgressTrack.getBoundingClientRect();
-    fullscreenVideo.currentTime = Math.max(0, Math.min(1, (clientX - rect.left) / rect.width)) * fullscreenVideo.duration;
+    const ratio = Math.max(0, Math.min(1, (clientX - rect.left) / rect.width));
+    fullscreenVideo.currentTime = ratio * fullscreenVideo.duration;
+    if (fullscreenVideo.paused) fsProgressFill.style.width = (ratio * 100) + '%';
   }
   fsProgressTrack.addEventListener('mousedown', (e) => { e.stopPropagation(); dragging = true; fsSeek(e.clientX); });
   document.addEventListener('mousemove', (e) => { if (dragging) fsSeek(e.clientX); });
