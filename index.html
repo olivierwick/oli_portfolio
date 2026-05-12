@@ -1670,8 +1670,9 @@ function pcInvertState(t) {
 }
 
 function positionFSControls(hintW, hintH) {
-  const vw = fullscreenVideo.clientWidth  || window.innerWidth;
-  const vh = fullscreenVideo.clientHeight || window.innerHeight;
+  const vp = window.visualViewport;
+  const vw = (vp ? vp.width  : null) || fullscreenVideo.clientWidth  || window.innerWidth;
+  const vh = (vp ? vp.height : null) || fullscreenVideo.clientHeight || window.innerHeight;
   const iw = fullscreenVideo.videoWidth  || hintW || vw;
   const ih = fullscreenVideo.videoHeight || hintH || vh;
   const scale = Math.min(vw / iw, vh / ih);
@@ -1685,8 +1686,15 @@ function positionFSControls(hintW, hintH) {
   document.querySelector('.fullscreen-controls-br').style.bottom = (offsetY + 12) + 'px';
   document.querySelector('.fullscreen-controls-br').style.right  = (offsetX + 4)  + 'px';
 }
-window.addEventListener('resize', positionFSControls);
-window.addEventListener('orientationchange', () => { setTimeout(positionFSControls, 200); });
+if (window.visualViewport) {
+  window.visualViewport.addEventListener('resize', positionFSControls);
+} else {
+  window.addEventListener('resize', positionFSControls);
+}
+window.addEventListener('orientationchange', () => {
+  setTimeout(positionFSControls, 100);
+  setTimeout(positionFSControls, 400);
+});
 fullscreenVideo.addEventListener('loadedmetadata', positionFSControls);
 
 function openVideoFullscreen(src, sourceVideo) {
@@ -2058,7 +2066,7 @@ window.addEventListener('scroll', () => {
 }, { passive: true });
 
 history.scrollRestoration = 'manual';
-const _landingWorks = BIG_ITEMS.filter(it => it.workId && it.workId !== 'work-info-kontakt');
+const _landingWorks = BIG_ITEMS.filter(it => ['work-plakate', 'work-emerald-barrel', 'work-ueberall-bauen'].includes(it.workId));
 const _lastLandingId = localStorage.getItem('lastLandingWork');
 const _landingPool = _landingWorks.filter(it => it.workId !== _lastLandingId);
 const _landingWorkId = (_landingPool.length > 0 ? _landingPool : _landingWorks)[Math.floor(Math.random() * (_landingPool.length > 0 ? _landingPool : _landingWorks).length)].workId;
