@@ -609,14 +609,6 @@ body.mode-index .grid-item:hover .grid-item-inner .grid-thumb { opacity: 1; }
   .fullscreen-pause-btn { padding: 0 !important; }
   #videoOverlay.idle { cursor: auto !important; }
 
-@media (max-width: 1024px) and (orientation: landscape) {
-  #fullscreenVideo {
-    height: 100vh !important;
-    height: 100dvh !important;
-    width: auto !important;
-    max-width: 100vw !important;
-  }
-}
 
   /* ── Layout ── */
   .main {
@@ -1197,7 +1189,7 @@ function renderGridView() {
   _gridObservers.forEach(obs => obs.disconnect());
   _gridObservers = [];
 
-  const isMobile = window.innerWidth <= 1024;
+  const isMobile = window.innerWidth <= 880;
   // Mobile (2 cols): skip i=3 (empty after netz), i=9 (empty after zigaretten), i=12 (empty before zwischen)
   // so netz lands col2, ub_mock lands col1, zwischen lands col1.
   const mobileSkip = new Set([3, 9, 12]);
@@ -1366,7 +1358,7 @@ function startGridSequencer() {
 
   function getNextItem() {
     const vh = window.innerHeight;
-    const isMobile = window.innerWidth <= 1024;
+    const isMobile = window.innerWidth <= 880;
     const visible = items.filter(item => {
       const r = item.el.getBoundingClientRect();
       return isMobile ? r.top >= 0 && r.bottom <= vh : r.bottom > 0 && r.top < vh;
@@ -1381,7 +1373,7 @@ function startGridSequencer() {
   // Scroll-Interrupt: wechseln wenn aktuelles nicht mehr sichtbar ODER oben neues sichtbar
   _seqScrollHandler = () => {
     const vh = window.innerHeight;
-    const isMobile = window.innerWidth <= 1024;
+    const isMobile = window.innerWidth <= 880;
     const isFullyVisible = r => r.top >= 0 && r.bottom <= vh;
     const isPartlyVisible = r => r.bottom > 0 && r.top < vh;
     const checkVisible = isMobile ? isFullyVisible : isPartlyVisible;
@@ -1579,7 +1571,7 @@ function getLineRects(link) {
   return lines;
 }
 function spawnBars(link, opts = {}) {
-  if (window.innerWidth <= (opts.mobileOk ? 430 : 1024)) return;
+  if (window.innerWidth <= (opts.mobileOk ? 430 : 880)) return;
   const isLong = opts.maxSkew !== undefined ? false : link.dataset.long === 'true';
   const maxSkew = opts.maxSkew !== undefined ? opts.maxSkew : (isLong ? 2 : 3);
   const height  = opts.height || 8;
@@ -1901,7 +1893,7 @@ function fitScrollEnd() {
   const el     = document.getElementById('work-info-kontakt');
   if (!el) return;
   requestAnimationFrame(() => {
-    const isMobile  = window.innerWidth <= 1024;
+    const isMobile  = window.innerWidth <= 880;
     const spacerH   = spacer ? (parseFloat(spacer.style.height) || 0) : 0;
     const padH      = parseFloat(getComputedStyle(main).paddingBottom) || 0;
     const currentExtra      = spacerH + padH;
@@ -1941,11 +1933,11 @@ function getResizeAnchorEl() {
   return best;
 }
 
-let _wasAbove1024 = window.innerWidth > 1024;
+let _wasAbove1024 = window.innerWidth > 880;
 let _savedIndexFilter = null;
 let _prevResizeWidth = window.innerWidth;
 window.addEventListener('resize', () => {
-  const isAbove1024 = window.innerWidth > 1024;
+  const isAbove1024 = window.innerWidth > 880;
   const widthChanged = window.innerWidth !== _prevResizeWidth;
   _prevResizeWidth = window.innerWidth;
   if (!isAbove1024 && _wasAbove1024 && currentMode === 'index') {
@@ -2221,7 +2213,7 @@ document.addEventListener('touchstart', () => {
 
   // Thumbnail: über 819px invertiert, darunter normal — auch beim Resize
   const updateThumb = () => {
-    if (pcThumb) pcThumb.style.filter = window.innerWidth > 1024 ? 'invert(1)' : 'invert(0)';
+    if (pcThumb) pcThumb.style.filter = window.innerWidth > 880 ? 'invert(1)' : 'invert(0)';
   };
   updateThumb();
   window.addEventListener('resize', updateThumb);
@@ -2239,7 +2231,7 @@ document.addEventListener('touchstart', () => {
   let lastSrc = null;
 
   function updateKopfSrc() {
-    const src = window.innerWidth > 1024 ? './kopf2.mp4' : './kopf.mp4';
+    const src = window.innerWidth > 880 ? './kopf2.mp4' : './kopf.mp4';
     if (src === lastSrc) return;
     lastSrc = src;
     video.querySelectorAll('source').forEach(s => { s.src = src; });
@@ -2371,7 +2363,7 @@ document.addEventListener('touchstart', () => {
       const getActiveZoom = () => {
         if (isGrid) return gridZoom;
         if (smallViewerZoom !== null && window.innerWidth <= 430) return smallViewerZoom;
-        if (mobileViewerZoom !== null && window.innerWidth <= 1024) return mobileViewerZoom;
+        if (mobileViewerZoom !== null && window.innerWidth <= 880) return mobileViewerZoom;
         return viewerZoom;
       };
       const onResize = () => {
