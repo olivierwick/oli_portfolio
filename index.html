@@ -4,6 +4,9 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <title>Olivier Wick</title>
+  <meta name="description" content="Olivier Wick – Portfolio">
+  <meta name="author" content="Olivier Wick">
+  <link rel="canonical" href="https://olivierwick.ch/">
   <link rel="icon" type="image/png" href="./olivier.png">
 
   <script type="importmap">
@@ -632,8 +635,8 @@ body.mode-index .grid-item:hover .grid-item-inner .grid-thumb { opacity: 1; }
   #mobile-bottom-fill {
     display: block;
     position: fixed;
-    bottom: 0; left: 0; right: 0;
-    height: calc(84px + env(safe-area-inset-bottom));
+    bottom: -100px; left: 0; right: 0;
+    height: calc(84px + env(safe-area-inset-bottom) + 100px);
     background: #fff;
     z-index: 8999;
     pointer-events: none;
@@ -774,7 +777,7 @@ body.mode-index .grid-item:hover .grid-item-inner .grid-thumb { opacity: 1; }
     transform: translateX(-50%) !important;
     margin-left: 0 !important;
   }
-  #mobile-bottom-fill { height: calc(84px + env(safe-area-inset-bottom)); }
+  #mobile-bottom-fill { bottom: -100px !important; height: calc(84px + env(safe-area-inset-bottom) + 100px) !important; }
   .nav-secondary a::after { opacity: 0 !important; }
   .info-contact-link:hover::after { opacity: 0 !important; }
   .expand-btn { width: 40px !important; }
@@ -1406,16 +1409,8 @@ function startGridSequencer() {
     currentEl = item.el;
 
     if (item.type === '3d') {
-      if (!item.el._fbxStartRotate) {
-        playNext();
-        return;
-      }
-      item.el._fbxStartRotate();
-      _seqTimer = setTimeout(() => {
-        if (_seqGen !== gen) return;
-        item.el._fbxStopRotate();
-        _seqTimer = setTimeout(playNext, 1500);
-      }, 4000);
+      playNext();
+      return;
     } else {
       const v = item.el;
       const th = v.parentElement.querySelector('.grid-thumb');
