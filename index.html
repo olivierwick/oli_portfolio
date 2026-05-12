@@ -1669,11 +1669,11 @@ function pcInvertState(t) {
   return t < 2.5 || Math.floor((t - 2.5) / 10) % 2 !== 0;
 }
 
-function positionFSControls() {
+function positionFSControls(hintW, hintH) {
   const vw = fullscreenVideo.clientWidth  || window.innerWidth;
   const vh = fullscreenVideo.clientHeight || window.innerHeight;
-  const iw = fullscreenVideo.videoWidth  || vw;
-  const ih = fullscreenVideo.videoHeight || vh;
+  const iw = fullscreenVideo.videoWidth  || hintW || vw;
+  const ih = fullscreenVideo.videoHeight || hintH || vh;
   const scale = Math.min(vw / iw, vh / ih);
   const offsetY = Math.round((vh - ih * scale) / 2);
   const offsetX = Math.round((vw - iw * scale) / 2);
@@ -1686,6 +1686,7 @@ function positionFSControls() {
   document.querySelector('.fullscreen-controls-br').style.right  = (offsetX + 4)  + 'px';
 }
 window.addEventListener('resize', positionFSControls);
+window.addEventListener('orientationchange', () => { setTimeout(positionFSControls, 200); });
 fullscreenVideo.addEventListener('loadedmetadata', positionFSControls);
 
 function openVideoFullscreen(src, sourceVideo) {
@@ -1699,7 +1700,9 @@ function openVideoFullscreen(src, sourceVideo) {
   const hasTon = TON_VIDEOS.some(name => src.includes(name));
   fullscreenTonBtn.style.display = hasTon ? '' : 'none';
   videoOverlay.classList.add('active');
-  positionFSControls();
+  const hintW = sourceVideo ? sourceVideo.videoWidth  : 0;
+  const hintH = sourceVideo ? sourceVideo.videoHeight : 0;
+  positionFSControls(hintW || 0, hintH || 0);
   fsResetIdle();
   document.body.style.overflow = 'hidden';
 
