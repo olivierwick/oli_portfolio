@@ -827,7 +827,7 @@ body.mode-index .grid-item:hover .grid-item-inner .grid-thumb { opacity: 1; }
         <!-- All along the white line -->
         <div class="work-block" id="work-all-along">
           <div class="video-wrapper" style="margin-top:0; aspect-ratio:16/9; overflow:hidden;">
-            <video loop muted playsinline style="width:100%; height:100%; object-fit:cover;" data-start-time="30">
+            <video loop muted playsinline preload="none" style="width:100%; height:100%; object-fit:cover;" data-start-time="30">
               <source src="./all_along_the_white_line.mp4" type="video/mp4">
             </video>
             <img class="video-thumb" src="./all_along_the_white_line.png" alt="">
@@ -841,7 +841,7 @@ body.mode-index .grid-item:hover .grid-item-inner .grid-thumb { opacity: 1; }
         <!-- Netz -->
         <div class="work-block" id="work-plakate">
           <div class="video-wrapper" style="width:75%; margin-top:0; aspect-ratio:1/1; overflow:hidden;">
-            <video loop muted playsinline style="width:100%; height:100%; object-fit:cover; display:block;">
+            <video loop muted playsinline preload="none" style="width:100%; height:100%; object-fit:cover; display:block;">
               <source src="./netz.mp4" type="video/mp4">
               <source src="./netz.mov" type="video/quicktime">
             </video>
@@ -855,7 +855,7 @@ body.mode-index .grid-item:hover .grid-item-inner .grid-thumb { opacity: 1; }
         <!-- pointcloud.xyz -->
         <div class="work-block" id="work-pointcloud">
           <div class="video-wrapper" style="width:75%; margin-top:0; aspect-ratio:1/1; overflow:hidden;">
-            <video id="kopf-video" loop muted playsinline style="width:100%;height:100%;object-fit:cover;">
+            <video id="kopf-video" loop muted playsinline preload="none" style="width:100%;height:100%;object-fit:cover;">
               <source src="./kopf2.mp4" type="video/mp4">
             </video>
             <img class="video-thumb" src="./pointcloud_thumb.png" alt="">
@@ -868,7 +868,7 @@ body.mode-index .grid-item:hover .grid-item-inner .grid-thumb { opacity: 1; }
         <!-- The Emerald Barrel -->
         <div class="work-block" id="work-emerald-barrel">
           <div class="video-wrapper" style="margin-top:0; aspect-ratio:16/9; overflow:hidden;">
-            <video loop muted playsinline style="width:100%;height:100%;object-fit:cover;">
+            <video loop muted playsinline preload="none" style="width:100%;height:100%;object-fit:cover;">
               <source src="./TheEmeraldBarrel.mp4" type="video/mp4">
             </video>
             <img class="video-thumb" src="./the_emerald_barrell.png" alt="">
@@ -888,7 +888,7 @@ body.mode-index .grid-item:hover .grid-item-inner .grid-thumb { opacity: 1; }
         <!-- Überall bauen, nirgendwo leben -->
         <div class="work-block" id="work-ueberall-bauen">
           <div class="video-wrapper" style="margin-top:0; width:100%; aspect-ratio:16/9; overflow:hidden;">
-            <video loop muted playsinline style="width:100%;height:100%;object-fit:cover;">
+            <video loop muted playsinline preload="none" style="width:100%;height:100%;object-fit:cover;">
               <source src="./überall_bauen_mockup.mov" type="video/quicktime">
               <source src="./überall_bauen_mockup.mov" type="video/mp4">
             </video>
@@ -898,7 +898,7 @@ body.mode-index .grid-item:hover .grid-item-inner .grid-thumb { opacity: 1; }
           </div>
           <div class="work-description">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2024<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Moving Graphics<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Dozent*in: <a class="inline-link" href="https://www.dirkkoy.com/">Dirk Koy</a><br>Die Arbeit geht auf die Verdrängung autonomer Räume in der Stadt Basel ein. Daraus ist eine Serie entstanden, die Orte zeigt, die vor einer Bebauung stehen. Darunter das Lysbüchelareal, der Wagenplatz sowie das DB-Areal.</div>
           <div class="video-wrapper" id="ueberall-video" style="margin-top:26px; width: 50%; aspect-ratio:607/1080; overflow:hidden;">
-            <video loop muted playsinline style="width:100%;height:100%;object-fit:cover;">
+            <video loop muted playsinline preload="none" style="width:100%;height:100%;object-fit:cover;">
               <source src="./überall_bauen2.mp4" type="video/mp4">
             </video>
             <img class="video-thumb" src="./überall_bauen_thumb2.png" alt="">
@@ -910,7 +910,7 @@ body.mode-index .grid-item:hover .grid-item-inner .grid-thumb { opacity: 1; }
         <!-- Zwischen Asphalt und Beton -->
         <div class="work-block" id="work-zwischen-asphalt">
           <div class="video-wrapper" style="margin-top:0; aspect-ratio:16/9; overflow:hidden;">
-            <video loop muted playsinline style="width:100%;height:100%;object-fit:cover;">
+            <video loop muted playsinline preload="none" style="width:100%;height:100%;object-fit:cover;">
               <source src="./zwischen_asphalt_und_beton.mp4" type="video/mp4">
             </video>
             <img class="video-thumb" src="./zwischen_asphalt_und_beton_thumb.png" alt="">
@@ -1229,7 +1229,7 @@ function renderGridView() {
 
     if (item.type === 'video') {
       const video = document.createElement('video');
-      video.loop = true; video.muted = true; video.playsInline = true;
+      video.loop = true; video.muted = true; video.playsInline = true; video.preload = 'none';
       const source = document.createElement('source');
       source.src  = item.src;
       source.type = item.src.endsWith('.mov') ? 'video/quicktime' : 'video/mp4';
