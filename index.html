@@ -627,8 +627,8 @@ body.mode-index .grid-item:hover .grid-item-inner .grid-thumb { opacity: 1; }
   #mobile-bottom-fill {
     display: block;
     position: fixed;
-    bottom: -200px; left: 0; right: 0;
-    height: calc(84px + env(safe-area-inset-bottom) + 200px);
+    bottom: 0; left: 0; right: 0;
+    height: 300px;
     background: #fff;
     z-index: 8999;
     pointer-events: none;
@@ -769,7 +769,7 @@ body.mode-index .grid-item:hover .grid-item-inner .grid-thumb { opacity: 1; }
     transform: translateX(-50%) !important;
     margin-left: 0 !important;
   }
-  #mobile-bottom-fill { bottom: -200px !important; height: calc(84px + env(safe-area-inset-bottom) + 200px) !important; }
+  #mobile-bottom-fill { bottom: 0 !important; height: 300px !important; }
   .nav-secondary a::after { opacity: 0 !important; }
   .info-contact-link:hover::after { opacity: 0 !important; }
   .expand-btn { width: 40px !important; }
@@ -2066,15 +2066,10 @@ window.addEventListener('scroll', () => {
   }
 }, { passive: true });
 
-function _clampToInfoLimit() {
+window.addEventListener('scroll', () => {
   if (window.innerWidth <= 880 && _infoLimit !== null && currentMode === 'big' && window.scrollY > _infoLimit) {
-    window.scrollTo({ top: _infoLimit, behavior: 'smooth' });
+    window.scrollTo(0, _infoLimit);
   }
-}
-window.addEventListener('scrollend', _clampToInfoLimit, { passive: true });
-window.addEventListener('touchend', () => {
-  if (window.innerWidth > 880 || _infoLimit === null || currentMode !== 'big') return;
-  [150, 400, 800, 1300].forEach(d => setTimeout(_clampToInfoLimit, d));
 }, { passive: true });
 
 history.scrollRestoration = 'manual';
