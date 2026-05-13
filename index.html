@@ -2066,14 +2066,15 @@ window.addEventListener('scroll', () => {
   }
 }, { passive: true });
 
-window.addEventListener('touchend', () => {
-  if (window.innerWidth <= 880 && _infoLimit !== null && currentMode === 'big') {
-    requestAnimationFrame(() => {
-      if (window.scrollY > _infoLimit) {
-        window.scrollTo({ top: _infoLimit, behavior: 'smooth' });
-      }
-    });
+function _clampToInfoLimit() {
+  if (window.innerWidth <= 880 && _infoLimit !== null && currentMode === 'big' && window.scrollY > _infoLimit) {
+    window.scrollTo({ top: _infoLimit, behavior: 'smooth' });
   }
+}
+window.addEventListener('scrollend', _clampToInfoLimit, { passive: true });
+window.addEventListener('touchend', () => {
+  if (window.innerWidth > 880 || _infoLimit === null || currentMode !== 'big') return;
+  [150, 400, 800, 1300].forEach(d => setTimeout(_clampToInfoLimit, d));
 }, { passive: true });
 
 history.scrollRestoration = 'manual';
