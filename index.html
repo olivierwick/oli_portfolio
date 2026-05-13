@@ -628,7 +628,7 @@ body.mode-index .grid-item:hover .grid-item-inner .grid-thumb { opacity: 1; }
     display: block;
     position: fixed;
     bottom: 0; left: 0; right: 0;
-    height: 300px;
+    height: calc(84px + env(safe-area-inset-bottom));
     background: #fff;
     z-index: 8999;
     pointer-events: none;
@@ -769,7 +769,7 @@ body.mode-index .grid-item:hover .grid-item-inner .grid-thumb { opacity: 1; }
     transform: translateX(-50%) !important;
     margin-left: 0 !important;
   }
-  #mobile-bottom-fill { bottom: 0 !important; height: 300px !important; }
+  #mobile-bottom-fill { height: calc(84px + env(safe-area-inset-bottom)); }
   .nav-secondary a::after { opacity: 0 !important; }
   .info-contact-link:hover::after { opacity: 0 !important; }
   .expand-btn { width: 40px !important; }
