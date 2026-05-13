@@ -1926,6 +1926,7 @@ function fitScrollEnd() {
 window.addEventListener('load', () => {
   fitScrollEnd();
   setTimeout(fitScrollEnd, 600);
+  setTimeout(fitScrollEnd, 1500);
   const content = document.getElementById('mainContent');
   if (content && window.ResizeObserver) {
     new ResizeObserver(fitScrollEnd).observe(content);
@@ -2062,6 +2063,9 @@ window.addEventListener('scroll', () => {
   if (_scrollingToWork) {
     clearTimeout(_scrollEndTimer);
     _scrollEndTimer = setTimeout(() => { _scrollingToWork = false; }, 150);
+  }
+  if (window.innerWidth <= 880 && _infoLimit !== null && currentMode === 'big' && window.scrollY > _infoLimit) {
+    window.scrollTo(0, _infoLimit);
   }
 }, { passive: true });
 
