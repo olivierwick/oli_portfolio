@@ -2370,13 +2370,19 @@ document.addEventListener('touchstart', () => {
       };
 
       let rafId;
+      let _fbxVisible = false;
       const tick = () => {
+        if (!_fbxVisible) { rafId = null; return; }
         rafId = requestAnimationFrame(tick);
         if (autoRotating && obj3d) { rotDelta += 0.008; obj3d.rotation[rotAxis] = rotation['xyz'.indexOf(rotAxis)] + rotDelta; }
         if (!isGrid) controls.update();
         renderer.render(scene, camera);
       };
-      tick();
+      const _fbxVisObs = new IntersectionObserver(([e]) => {
+        _fbxVisible = e.isIntersecting;
+        if (_fbxVisible && !rafId) tick();
+      }, { threshold: 0 });
+      _fbxVisObs.observe(canvasEl);
 
       const getActiveZoom = () => {
         if (isGrid) return gridZoom;
