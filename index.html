@@ -2080,8 +2080,9 @@ const _landingWorks = BIG_ITEMS.filter(it => it.workId && it.workId !== 'work-in
 const _lastLandingId = localStorage.getItem('lastLandingWork');
 const _landingPool = _landingWorks.filter(it => it.workId !== _lastLandingId);
 const _landingPick = (_landingPool.length > 0 ? _landingPool : _landingWorks)[Math.floor(Math.random() * (_landingPool.length > 0 ? _landingPool.length : _landingWorks.length))];
-localStorage.setItem('lastLandingWork', _landingPick.workId);
-switchToBig(_landingPick.workId, false);
+const _landingWorkId = _landingPick.workId;
+localStorage.setItem('lastLandingWork', _landingWorkId);
+switchToBig(_landingWorkId, false);
 observeWorkBlocks();
 let _pageShown = false;
 const _removeCover = () => { document.getElementById('_page_cover')?.remove(); };
