@@ -512,6 +512,16 @@ body.mode-index .grid-item:hover .grid-item-inner .grid-thumb { opacity: 1; }
 }
 .footer-links a:hover::after { opacity: 1; }
 
+.nav-primary a,
+.nav-index a,
+.nav-secondary a,
+.footer-left .title a,
+.footer-links a,
+.info-text {
+  /* -webkit-text-stroke: 3px #fff; */
+  paint-order: stroke fill;
+}
+
 /* ════════════════════════════════════════════════════════════════
    VERTICAL BREAKPOINTS (desktop only, > 819px wide)
    ════════════════════════════════════════════════════════════════ */
@@ -1475,18 +1485,28 @@ function switchToBig(targetWorkId, scrollToTarget) {
   setTimeout(fitScrollEnd, 100);
   const activeWorkId = targetWorkId || (BIG_ITEMS.find(it => it.workId) || {}).workId;
   if (activeWorkId) {
-    const targetIdx = BIG_ITEMS.findIndex(it => it.workId === activeWorkId);
-    const delay = (targetIdx >= 0 ? targetIdx : 0) * 80 + 310;
-    setTimeout(() => {
-      const targetLink = navPrimary.querySelector(`[data-work-id="${activeWorkId}"]`);
-      if (targetLink) {
+    const targetLink = navPrimary.querySelector(`[data-work-id="${activeWorkId}"]`);
+    if (targetLink) {
+      let done = false;
+      const doSpawnActive = () => {
+        if (done) return;
+        done = true;
         spawnBars(targetLink, { cls: 'nav-active-bar' });
         targetLink._activeBars = targetLink._navBars;
         targetLink._navBars = [];
         targetLink.classList.add('work-active');
-      }
+        _scrollingToWork = false;
+      };
+      targetLink.addEventListener('transitionend', function handler(e) {
+        if (e.propertyName !== 'transform') return;
+        targetLink.removeEventListener('transitionend', handler);
+        doSpawnActive();
+      });
+      const targetIdx = BIG_ITEMS.findIndex(it => it.workId === activeWorkId);
+      setTimeout(doSpawnActive, (targetIdx >= 0 ? targetIdx : 0) * 80 + 400);
+    } else {
       _scrollingToWork = false;
-    }, delay);
+    }
   } else {
     _scrollingToWork = false;
   }
@@ -1587,7 +1607,7 @@ function spawnBars(link, opts = {}) {
   link._navBars = lines.map(line => {
     const bar = document.createElement('span');
     bar.className = cls;
-    const zIndex = opts.mobileOk ? 10000 : 100;
+    const zIndex = opts.mobileOk ? 10000 : 9;
     bar.style.cssText = `position:fixed;left:${line.left}px;top:${line.bottom - height}px;width:${line.width}px;height:${height}px;background:#000;pointer-events:none;z-index:${zIndex};`;
     document.body.appendChild(bar);
     return bar;
@@ -2018,7 +2038,7 @@ function repositionBars(link, bars) {
     const newBars = lines.map((line) => {
       const bar = document.createElement('span');
       bar.className = cls;
-      bar.style.cssText = `position:fixed;left:${line.left}px;top:${line.bottom - height}px;width:${line.width}px;height:${height}px;background:#000;pointer-events:none;z-index:100;`;
+      bar.style.cssText = `position:fixed;left:${line.left}px;top:${line.bottom - height}px;width:${line.width}px;height:${height}px;background:#000;pointer-events:none;z-index:9;`;
       document.body.appendChild(bar);
       return bar;
     });
@@ -2101,6 +2121,13 @@ const _showPage = () => {
     const drift = el.getBoundingClientRect().top - SCROLL_OFFSET;
     if (Math.abs(drift) > 1) window.scrollTo({ top: window.scrollY + drift, behavior: 'instant' });
     _removeCover();
+    requestAnimationFrame(() => {
+      document.querySelectorAll('.nav-primary a').forEach(link => {
+        if (link._activeBars && link._activeBars.length) {
+          link._activeBars = repositionBars(link, link._activeBars) || link._activeBars;
+        }
+      });
+    });
   });
 };
 document.fonts.load('1em NimbusRoman')
