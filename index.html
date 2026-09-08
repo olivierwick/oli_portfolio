@@ -2,2578 +2,1258 @@
 <html lang="de">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <title>Olivier Wick</title>
-  <meta name="description" content="Olivier Wick – Portfolio">
-  <meta name="author" content="Olivier Wick">
-  <link rel="canonical" href="https://olivierwick.ch/">
-  <link rel="icon" type="image/png" href="./favicon.png">
-
-  <script type="importmap">
-  {
-    "imports": {
-      "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
-      "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/",
-      "fflate": "https://cdn.jsdelivr.net/npm/fflate@0.8.2/esm/browser.js"
-    }
-  }
-  </script>
-
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Olivier Wick—Kontakt</title>
   <style>
-@font-face {
-  font-family: 'NimbusRoman';
-  src: url('TimesTenPro-Roman.otf') format('opentype');
-  font-weight: normal;
-  font-style: normal;
-}
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-body {
-  font-family: 'NimbusRoman', 'Times New Roman', Times, serif;
-  font-size: 14px;
-  background: #fff;
-  color: #000;
-  min-height: 100vh;
-  overflow-anchor: none;
-}
+    @font-face {
+      font-family: "Ronzino";
+      src: url("Ronzino-Medium.otf") format("opentype");
+      font-weight: 400;
+      font-style: normal;
+      font-display: swap;
+    }
 
-a {
-  text-decoration: none;
-  color: inherit;
-}
+    @font-face {
+      font-family: "Suisse Works";
+      src: url("SuisseWorksTrial-Medium.otf") format("opentype");
+      font-weight: 400;
+      font-style: normal;
+      font-display: swap;
+    }
 
-.work-description a.inline-link,
-.netz-description a.inline-link {
-  text-decoration: none;
-  color: inherit;
-  display: inline;
-  position: relative;
-}
-.work-description a.inline-link::after,
-.netz-description a.inline-link::after {
-  content: '';
-  position: absolute;
-  left: 0; right: 0; bottom: -1px;
-  height: 16px;
-  background: #000;
-  opacity: 0;
-  pointer-events: none;
-}
-.work-description a.inline-link:hover::after,
-.netz-description a.inline-link:hover::after { opacity: 0; }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
-.top-border { width: 100%; height: 2px; }
-.page-wrapper { display: flex; flex-direction: column; min-height: 100vh; }
-.main {
-  display: grid;
-  grid-template-columns: 50% 50%;
-  align-items: start;
-  flex: 1;
-  padding-top: 0;
-  padding-bottom: 0;
-  position: relative;
-}
+    html {
+      font-size: 110%;
+    }
 
-/* ── Sidebar ────────────────────────────────────────────────── */
-.sidebar {
-  position: fixed;
-  top: 0; left: 0;
-  width: 50%;
-  height: 100vh;
-  height: 100dvh;
-  padding: 4px 4px 4px 4px;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  transition: filter 0.3s ease;
-  z-index: 10;
-}
-body.mode-index .sidebar { pointer-events: none; }
-body.mode-index .sidebar .nav-index a,
-body.mode-index .sidebar .nav-secondary a { pointer-events: auto; }
+    html, body {
+      min-height: 100%;
+    }
 
-.nav-primary {
-  display: flex;
-  flex-direction: column;
-  gap: 0;
-  line-height: 1.35;
-  align-items: flex-start;
-}
-.nav-primary a {
-  text-decoration: none;
-  color: #000;
-  display: inline-block;
-  font-size: 37px;
-  line-height: 37px;
-  position: relative;
-  opacity: 0;
-  transform: translateY(5px);
-  transition: opacity 0.25s ease, transform 0.25s ease, filter 0.4s ease;
-}
-.nav-primary a.visible { opacity: 1; transform: translateY(0); }
-.nav-primary a::after {
-  content: '';
-  position: absolute;
-  left: 0; right: 0; bottom: 0;
-  height: 8px;
-  background: #000;
-  opacity: 0;
-  transition: opacity 0.2s ease;
-  pointer-events: none;
-}
-.nav-active-bar { opacity: 1; transition: opacity 0.15s; }
+    body {
+      min-height: 100vh;
+      background: #ffffff;
+      color: #000000;
+      font-family: "Ronzino", sans-serif;
+      font-weight: 400;
+      /* Zeilenabstand gleich der Schriftgrösse */
+      line-height: 1;
+      /* Silbentrennung (nutzt lang="de" am html-Element) */
+      -webkit-hyphens: auto;
+      hyphens: auto;
+      display: flex;
+      flex-direction: column;
+    }
 
-body.nav-active-hovered .nav-active-bar { opacity: 1 !important; }
-body:has(.nav-primary a:hover) .nav-active-bar,
-body:has(.nav-index a:hover) .nav-active-bar,
-body:has(.nav-secondary a:hover) .nav-active-bar,
-body:has(.footer-left a:hover) .nav-active-bar,
-body:has(.footer-links a:hover) .nav-active-bar { opacity: 0; }
+    /* ---------- Projekte oben ---------- */
+    .projects {
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 11rem;
+    }
 
-.nav-index {
-  display: none;
-  position: absolute;
-  top: 4px; left: 4px;
-  flex-direction: column;
-  gap: 0;
-  align-items: flex-start;
-}
-.nav-index.active { display: flex; }
-.nav-index a {
-  text-decoration: none;
-  color: #000;
-  display: inline-block;
-  font-size: 37px;
-  line-height: 37px;
-  position: relative;
-  opacity: 0;
-  transform: translateY(5px);
-  transition: opacity 0.25s ease, transform 0.25s ease;
-}
-.nav-index a.visible { opacity: 1; transform: translateY(0); }
+    /* eine Sparte pro Projekt: Titel links, Medien rechts daneben */
+    .project {
+      display: flex;
+      flex-direction: column;
+    }
 
-.nav-secondary {
-  position: absolute;
-  left: 4px;
-  display: flex;
-  flex-direction: column;
-  line-height: 1.35;
-  align-items: flex-start;
-  transition: filter 0.3s ease;
-}
-.nav-secondary a {
-  text-decoration: none;
-  color: #000;
-  font-size: 37px;
-  line-height: 37px;
-  display: inline-block;
-  position: relative;
-}
-.nav-secondary a::after {
-  content: '';
-  position: absolute;
-  left: 0; right: 0; bottom: 0px;
-  height: 8px;
-  background: #000;
-  opacity: 0;
-}
-.nav-secondary a:hover::after { opacity: 1; }
+    /* obere Zeile: Titel links, Medien rechts daneben.
+       Zurückgenommene Deckkraft, erst beim Hover volle Deckung. */
+    /* Abgedunkelt über filter statt opacity: Safari wendet eine
+       Eltern-opacity nicht zuverlässig auf bereits komponierte Kinder an
+       (Videos liegen dort immer auf einer eigenen GPU-Ebene), wodurch
+       einzelne Elemente voll gedeckt hängen bleiben. filter geht durch
+       die Filter-Pipeline und erfasst auch diese Ebenen. */
+    .p-row {
+      display: flex;
+      gap: 0.3rem;
+      align-items: flex-start;
+      filter: opacity(0.5);
+      transition: filter 0.3s ease;
+    }
 
-/* ── Content column ─────────────────────────────────────────── */
-.content {
-  padding: 2px 4px 0 4px;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 320px;
-  transition: filter 0.3s ease;
-}
+    /* Volle Deckung steuert ausschliesslich das Skript über .active –
+       am Desktop per Zeiger, auf dem Handy per Scrollposition. Kein
+       :hover, damit kein Zustand hängen bleibt, wenn der Zeiger das
+       Fenster verlässt. */
+    .p-row.active {
+      filter: opacity(1);
+    }
 
-/* Desktop: hide content when index mode is active */
-.content.hidden-for-index { display: none !important; }
+    /* Beschreibungen ausgeblendet – Text bleibt im HTML erhalten */
+    .p-desc {
+      display: none;
+    }
 
-.work-block {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  gap: 0;
-  align-items: flex-end;
-  scroll-margin-top: 5px;
-}
+    /* Beim Laden erscheint ein Element nach dem anderen: erst der Titel,
+       dann die Medien des Projekts, dann das nächste Projekt.
+       Startzustand hier, das Skript schaltet nacheinander .is-in dazu. */
+    .p-head,
+    .media-strip > img,
+    .media-strip > video,
+    .media-strip > model-viewer {
+      opacity: 0;
+      transform: translateY(1.2rem);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
 
-.work-description {
-  margin-top: 5px;
-  font-size: 19px;
-  line-height: 19px;
-  width: 500px;
-  max-width: 38vw;
-  text-align: left;
-  align-self: flex-start;
-  hyphens: auto;
-  -webkit-hyphens: auto;
-  word-break: break-word;
-}
+    .p-head.is-in,
+    .media-strip > img.is-in,
+    .media-strip > video.is-in,
+    .media-strip > model-viewer.is-in {
+      opacity: 1;
+      transform: translateY(0);
+    }
 
-.netz-description {
-  margin-top: 5px;
-  font-size: 19px;
-  line-height: 19px;
-  width: 75%;
-  text-align: left;
-  align-self: flex-end;
-  hyphens: auto;
-  -webkit-hyphens: auto;
-  word-break: break-word;
-}
+    /* Nach dem Einblenden Transform und Transition entfernen. Sonst
+       bleiben die Elemente auf einer eigenen Compositing-Ebene und die
+       Deckkraft der Reihe schlägt nicht zuverlässig auf sie durch. */
+    .p-head.settled,
+    .media-strip > img.settled,
+    .media-strip > video.settled,
+    .media-strip > model-viewer.settled {
+      transform: none;
+      transition: none;
+    }
 
-.info-block { width: 100%; }
-.info-text { font-size: 37px; line-height: 37px; max-width: 100%; }
-.info-contact-link { text-decoration: none; color: inherit; display: inline-block; position: relative; }
+    /* laufende Nummer über dem Titel, halber Einzug der Angaben */
+    .p-num {
+      padding-left: 1em;
+    }
 
-/* ── Image wrapper ──────────────────────────────────────────── */
-.img-wrapper { position: relative; width: 100%; }
-.img-wrapper > img:first-child { display: block; width: 100%; height: auto; }
-.img-wrapper .expand-btn { bottom: 4px; }
+    /* Angaben unter dem Titel, eingezogen */
+    .p-meta {
+      padding-left: 2em;
+    }
 
-/* ── Video wrapper ──────────────────────────────────────────── */
-.video-wrapper {
-  position: relative;
-  width: 100%;
-  margin-top: 13px;
-  line-height: 0;
-  overflow: hidden;
-  transform: translateZ(0);
-}
-.video-wrapper video { display: block; width: 100%; height: auto; }
+    /* Titel links neben der Arbeit, nur so breit wie der Text */
+    .p-head {
+      flex: 0 0 auto;
+      white-space: nowrap;
+      font-size: 1.5rem;
+      line-height: 1;
+    }
 
-.work-description + .video-wrapper,
-.work-description + .img-wrapper,
-.work-description + .fbx-viewer-wrap,
-.netz-description + .video-wrapper,
-.netz-description + .img-wrapper {
-  margin-top: 80px !important;
-}
+    /* Index: alle Medien nebeneinander, rechts neben dem Titel.
+       Feste Höhe pro Element, die Breite ergibt sich aus dem Seitenverhältnis.
+       Passt eine Zeile nicht, bricht sie um. */
+    .media-strip {
+      flex: 1;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+      gap: 0.5rem;
+      min-width: 0;
+      /* fester Abstand vom rechten Rand, je Reihe im HTML als --inset
+         gesetzt. Reihen ohne Angabe schliessen bündig ab. */
+      padding-right: var(--inset, 0);
+    }
 
-.video-thumb {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  z-index: 1;
-  opacity: 1;
-  transition: opacity 0.6s ease;
-  pointer-events: none;
-}
-.video-wrapper:hover .video-thumb { opacity: 0; }
+    .media-strip > * {
+      flex: 0 0 auto;
+      width: auto;
+      /* breite Medien dürfen den Strip nicht überlaufen – object-fit
+         passt den Inhalt dann innerhalb der Box ein */
+      max-width: 100%;
+      /* Höhe wächst und schrumpft mit der Fensterbreite, gedeckelt nach
+         unten und oben. 21vw trifft bei 1440px die bisherigen 300px. */
+      height: clamp(150px, 26vw, 375px);
+      object-fit: contain;
+      display: block;
+    }
 
-/* ── Grid thumb ─────────────────────────────────────────────── */
-.grid-thumb {
-  position: absolute; inset: 0; width: 100%; height: 100%;
-  object-fit: cover; z-index: 1; opacity: 1;
-  transition: opacity 0.6s ease; pointer-events: none;
-}
-.grid-item:hover .grid-item-inner .grid-thumb { opacity: 0; }
-body.mode-index .grid-item:hover .grid-item-inner .grid-thumb { opacity: 1; }
+    /* erzwungener Zeilenumbruch im Strip: nimmt die volle Breite ein und
+       schiebt damit alles Folgende in die nächste Zeile. Weil er eine
+       eigene Zeile bildet, zählt der row-gap sonst zweimal – senkrecht
+       stünde also der doppelte Abstand. Deshalb übernimmt der Umbruch
+       den Abstand selbst und der row-gap fällt weg. */
+    .media-strip > .row-break {
+      flex: 0 0 100%;
+      height: 0.5rem;
+    }
 
-.img-wrapper .expand-btn,
-.video-wrapper .expand-btn,
-.video-wrapper .ton-btn { z-index: 2; opacity: 0; transition: opacity 0.15s; }
-.img-wrapper:hover .expand-btn,
-.video-wrapper:hover .expand-btn,
-.video-wrapper:hover .ton-btn { opacity: 0.7; }
-.img-wrapper:hover .expand-btn:hover,
-.video-wrapper:hover .expand-btn:hover,
-.video-wrapper:hover .ton-btn:hover { opacity: 1; }
+    .media-strip:has(> .row-break) {
+      row-gap: 0;
+    }
 
-.expand-btn {
-  z-index: 2;
-  position: absolute;
-  bottom: 12px; left: 4px;
-  width: 60px; height: auto;
-  cursor: pointer;
-  mix-blend-mode: difference;
-  filter: brightness(0) invert(1);
-}
-.ton-btn {
-  display: none;
-}
+    /* Nie ein einzelnes Bild allein in einer Zeile. Bei fünf Plakaten gibt
+       es dafür nur zwei Aufteilungen: alle fünf, oder drei plus zwei. Die
+       Breiten sind deshalb fest in Spalten geteilt, statt sich aus der
+       Höhe zu ergeben – sonst würde als Rest ein einzelnes übrig bleiben. */
+    .media-strip.no-orphan > * {
+      width: calc((100% - 2rem) / 5);
+      height: auto;
+    }
 
-.video-progress-track {
-  position: absolute;
-  bottom: 0px; left: 0; right: 0;
-  height: 32px;
-  cursor: pointer;
-  display: flex;
-  align-items: flex-end;
-  mix-blend-mode: difference;
-  transition: opacity 0.5s ease;
-}
-.video-progress-fill {
-  height: 8px;
-  width: 0%;
-  background: rgba(255, 255, 255, 0.8);
-  pointer-events: none;
-  transition: background 0.3s ease, height 0.2s ease;
-  will-change: width;
-}
-.video-progress-track:hover .video-progress-fill {
-  background: rgba(255, 255, 255, 1);
-  height: 8px;
-}
+    @media (max-width: 1200px) {
+      .media-strip.no-orphan > * {
+        width: calc((100% - 1rem) / 3);
+      }
+    }
 
-/* ── FBX viewer ──────────────────────────────────────────────── */
-.fbx-viewer-wrap {
-  position: relative;
-  width: 100%;
-  margin-top: 160px;
-  background: #ffffff;
-  cursor: grab;
-  user-select: none;
-  touch-action: none;
-}
-.fbx-viewer-wrap:active { cursor: grabbing; }
-.fbx-viewer-wrap canvas { display: block; width: 100% !important; height: auto; aspect-ratio: 16/9; }
-#wrap-zigaretten {
-  overflow: hidden;
-  padding-top: 40px;
-  margin-left: 0 !important;
-  margin-right: 0 !important;
-  margin-bottom: -96px;
-  width: 100% !important;
-}
-#wrap-zigaretten canvas {
-  width: 100% !important;
-  margin-left: 0;
-  margin-bottom: 80px;
-}
-#wrap-billiardkreide {
-  overflow: hidden;
-  margin-left: 0 !important;
-  margin-right: 0 !important;
-  width: 100% !important;
-}
-#wrap-billiardkreide canvas {
-  width: 100% !important;
-  margin-left: 0;
-}
-.fbx-loading-overlay {
-  position: absolute; inset: 0;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 14px; color: #fff; background: #111;
-  pointer-events: none; transition: opacity 0.5s ease; z-index: 5;
-}
-.fbx-loading-overlay.hidden { opacity: 0; }
+    /* 3D-Modell: anders als Bild und Video hat es kein eigenes
+       Seitenverhältnis, deshalb hier eins vorgeben. Die Höhe kommt wie
+       bei den übrigen Medien aus der Regel darüber. */
+    .media-strip > model-viewer {
+      aspect-ratio: 4 / 3;
+      width: auto;
+      background: transparent;
+      --poster-color: transparent;
+    }
 
-/* ── Fullscreen overlays ─────────────────────────────────────── */
-.fullscreen-overlay {
-  display: none;
-  position: fixed; inset: 0;
-  background: #000;
-  z-index: 99999;
-}
-.fullscreen-overlay.active { display: flex; align-items: center; justify-content: center; }
-#fullscreenImg { max-width: 100vw; max-height: 100vh; width: auto; height: auto; display: block; cursor: default; }
-#fullscreenVideo { width: 100vw; height: 100vh; height: 100dvh; max-width: none; max-height: none; object-fit: contain; display: block; cursor: default; }
+    /* model-viewer setzt selbst einen Greif-Cursor – hier soll wie bei
+       den übrigen Medien nur das Textlabel zu sehen sein */
+    .media-strip > model-viewer.has-cursor,
+    .media-strip > model-viewer.has-cursor:active {
+      cursor: none;
+    }
 
-.fullscreen-close-x {
-  position: absolute; bottom: 12px; left: 4px;
-  width: 60px; height: auto;
-  cursor: pointer; opacity: 0.7;
-  z-index: 100000; background: none; border: none; padding: 0;
-  mix-blend-mode: difference;
-  filter: brightness(0) invert(1);
-  transition: opacity 0.5s ease;
-}
-@media (hover: hover) { .fullscreen-close-x:hover { opacity: 1; } }
-#imgOverlay .fullscreen-close-x {
-  position: absolute; bottom: 4px; left: 4px;
-}
-.fullscreen-controls-br {
-  position: absolute; bottom: 12px; right: 4px;
-  display: flex; flex-direction: column; align-items: flex-end;
-  gap: 0; z-index: 100000;
-  mix-blend-mode: difference;
-}
-.fullscreen-ton-btn,
-.fullscreen-pause-btn {
-  cursor: pointer; opacity: 0.7;
-  background: none; border: none; padding: 0;
-  font-family: Helvetica, Arial, sans-serif;
-  font-size: 30px; line-height: 1;
-  color: #fff;
-}
-@media (hover: hover) {
-  .fullscreen-ton-btn:hover,
-  .fullscreen-pause-btn:hover { opacity: 1; }
-}
+    /* leichter Schatten nur für dieses Element (folgt dank drop-shadow der Alpha-Form) */
+    .media-strip > .shadow {
+      filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.3));
+    }
 
-#fsVideoWrap, #fsImgWrap {
-  position: relative; display: inline-block; line-height: 0;
-}
-.fs-progress-track {
-  position: absolute; bottom: 0; left: 0; right: 0;
-  height: 8px; cursor: pointer;
-  mix-blend-mode: difference;
-  transition: opacity 0.5s ease; opacity: 0;
-}
-@media (hover: hover) {
-  #fsVideoWrap:hover .fs-progress-track { opacity: 0.7; }
-  #fsVideoWrap:hover .fs-progress-track:hover { opacity: 1; }
-}
-@media (hover: none) {
-  .fs-progress-track { opacity: 0.7; }
-}
-.fs-progress-fill {
-  height: 100%; width: 0%;
-  background: rgba(255, 255, 255, 0.8);
-  pointer-events: none; transition: background 0.3s ease;
-}
-.fs-progress-track:hover .fs-progress-fill { background: rgba(255, 255, 255, 1); }
+    /* Fusszeile ganz unten, linksbündig unter den Projekten */
+    .footer {
+      margin-top: 11rem;
+      padding-left: 3px;
+      font-size: 1.5rem;
+      line-height: 1;
+    }
 
-.fullscreen-ton-btn,
-.fullscreen-pause-btn { transition: opacity 0.5s ease; }
-#videoOverlay.idle .fullscreen-close-x,
-#videoOverlay.idle .fullscreen-controls-br,
-#videoOverlay.idle .fs-progress-track { opacity: 0 !important; pointer-events: none; }
-#videoOverlay.idle { cursor: none; }
+    /* Bild mit Text-Cursor */
+    .has-cursor {
+      cursor: none;
+    }
 
-.video-wrapper.idle .expand-btn,
-.video-wrapper.idle .ton-btn { opacity: 0 !important; pointer-events: none; }
-.video-wrapper.idle .video-progress-track { opacity: 0; transition: opacity 0.5s ease; }
+    .cursor-label {
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 200;
+      pointer-events: none;
+      font-family: "Ronzino", sans-serif;
+      font-size: 1.5rem;
+      line-height: 1;
+      color: #fff;
+      mix-blend-mode: difference;
+      white-space: nowrap;
+      transform-origin: top left;
+      display: none;
+    }
 
-/* ── Index grid ──────────────────────────────────────────────── */
-.index-grid-view {
-  display: none;
-  position: absolute;
-  top: 4px; left: calc(100% / 6); right: 0;
-  padding: 0 4px 16px 0;
-  transition: filter 0.3s ease;
-}
-.index-grid-view.active { display: block; }
-.grid-container { display: grid; grid-template-columns: repeat(5, 1fr); column-gap: 4px; row-gap: 14vw; width: 100%; }
+    .cursor-label.show {
+      display: block;
+    }
 
-.grid-item { cursor: pointer; }
-.grid-item[data-work-id="work-pointcloud"] img.grid-thumb { filter: invert(1); }
-#work-pointcloud .video-thumb { filter: invert(1); }
-.grid-item-inner {
-  position: relative; width: 100%;
-  overflow: hidden; background: transparent;
-}
-.grid-item-inner video {
-  display: block; width: 100%; height: auto;
-}
-.grid-item-inner.fixed-ratio video {
-  position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;
-}
-.grid-item-inner img.grid-image {
-  display: block; width: 100%; height: auto;
-}
-.grid-item-inner canvas {
-  display: block; aspect-ratio: 16 / 9;
-  width: 100% !important; height: auto !important;
-}
-/* NOTE: .grid-thumb moved above (shared with mobile) */
-.grid-loading-overlay {
-  position: absolute; inset: 0;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 9px; color: #fff; background: #111;
-  pointer-events: none; transition: opacity 0.5s ease; z-index: 2;
-}
-.grid-loading-overlay.hidden { opacity: 0; }
-.grid-item-title { font-size: 19px; line-height: 19px; margin-top: 5px; }
+    .cursor-label.arrow {
+      font-size: 3rem;
+    }
 
-/* ── Fixed footer ────────────────────────────────────────────── */
-.footer-left {
-  position: fixed; left: 4px; bottom: 4px;
-  line-height: 1.35; pointer-events: all;
-  transition: filter 0.3s ease; z-index: 10;
-}
-.footer-left .title a {
-  text-decoration: none; color: #000;
-  font-size: 37px; line-height: 37px;
-  display: inline-block; position: relative;
-}
-.footer-links {
-  position: fixed; left: 25%; bottom: 14px;
-  line-height: 1.35; pointer-events: all;
-  display: flex; flex-direction: column;
-  transition: filter 0.3s ease; z-index: 10;
-}
-.footer-links a {
-  text-decoration: none; color: #000;
-  display: inline-block; position: relative;
-  font-size: 37px; line-height: 37px;
-}
-.footer-links a::after {
-  content: ''; position: absolute;
-  left: 0; right: 0; bottom: 0px;
-  height: 8px; background: #000;
-  opacity: 0;
-}
-.footer-links a:hover::after { opacity: 1; }
+    /* ---------- Info-Text ---------- */
+    .info {
+      display: none;
+      position: fixed;
+      inset: 0;
+      /* über den Projekten, aber unter der Lightbox und dem Header */
+      z-index: 40;
+    }
 
-.nav-primary a,
-.nav-index a,
-.nav-secondary a,
-.footer-left .title a,
-.footer-links a,
-.info-text {
-  /* -webkit-text-stroke: 3px #fff; */
-  paint-order: stroke fill;
-}
+    .info.open {
+      display: block;
+    }
 
-/* ════════════════════════════════════════════════════════════════
-   VERTICAL BREAKPOINTS (desktop only, > 819px wide)
-   ════════════════════════════════════════════════════════════════ */
-@media (min-width: 1025px) and (max-height: 650px) {
-  .nav-secondary {
-    position: fixed !important;
-    bottom: 4px !important;
-    right: 4px !important;
-    left: auto !important;
-    top: auto !important;
-    align-items: flex-end !important;
-    padding: 0 !important;
-    z-index: 9000 !important;
-  }
-  .nav-secondary a { white-space: nowrap !important; }
-  .footer-left { z-index: 9000 !important; }
-  #mobile-bottom-fill {
-    display: block;
-    position: fixed;
-    bottom: 0; left: 0; right: 0;
-    height: 84px;
-    background: #fff;
-    z-index: 8999;
-    pointer-events: none;
-  }
-}
+    /* gleicher weichgezeichneter Hintergrund wie in der Lightbox */
+    .info-backdrop {
+      position: absolute;
+      inset: 0;
+      background: rgba(255, 255, 255, 0.12);
+      backdrop-filter: blur(2.5px);
+      -webkit-backdrop-filter: blur(2.5px);
+    }
 
-/* ════════════════════════════════════════════════════════════════
-   MOBILE / TABLET  ≤ 819px
-   ════════════════════════════════════════════════════════════════ */
-@media (max-width: 880px) {
-  /*
-   * FIX: Exclude .video-thumb and .grid-thumb from opacity:1 !important
-   * so that JS can set their opacity to 0 when videos play via scroll.
-   */
-  *:not(.video-thumb):not(.grid-thumb):not(.expand-btn):not(.ton-btn):not(.video-progress-track):not(.video-progress-fill):not(.fullscreen-close-x):not(.fullscreen-ton-btn):not(.fullscreen-pause-btn):not(.fs-progress-track):not(.fs-progress-fill):not(.nav-active-bar):not(.nav-hover-bar) {
-    filter: none !important;
-    opacity: 1 !important;
-    transition: none !important;
-  }
+    /* Text beginnt bei der Hälfte der Fensterbreite */
+    .info-text {
+      position: relative;
+      z-index: 2;
+      margin-left: 50%;
+      padding-right: 2rem;
+      font-size: 1.5rem;
+      line-height: 1.15;
+    }
 
-  .nav-active-bar, .nav-hover-bar { display: none !important; }
+    .info-text p + p {
+      margin-top: 1em;
+    }
 
-  .info-contact-link::after {
-    content: '';
-    position: absolute;
-    left: 0; right: 0; bottom: 0;
-    height: 8px;
-    background: #000;
-    opacity: 0;
-    pointer-events: none;
-  }
-  .info-contact-link:hover::after { opacity: 1; }
+    .info-text a {
+      color: inherit;
+    }
 
-  /* Allow smooth fade on thumbnails */
-  .video-thumb,
-  .grid-thumb {
-    transition: opacity 0.4s ease !important;
-  }
+    /* ---------- Info-Text ---------- */
+    .info {
+      display: none;
+      position: fixed;
+      inset: 0;
+      /* über den Projekten, aber unter der Lightbox und dem Header */
+      z-index: 40;
+    }
 
-  /* ── Fullscreen: über allem, inkl. body::after fade ── */
-  .fullscreen-overlay {
-    display: none !important;
-    position: fixed !important;
-    inset: 0 !important;
-    background: #000 !important;
-    z-index: 99999 !important;
-    align-items: center !important;
-    justify-content: center !important;
-  }
-  .fullscreen-overlay.active {
-    display: flex !important;
-  }
-  #fullscreenImg {
-    display: block !important;
-    max-width: 100vw !important; max-height: 100vh !important;
-    width: auto !important; height: auto !important;
-    object-fit: contain !important;
-  }
-  #fsVideoWrap {
-    display: inline-block !important;
-    position: relative !important;
-    line-height: 0 !important;
-  }
-  #fullscreenVideo {
-    display: block !important;
-    width: 100vw !important; height: 100vh !important; height: 100dvh !important;
-    max-width: none !important; max-height: none !important;
-    object-fit: contain !important;
-  }
-  .fullscreen-close-x {
-    padding: 0 !important;
-    z-index: 100001 !important;
-  }
-  #imgOverlay .fullscreen-close-x {
-    position: absolute !important; bottom: 4px !important; left: 4px !important;
-  }
-  .fullscreen-controls-br {
-    z-index: 100001 !important;
-  }
-  .fullscreen-ton-btn,
-  .fullscreen-pause-btn { padding: 0 !important; }
-  #videoOverlay.idle { cursor: auto !important; }
+    .info.open {
+      display: block;
+    }
 
+    /* gleicher weichgezeichneter Hintergrund wie in der Lightbox */
+    .info-backdrop {
+      position: absolute;
+      inset: 0;
+      background: rgba(255, 255, 255, 0.12);
+      backdrop-filter: blur(2.5px);
+      -webkit-backdrop-filter: blur(2.5px);
+    }
 
-  /* ── Layout ── */
-  .main {
-    display: block !important;
-    width: 100% !important; padding: 0 !important;
-  }
-  .sidebar {
-    position: static !important;
-    width: 100% !important; height: auto !important; padding: 0 !important;
-  }
-  .nav-primary, .nav-index { display: none !important; }
+    /* Text beginnt bei der Hälfte der Fensterbreite */
+    .info-text {
+      position: relative;
+      z-index: 2;
+      margin-left: 50%;
+      padding-right: 2rem;
+      font-size: 1.5rem;
+      line-height: 1.15;
+    }
 
-  /* Fade-Footer — UNTER dem Fullscreen */
-  body::after { display: none; }
+    .info-text p + p {
+      margin-top: 1em;
+    }
 
-  #mobile-bottom-fill {
-    display: block;
-    position: fixed;
-    bottom: 0; left: 0; right: 0;
-    height: calc(84px + env(safe-area-inset-bottom));
-    background: #fff;
-    z-index: 8999;
-    pointer-events: none;
-  }
-  .footer-left {
-    position: fixed !important;
-    bottom: calc(4px + env(safe-area-inset-bottom)) !important;
-    left: 4px !important;
-    z-index: 9000 !important; background: transparent;
-  }
-  .nav-secondary {
-    position: fixed !important;
-    bottom: calc(4px + env(safe-area-inset-bottom)) !important;
-    right: 4px !important;
-    left: auto !important; top: auto !important;
-    display: flex !important; flex-direction: column !important;
-    align-items: flex-end !important; gap: 0 !important;
-    z-index: 9000 !important;
-    padding: 16px 0 0 32px !important;
-  }
-  .footer-left .title a { white-space: nowrap; line-height: 37px !important; }
-  .nav-secondary a      { white-space: nowrap; line-height: 37px !important; }
-  /* ── Arbeiten-Modus: content sichtbar, grid versteckt ── */
-  body:not(.mode-index) .content {
-    width: 100% !important;
-    padding: 4px 4px 176px 4px !important;
-    display: flex !important;
-    flex-direction: column !important;
-    gap: 200px !important;
-  }
-  body:not(.mode-index) .index-grid-view {
-    display: none !important;
-  }
+    .info-text a {
+      color: inherit;
+    }
 
-  /* ── Index-Modus: content versteckt, grid sichtbar ── */
-  body.mode-index .content {
-    display: none !important;
-  }
-  body.mode-index .index-grid-view {
-    display: block !important;
-    position: static !important;
-    left: auto !important; top: auto !important;
-    padding: 4px 4px 96px 4px !important;
-    width: 100% !important;
-  }
-  /* Mobile: 2 columns */
-  body.mode-index .grid-container {
-    grid-template-columns: repeat(2, 1fr) !important;
-    row-gap: 0 !important;
-  }
-  body.mode-index .grid-item,
-  body.mode-index .grid-item-empty,
-  body.mode-index .grid-filter-gap { margin-bottom: 80px; }
-  body.mode-index .grid-row-close  { margin-bottom: 4px !important; }
-  .grid-item-title {
-    font-size: 14px !important; line-height: 16px !important;
-  }
+    .h-info {
+      cursor: pointer;
+      user-select: none;
+    }
 
-  /* ── Work blocks ── */
-  .work-block {
-    width: 100% !important;
-    display: flex !important; flex-direction: column !important;
-    align-items: flex-start !important;
-  }
-  .work-block::before {
-    display: block !important; text-align: left !important;
-    margin-bottom: 5px !important; width: 100% !important;
-    line-height: 1 !important;
-  }
-  #work-all-along::before         { content: "All along the white line"; font-size: 37px; }
-  #work-pointcloud::before        { content: "pointcloud.xyz";            font-size: 37px; }
-  #work-plakate::before           { content: "Netz";                      font-size: 37px; }
-  #work-emerald-barrel::before    { content: "The Emerald Barrel";          font-size: 37px; }
-  #work-ueberall-bauen::before    { content: "Überall bauen,\A nirgendwo leben"; white-space: pre-wrap; font-size: 37px; }
-  #work-zwischen-asphalt::before  { content: "Zwischen Asphalt\A und Beton"; white-space: pre-wrap; font-size: 37px; }
-  #work-info-kontakt::before      { display: none !important; }
+    /* Solange etwas darüber liegt – Info-Text oder Lightbox – braucht die
+       Kopfzeile drei Anpassungen:
+       1. fixed statt sticky: die Scroll-Sperre nimmt dem Dokument den
+          Scroll-Container, sticky greift dann nicht mehr und die Zeile
+          fällt an ihre statische Position ganz oben zurück.
+       2. z-index über die Lightbox (100), sonst liegt sie darunter.
+       3. Difference-Blend aus – über dem weichgezeichneten Overlay
+          rechnet er die Schrift teils unsichtbar. */
+    html.lb-open .header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 150;
+      mix-blend-mode: normal;
+      color: #000000;
+    }
 
-  .work-description,
-  .netz-description,
-  .video-wrapper,
-  .img-wrapper,
-  .fbx-viewer-wrap {
-    width: 100% !important; max-width: 100% !important;
-    margin-left: 0 !important; margin-right: 0 !important;
-    padding-left: 0 !important; left: 0 !important;
-    text-align: left !important; align-self: flex-start !important;
-    touch-action: pan-y !important;
-  }
-  #wrap-zigaretten {
-    margin-top: 16px !important;
-    margin-left: 0 !important;
-    margin-right: 0 !important;
-    width: 100% !important;
-  }
-  #wrap-zigaretten canvas {
-    width: 100% !important;
-    margin-left: 0 !important;
-        margin-bottom: 80px !important;
-  }
-  #wrap-billiardkreide {
-    overflow: hidden !important;
-    margin-left: 0 !important;
-    margin-right: 0 !important;
-    margin-bottom: 0px !important;
-    width: 100% !important;
-  }
-  #wrap-billiardkreide canvas {
-    width: 100% !important;
-    margin-left: 0 !important;
-  }
-  .work-block > .video-wrapper:first-child,
-  .work-block > .img-wrapper:first-child { margin-top: 0 !important; }
+    /* gleicht die Höhe aus, die die fixierte Kopfzeile im Fluss hinterlässt.
+       Dazu die Breite der Scrollleiste: sie verschwindet beim Sperren, das
+       Fenster wird dadurch breiter und alles rutschte sonst nach rechts. */
+    html.lb-open body {
+      padding-top: var(--header-h, 0);
+      padding-right: var(--sbw, 0);
+    }
 
+    /* dasselbe für alles, was am Fensterrand hängt */
+    html.lb-open .header,
+    html.lb-open .info,
+    html.lb-open .lightbox {
+      right: var(--sbw, 0);
+    }
 
-  .video-wrapper .video-progress-track {
-    height: 35px !important; opacity: 0;
-  }
-  .video-wrapper:not(.idle) .video-progress-track { opacity: 1 !important; }
-  .video-wrapper.playing:not(.idle) .expand-btn,
-  .video-wrapper.playing:not(.idle) .ton-btn { opacity: 0.7 !important; }
-  .img-wrapper .expand-btn { opacity: 0.7 !important; pointer-events: all !important; bottom: 4px !important; }
-  .ton-btn { width: 34px !important; height: auto !important; }
-}
+    /* Die Kopfzeile liegt über dem Schleier, wird vom backdrop-filter also
+       nicht erfasst. Deshalb hier direkt weichzeichnen – in derselben
+       Stärke wie der Schleier selbst. */
 
-@media (max-width: 430px) {
-  #wrap-billiardkreide,
-  #wrap-zigaretten {
-    overflow: hidden !important;
-    margin-left: 80px !important;
-    margin-right: 80px !important;
-    width: calc(100% - 160px) !important;
-  }
-  #wrap-billiardkreide canvas,
-  #wrap-zigaretten canvas {
-    width: 100vw !important;
-    position: relative !important;
-    left: 50% !important;
-    transform: translateX(-50%) !important;
-    margin-left: 0 !important;
-  }
-  #mobile-bottom-fill { height: calc(84px + env(safe-area-inset-bottom)); }
-  .nav-secondary a::after { opacity: 0 !important; }
-  .info-contact-link:hover::after { opacity: 0 !important; }
-  .expand-btn { width: 40px !important; }
-  .ton-btn { width: 26px !important; height: auto !important; }
-  .fullscreen-close-x { width: 40px !important; }
-  .fullscreen-ton-btn,
-  .fullscreen-pause-btn { font-size: 20px !important; }
-}
+    /* Lightbox: beide Elemente unscharf und zurückgenommen wie die Reihen */
+    html.lb-open:not(.info-open) .header {
+      filter: blur(2.5px) opacity(0.5);
+    }
+
+    /* Info: der Name ebenso, "Schliessen" bleibt klar und lesbar */
+    html.info-open .h-name {
+      filter: blur(2.5px) opacity(0.5);
+    }
+
+    /* Bei offener Lightbox die Seite dahinter festhalten */
+    html.lb-open,
+    html.lb-open body {
+      overflow: hidden;
+    }
+
+    /* ---------- Lightbox ---------- */
+    .lightbox {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 100;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .lightbox.open {
+      display: flex;
+    }
+
+    /* weichgezeichneter Hintergrund – Seite bleibt sichtbar */
+    .lb-backdrop {
+      position: absolute;
+      inset: 0;
+      background: rgba(255, 255, 255, 0.12);
+      backdrop-filter: blur(2.5px);
+      -webkit-backdrop-filter: blur(2.5px);
+    }
+
+    .lb-stage {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .lb-stage img,
+    .lb-stage video {
+      /* Platz an den Seiten frei lassen, damit breite Videos die
+         Zurück-/Weiter-Buttons nicht überlappen */
+      max-width: calc(100vw - 16rem);
+      max-height: 92vh;
+      object-fit: contain;
+      display: block;
+    }
+
+    .lb-arrow {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 3;
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-family: inherit;
+      font-size: 1.5rem;
+      line-height: 1;
+      color: #000;
+      padding: 0.4rem 0;
+      user-select: none;
+    }
+
+    .lb-prev { left: 0; }
+    .lb-next { right: 0; }
+
+    /* Text ganz rechts */
+    .text {
+      display: none;
+    }
+
+    .text .t {
+      font-size: 1.5rem;
+      line-height: 1;
+    }
+
+    .text .m {
+      font-size: 1rem;
+      line-height: 1;
+      margin-top: 0.2em;
+    }
+
+    .text .d {
+      font-size: 1rem;
+      line-height: 1;
+      margin-top: 0.4em;
+      display: none;
+    }
+
+    /* ---------- Header oben (sticky, difference) ---------- */
+    .header {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      display: flex;
+      justify-content: flex-start;
+      font-size: 1.5rem;
+      line-height: 1;
+      margin-bottom: 0;
+      color: #fff;
+      mix-blend-mode: difference;
+    }
+
+    .header a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .header .h-name {
+      cursor: pointer;
+      /* nimmt das erste Viertel ein, dadurch beginnt "Info" bei 25% */
+      flex: 0 0 25%;
+    }
+
+    /* ---------- iPhone / kleine Screens ---------- */
+    @media (max-width: 600px) {
+      html {
+        font-size: 95%;
+      }
+
+      /* kein Hover auf Touch: Cursor-Texte weg, normaler Cursor zurück */
+      .cursor-label,
+      .cursor-label.show {
+        display: none;
+      }
+
+      .has-cursor {
+        cursor: auto;
+      }
+
+      /* Titel oben, Medien darunter – beide linksbündig */
+      .p-row {
+        flex-direction: column;
+        align-items: flex-start;
+        /* hier wirkt der gap vertikal, deshalb wieder grosszügiger */
+        gap: 0.6rem;
+      }
+
+      /* in der Spalte nicht mitwachsen, sonst kollabiert die Höhe.
+         Linksbündig, damit das Wechselspiel links/rechts erhalten bleibt,
+         und ohne den Einzug vom rechten Rand. */
+      .media-strip {
+        flex: 0 0 auto;
+        width: 100%;
+        justify-content: flex-start;
+        padding-right: 0;
+      }
+
+      /* Medien untereinander: eins pro Reihe, abwechselnd links und rechts.
+         Breite gesetzt, Höhe folgt dem Seitenverhältnis. */
+      .media-strip > * {
+        width: 72%;
+        height: auto;
+      }
+
+      .media-strip > *:nth-child(even) {
+        margin-left: auto;
+      }
+
+      /* Videos laufen über die volle Breite, nicht versetzt.
+         Die :nth-child-Variante ist nötig, um die Regel darüber zu schlagen. */
+      .media-strip > video,
+      .media-strip > video:nth-child(even) {
+        width: 100%;
+        margin-left: 0;
+      }
+
+      /* einzelne Medien schmaler. Die :nth-child-Variante muss die
+         Video-Regel darüber schlagen, daher die höhere Spezifität. */
+      .media-strip > .w70,
+      .media-strip > .w70:nth-child(even) {
+        width: 70%;
+      }
+
+      /* auf geraden Positionen weiter nach rechts gesetzt */
+      .media-strip > .w70:nth-child(even) {
+        margin-left: auto;
+      }
+
+      /* Plakate: zwei pro Reihe über die volle Breite */
+      .media-strip.two-up > * {
+        width: calc((100% - 0.5rem) / 2);
+        margin-left: 0;
+      }
+
+      /* Lightbox: Medium oben, darunter Zurück/Weiter links und rechts.
+         Als Grid, damit der Abstand exakt dem Abstand zwischen den
+         Medien entspricht (0.5rem) statt am Bildschirmrand zu kleben. */
+      .lightbox.open {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: auto auto;
+        align-content: center;
+        row-gap: 0.5rem;
+      }
+
+      .lb-stage {
+        grid-row: 1;
+        grid-column: 1 / 3;
+      }
+
+      .lb-arrow {
+        position: static;
+        transform: none;
+        align-self: center;
+      }
+
+      .lb-prev {
+        grid-row: 2;
+        grid-column: 1;
+        justify-self: start;
+        margin-left: 1rem;
+      }
+
+      .lb-next {
+        grid-row: 2;
+        grid-column: 2;
+        justify-self: end;
+        margin-right: 1rem;
+      }
+
+      /* fast volle Breite, aber ein schmaler Rand bleibt links und rechts */
+      .lb-stage img,
+      .lb-stage video {
+        max-width: calc(100vw - 2rem);
+        max-height: 82vh;
+      }
+
+      /* Kopfzeile: nur Name links, Info rechts */
+      .h-insta,
+      .h-mail {
+        display: none;
+      }
+
+      /* nur ein Strich statt zwei */
+      .d2 {
+        display: none;
+      }
+    }
   </style>
 </head>
 <body>
-<div id="_page_cover" style="position:fixed;inset:0;background:#fff;z-index:2147483647;pointer-events:none;"></div>
+  <div class="header">
+    <span class="h-name" onclick="location.reload()">Olivier Wick</span>
+    <span class="h-info">Info</span>
+  </div>
 
-  <!-- Image fullscreen -->
-  <div class="fullscreen-overlay" id="imgOverlay">
-    <div id="fsImgWrap">
-      <img id="fullscreenImg" src="" alt="">
-      <img class="fullscreen-close-x" id="imgClose" src="./leave.png" alt="Schliessen">
+  <div class="info" id="info" aria-hidden="true">
+    <div class="info-backdrop" data-close-info></div>
+    <div class="info-text">
+      <p>Ich gestalte Webseiten, Filme oder 3D-Environments mit einem grafischen Auge und Interesse an Subkultur. Mich beschäftigt Gestaltung im lokalen Kontext.</p>
+      <p>Ich habe Grundkenntnisse in CSS, HTML und JavaScript, in verschiedenen Adobe-Programmen sowie in Blender und DaVinci Resolve.</p>
+      <p>Feel free, mir eine Mail (<a href="mailto:olivier.wick@yahoo.com">olivier.wick@yahoo.com</a>) oder eine DM (<a href="https://instagram.com/076_olivier" target="_blank">076_olivier</a>) zu schicken!!!</p>
     </div>
   </div>
 
-  <!-- Video fullscreen -->
-  <div class="fullscreen-overlay" id="videoOverlay">
-    <div id="fsVideoWrap">
-      <video id="fullscreenVideo" loop playsinline></video>
-      <div class="fs-progress-track" id="fsProgressTrack">
-        <div class="fs-progress-fill" id="fsProgressFill"></div>
-      </div>
-      <img class="fullscreen-close-x" id="videoClose" src="./leave.png" alt="Schliessen">
-      <div class="fullscreen-controls-br">
-        <button class="fullscreen-ton-btn" id="fullscreenTonBtn">TON</button>
-        <button class="fullscreen-pause-btn" id="fullscreenPauseBtn">PAUSE</button>
+  <div class="projects">
+
+    <!-- klycheck.ch -->
+    <div class="project">
+      <div class="p-row">
+        <div class="p-head"><div class="p-num">1</div>klycheck.ch<div class="p-kind">Installation, Website</div><div class="p-meta">2026<br />Abschlussarbeit<br />Martin Fuchs<br />Annik Troxler</div></div>
+        <div class="p-desc">kurze Beschreibung der Arbeit …</div>
+        <div class="media-strip" id="kly-strip">
+          <img src="100.png" alt="" class="has-cursor" data-cursor="klycheck.ch|Plakat" />
+          <video src="INSTALLATION_DOKUMENTATION.mp4" autoplay loop muted playsinline class="has-cursor" style="height: clamp(175px, 30vw, 430px)" data-cursor="Installation|dokumentiert"></video>
+          <div class="row-break"></div>
+          <video src="huhuhaha.mp4" autoplay loop muted playsinline class="has-cursor" data-start="5" data-cursor="Story eins|Instagram"></video>
+        </div>      </div>
+      <div class="text">
+        <div class="t">klycheck.ch</div>
+        <div class="m">Jahr · Kategorie · Dozent*in</div>
+        <div class="d">kurze Beschreibung der Arbeit …</div>
       </div>
     </div>
+
+    <!-- All along the white line -->
+    <div class="project">
+      <div class="p-row">
+        <div class="p-head"><div class="p-num">2</div>All along the white line<div class="p-kind">Kurzfilm</div><div class="p-meta">2026<br />Critical Media<br />Berenice Serra</div></div>
+        <div class="p-desc">«All along the white line» gewährt einen Einblick in die Subkultur illegaler Straßenrennen und Drifts und erzählt drei verschiedene Geschichten aus der ganzen Welt. Entstanden 2026 im Kurs Critical Media bei Berenice Serra. Im Zentrum stehen nicht die Fahrzeuge, sondern die Menschen, die sich Nacht für Nacht an denselben Orten treffen, und die Regeln, die sie sich dabei selbst geben. Gezeigt wird die Videoarbeit zusammen mit einer Ausstellungssituation in der Burgunderstrasse.</div>
+        <div class="media-strip">
+          <video src="all_along_the_white_line.mp4" autoplay loop muted playsinline class="has-cursor" data-cursor="Drift bei Nacht|irgendwo im Nirgendwo"></video>
+          <img src="tvnight_web.jpeg" alt="" class="has-cursor w70" style="height: clamp(200px, 35vw, 500px)" data-cursor="Ausstellung in der|Burgunderstrasse" />
+        </div>      </div>
+      <div class="text">
+        <div class="t">All along the white line</div>
+        <div class="m">2026 · Critical Media · Berenice Serra</div>
+        <div class="d">«All along the white line» gewährt einen Einblick in die Subkultur illegaler Straßenrennen und Drifts und erzählt drei verschiedene Geschichten aus der ganzen Welt.</div>
+      </div>
+    </div>
+
+    <!-- Plakate -->
+    <div class="project">
+      <div class="p-row">
+        <div class="p-head"><div class="p-num">3</div>Fiktive Plakate<div class="p-kind">Freie Serie</div><div class="p-meta">seit 2025<br />Eigenes Projekt</div></div>
+        <div class="p-desc">Im Workshop von <a href="https://veravandeseyp.com">Vera van de Seyp</a> haben wir eine Plakatreihe via Creative Coding in P5.js erstellt. Die Arbeit entstand in Zusammenarbeit mit Laurel Biolley. Statt jedes Plakat einzeln zu setzen, entsteht die Reihe aus einem Programm: Typografie, Bildausschnitt und Farbe werden über Parameter gesteuert, jede Ausgabe ist eine Variante derselben Regel. Die Motive sind frei erfunden und laden zu Veranstaltungen ein, die es nicht gibt. Die Serie wächst seit 2025 weiter, jedes neue Plakat erweitert das Set.</div>
+        <div class="media-strip two-up no-orphan">
+          <img src="plakate/brunnen_web.png" alt="" class="has-cursor" data-cursor="Brunnen gehen|Pisoni-Brunnen" />
+          <img src="plakate/plakate_verschiedenste_web.jpg" alt="" class="has-cursor" data-cursor="Stadtspaziergänge|Schritt für Schritt Basel" />
+          <img src="plakate/caramelo_web.png" alt="" class="has-cursor" data-cursor="Caramelo|Kaschemme Basel" />
+          <img src="plakate/plakate_verschiedenste1_web.jpg" alt="" class="has-cursor" data-cursor="Der Zwischenraum|weder Stadt noch Land" />
+          <img src="plakate/hoffnung_web.jpg" alt="" class="has-cursor" data-cursor="Hoffnung|Plakat" />
+        </div>      </div>
+      <div class="text">
+        <div class="t">Plakate</div>
+        <div class="m">2025</div>
+        <div class="d">Plakatreihe.</div>
+      </div>
+    </div>
+
+    <!-- pointcloud.xyz -->
+    <div class="project">
+      <div class="p-row">
+        <div class="p-head"><div class="p-num">4</div>pointcloud.xyz<div class="p-kind">Webtool</div><div class="p-meta">2025<br />Tool Making<br />Ted Davis</div></div>
+        <div class="p-desc">«pointcloud.xyz» lässt ein OBJ-File in eine Pointcloud umwandeln. Mittels verschiedener Parameter kann die Pointcloud manipuliert und abstrahiert werden. Das Tool kannst du <a href="https://olivierwick.github.io/pointcloud.xyz/" target="_blank">hier</a> testen. Entstanden 2025 im Kurs Tool Making bei Ted Davis. Aus einem geschlossenen Volumen wird eine offene Wolke aus einzelnen Punkten – je nach Dichte und Streuung bleibt die Form erkennbar oder löst sich vollständig auf. Alles läuft direkt im Browser, das Ergebnis lässt sich als Bild weiterverwenden.</div>
+        <div class="media-strip" id="ref-strip">
+          <video src="kopf2.mp4" autoplay loop muted playsinline class="has-cursor w70" data-cursor="Kopf im Raum|rotierend"></video>
+          <img src="pointcloudxyz_1_web.jpg" alt="" class="has-cursor" style="height: clamp(200px, 35vw, 500px)" data-cursor="Punktwolke|Ansicht eins" />
+        </div>      </div>
+      <div class="text">
+        <div class="t">pointcloud.xyz</div>
+        <div class="m">2025 · Tool Making · Ted Davis</div>
+        <div class="d">«pointcloud.xyz» lässt ein OBJ-File in eine Pointcloud umwandeln. Mittels verschiedener Parameter kann die Pointcloud manipuliert und abstrahiert werden.</div>
+      </div>
+    </div>
+
+    <!-- 3D-Modelle: vorerst ausgeblendet, Code bleibt erhalten.
+         Zum Wiedereinblenden diesen Kommentar aufloesen und die
+         Nummern der Kapitel neu durchzaehlen.
+
+    <div class="project">
+      <div class="p-row">
+        <div class="p-head"><div class="p-num">5</div>3D-Modelle<div class="p-meta">2026</div></div>
+        <div class="p-desc">Sammlung eigener 3D-Modelle, direkt im Browser drehbar.</div>
+        <div class="media-strip">
+          <model-viewer
+            src="warteckd.glb"
+            alt="Warteck, 3D-Modell"
+            class="has-cursor"
+            data-cursor="Warteck|frei drehbar"
+            camera-controls
+            disable-zoom
+            interaction-prompt="none"
+            camera-orbit="-25deg 75deg auto"
+            touch-action="pan-y"
+            shadow-intensity="0"
+            exposure="1"
+          ></model-viewer>
+          <model-viewer
+            src="zigaretten.glb"
+            alt="Zigaretten, 3D-Modell"
+            class="has-cursor"
+            data-cursor="Zigaretten|frei drehbar"
+            camera-controls
+            disable-zoom
+            interaction-prompt="none"
+            camera-orbit="50deg 70deg auto"
+            touch-action="pan-y"
+            shadow-intensity="0"
+            exposure="1"
+          ></model-viewer>
+          <model-viewer
+            src="tram.glb"
+            alt="Tram, 3D-Modell"
+            class="has-cursor"
+            data-cursor="Tram|frei drehbar"
+            style="aspect-ratio: 16 / 9; width: 100%; height: auto"
+            camera-controls
+            disable-zoom
+            interaction-prompt="none"
+            camera-orbit="25deg 90deg 70%"
+            touch-action="pan-y"
+            shadow-intensity="0"
+            exposure="1"
+          ></model-viewer>
+        </div>
+      </div>
+      <div class="text">
+        <div class="t">3D-Modelle</div>
+        <div class="m">2026</div>
+        <div class="d">Sammlung eigener 3D-Modelle, direkt im Browser drehbar.</div>
+      </div>
+    </div>
+    -->
+
+    <!-- Zwischen Asphalt und Beton -->
+    <div class="project">
+      <div class="p-row">
+        <div class="p-head"><div class="p-num">5</div>Zwischen Asphalt und Beton<div class="p-kind">Dokumentation</div><div class="p-meta">2025<br />Sommerprojekt</div></div>
+        <div class="p-desc">Ein Film über die Graffiti-Kultur in Basel, erzählt aus der Sicht der Stadtreinigung, eines ehemaligen Sprühers und Graffiti-Ladenbesitzers sowie eines aktiven Sprayers. Die drei Perspektiven stehen nebeneinander, ohne gegeneinander ausgespielt zu werden. Gedreht an den Orten, an denen die Arbeit der einen die der anderen sichtbar macht. Entstanden als Sommerprojekt 2025. Noah Meyer hat mir mit der Kamera beim ersten Interview mit der Stadtreinigung geholfen. Die Kamera konnten wir von <a href="https://bilderundschall.ch">Bilder &amp; Schall</a> ausleihen.</div>
+        <div class="media-strip">
+          <video src="zwischen_asphalt_und_beton.mp4" autoplay loop muted playsinline class="has-cursor" data-cursor="Sprüher|bei der Arbeit"></video>
+          <div class="row-break"></div>
+          <img src="zaub_dok1.jpg" alt="" class="has-cursor w70" style="height: clamp(200px, 35vw, 500px)" data-cursor="Doku|Bild eins" />
+          <img src="zaub_dok3.jpg" alt="" class="has-cursor w70" style="height: clamp(200px, 35vw, 500px)" data-cursor="Doku|Bild drei" />
+        </div>      </div>
+      <div class="text">
+        <div class="t">Zwischen Asphalt und Beton</div>
+        <div class="m">2025 · Sommerprojekt</div>
+        <div class="d">Ein Film über die Graffiti-Kultur in Basel, erzählt aus der Sicht der Stadtreinigung, eines ehemaligen Sprühers und Graffiti-Ladenbesitzers sowie eines aktiven Sprayers.</div>
+      </div>
+    </div>
+
+    <!-- Überall bauen nirgendwo leben -->
+    <div class="project">
+      <div class="p-row">
+        <div class="p-head"><div class="p-num">6</div>Überall bauen, nirgendwo leben<div class="p-kind">Animation</div><div class="p-meta">2024<br />Moving Graphics<br />Dirk Koy</div></div>
+        <div class="p-desc">Die Arbeit geht auf die Verdrängung autonomer Räume in der Stadt Basel ein. Daraus ist eine Serie entstanden, die Orte zeigt, die vor einer Bebauung stehen. Darunter das Lysbüchelareal, der Wagenplatz sowie das DB-Areal. Entstanden 2024 im Kurs Moving Graphics bei Dirk Koy. Die bewegten Bilder halten einen Zustand fest, den es beim Erscheinen der Arbeit womöglich schon nicht mehr gibt – Zwischennutzung, Brache, Baustelle. Was danach kommt, ist auf den Visualisierungen der Investoren längst zu sehen.</div>
+        <div class="media-strip">
+          <video src="überall_bauen_mockup.mp4" autoplay loop muted playsinline class="has-cursor" data-cursor="Mockup|an der Wand"></video>
+          <video src="überall_bauen2.mp4" autoplay loop muted playsinline class="has-cursor w70" style="height: clamp(200px, 35vw, 500px)" data-cursor="Verdrängte|Räume"></video>
+        </div>      </div>
+      <div class="text">
+        <div class="t">Überall bauen nirgendwo leben</div>
+        <div class="m">2024 · Moving Graphics · Dirk Koy</div>
+        <div class="d">Die Arbeit geht auf die Verdrängung autonomer Räume in der Stadt Basel ein. Daraus ist eine Serie entstanden, die Orte zeigt, die vor einer Bebauung stehen.</div>
+      </div>
+    </div>
+
+    <!-- Fotos -->
+    <div class="project">
+      <div class="p-row">
+        <div class="p-head"><div class="p-num">7</div>Fotos<div class="p-kind">Fotoserie</div><div class="p-meta">2023<br />Freie Arbeit</div></div>
+        <div class="p-desc">Analoge Aufnahmen, entstanden 2023.</div>
+        <div class="media-strip">
+          <img src="IMG_6675.jpg" alt="" class="has-cursor" data-cursor="Napoli|an der Wand" />
+          <img src="IMG_6676.jpg" alt="" class="has-cursor" data-cursor="Küche|nach Feierabend" />
+          <img src="IMG_6681.jpg" alt="" class="has-cursor" data-cursor="Überfahrt|im Sitzen" />
+          <img src="IMG_6694.jpg" alt="" class="has-cursor" data-cursor="Schalter|Telefon und Tastatur" />
+        </div>
+      </div>
+      <div class="text">
+        <div class="t">Fotos</div>
+        <div class="m">2023 · Freie Arbeit</div>
+        <div class="d">Analoge Aufnahmen, entstanden 2023.</div>
+      </div>
+    </div>
+
   </div>
 
-  <div class="top-border"></div>
+  <footer class="footer">© 2026</footer>
 
-  <div class="page-wrapper">
-    <div class="main">
+  <div class="cursor-label" id="cursor-label"></div>
 
-      <aside class="sidebar" id="sidebar">
-        <nav class="nav-primary" id="navPrimary"></nav>
-        <nav class="nav-index"   id="navIndex"></nav>
-        <nav class="nav-secondary" id="navSecondary">
-          <a href="#" id="btnBig">Arbeiten</a>
-          <a href="#" id="btnIndex">Index</a>
-        </nav>
-      </aside>
-
-      <div></div>
-
-      <main class="content" id="mainContent">
-
-        <!-- All along the white line -->
-        <div class="work-block" id="work-all-along">
-          <div class="video-wrapper" style="margin-top:0; aspect-ratio:16/9; overflow:hidden;">
-            <video loop muted playsinline preload="none" style="width:100%; height:100%; object-fit:cover;" data-start-time="30">
-              <source src="./all_along_the_white_line.mp4" type="video/mp4">
-            </video>
-            <img class="video-thumb" src="./all_along_the_white_line.jpg" alt="">
-            <img class="expand-btn" src="./pfeil.png" alt="Vergrössern"
-                 data-type="video" data-src="./all_along_the_white_line.mp4">
-            <img class="ton-btn" src="./ton_aus.png" data-muted="true" alt="Ton">
-          </div>
-          <div class="work-description">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2026<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Critical Media<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Dozent*in: <a href="https://www.berenice-serra.com/index.html" class="inline-link">Berenice Serra</a><br>&laquo;All along the white line&raquo; gewährt einen Einblick in die Subkultur illegaler Stra&szlig;enrennen und Drifts und erz&auml;hlt drei verschiedene Geschichten aus der ganzen Welt.</div>
-        </div>
-
-        <!-- Netz -->
-        <div class="work-block" id="work-plakate">
-          <div class="video-wrapper" style="width:75%; margin-top:0; aspect-ratio:1/1; overflow:hidden;">
-            <video loop muted playsinline preload="none" style="width:100%; height:100%; object-fit:cover; display:block;">
-              <source src="./netz.mp4" type="video/mp4">
-              <source src="./netz.mov" type="video/quicktime">
-            </video>
-            <img class="video-thumb" src="./netz_thumb.jpg" alt="">
-            <img class="expand-btn" src="./pfeil.png" alt="Vergrössern"
-                 data-type="video" data-src="./netz.mp4">
-          </div>
-          <div class="netz-description">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2025<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Tool Making<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Dozent*in: <a class="inline-link" href="https://teddavis.org">Ted Davis</a><br>Im Workshop von <a class="inline-link" href="https://veravandeseyp.com">Vera van de Seyp</a> haben wir eine Plakatreihe via Creative Coding in P5.js erstellt. Die Arbeit entstand in Zusammenarbeit mit Laurel Biolley.</div>
-        </div>
-
-        <!-- pointcloud.xyz -->
-        <div class="work-block" id="work-pointcloud">
-          <div class="video-wrapper" style="width:75%; margin-top:0; aspect-ratio:1/1; overflow:hidden;">
-            <video id="kopf-video" loop muted playsinline preload="none" style="width:100%;height:100%;object-fit:cover;">
-              <source src="./kopf2.mp4" type="video/mp4">
-            </video>
-            <img class="video-thumb" src="./pointcloud_thumb.png" alt="">
-            <img class="expand-btn" src="./pfeil.png" alt="Vergrössern"
-                 data-type="video" data-src="./kopf2.mp4">
-          </div>
-          <div class="netz-description">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2025<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Tool Making<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Dozent*in: <a class="inline-link" href="https://teddavis.org">Ted Davis</a> <br>&laquo;pointcloud.xyz&raquo; lässt ein OBJ-File in eine Pointcloud umwandeln. Mittels verschiedener Parameter kann die Pointcloud manipuliert und abstrahiert werden. Das Tool kannst du <a href="https://olivierwick.github.io/pointcloud.xyz/" class="inline-link" target="_blank">hier</a> testen.</div>
-          <div class="img-wrapper" id="pointcloudxyz-1" style="width:75%; margin-top:32px;">
-            <img src="./pointcloudxyz_1.png" alt="">
-            <img class="expand-btn" src="./pfeil.png" alt="Vergrössern" data-type="image" data-src="./pointcloudxyz_1.png">
-          </div>
-          <div class="img-wrapper" id="pointcloudxyz-2" style="width:50vw; margin-top:24px;">
-            <img src="./pointcloudxyz_2.jpg" alt="">
-            <img class="expand-btn" src="./pfeil.png" alt="Vergrössern" data-type="image" data-src="./pointcloudxyz_2.jpg">
-          </div>
-        </div>
-
-        <!-- The Emerald Barrel -->
-        <div class="work-block" id="work-emerald-barrel">
-          <div class="video-wrapper" style="margin-top:0; aspect-ratio:16/9; overflow:hidden;">
-            <video loop muted playsinline preload="none" style="width:100%;height:100%;object-fit:cover;">
-              <source src="./TheEmeraldBarrel.mp4" type="video/mp4">
-            </video>
-            <img class="video-thumb" src="./the_emerald_barrell.jpg" alt="">
-            <img class="expand-btn" src="./pfeil.png" alt="Vergrössern"
-                 data-type="video" data-src="./TheEmeraldBarrel.mp4">
-            <img class="ton-btn" src="./ton_aus.png" data-muted="true" alt="Ton">
-          </div>
-          <div class="work-description" style="margin-bottom:-80px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2024<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Impuls Workshop<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Dozent*in: Lena Frei<br>Ein virtueller Escape Room in einem verrauchten Pub zwischen Basel und Dublin. Bevor die Bar endgültig schliesst, gilt es, das verschollene Rezept des «Gaelic Gold» aufzuspüren. Für das Projekt haben wir verschiedene Low-Poly Modelle gestaltet. Die Arbeit entstand in Zusammenarbeit mit <a class="inline-link" href="https://lukashecht.ch">Lukas Hecht</a>.</div>
-          <div class="fbx-viewer-wrap" id="wrap-billiardkreide" style="margin-top:48px; margin-bottom:-136px;">
-            <canvas id="canvas-billiardkreide"></canvas>
-          </div>
-          <div class="fbx-viewer-wrap" id="wrap-zigaretten">
-            <canvas id="canvas-zigaretten"></canvas>
-          </div>
-        </div>
-
-        <!-- Überall bauen, nirgendwo leben -->
-        <div class="work-block" id="work-ueberall-bauen">
-          <div class="video-wrapper" style="margin-top:0; width:100%; aspect-ratio:16/9; overflow:hidden;">
-            <video loop muted playsinline preload="none" style="width:100%;height:100%;object-fit:cover;">
-              <source src="./überall_bauen_mockup.mp4" type="video/mp4">
-            </video>
-            <img class="video-thumb" src="./überall_bauen_thumb.jpg" alt="">
-            <img class="expand-btn" src="./pfeil.png" alt="Vergrössern"
-                 data-type="video" data-src="./überall_bauen_mockup.mp4">
-          </div>
-          <div class="work-description">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2024<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Moving Graphics<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Dozent*in: <a class="inline-link" href="https://www.dirkkoy.com/">Dirk Koy</a><br>Die Arbeit geht auf die Verdrängung autonomer Räume in der Stadt Basel ein. Daraus ist eine Serie entstanden, die Orte zeigt, die vor einer Bebauung stehen. Darunter das Lysbüchelareal, der Wagenplatz sowie das DB-Areal.</div>
-          <div class="video-wrapper" id="ueberall-video" style="margin-top:26px; width: 50%; aspect-ratio:607/1080; overflow:hidden;">
-            <video loop muted playsinline preload="none" style="width:100%;height:100%;object-fit:cover;" data-start-time="3">
-              <source src="./überall_bauen2.mp4" type="video/mp4">
-            </video>
-            <img class="video-thumb" src="./überall_bauen_thumb2.jpg" alt="">
-            <img class="expand-btn" src="./pfeil.png" alt="Vergrössern"
-                 data-type="video" data-src="./überall_bauen2.mp4">
-          </div>
-        </div>
-
-        <!-- Zwischen Asphalt und Beton -->
-        <div class="work-block" id="work-zwischen-asphalt">
-          <div class="video-wrapper" style="margin-top:0; aspect-ratio:16/9; overflow:hidden;">
-            <video loop muted playsinline preload="none" style="width:100%;height:100%;object-fit:cover;">
-              <source src="./zwischen_asphalt_und_beton.mp4" type="video/mp4">
-            </video>
-            <img class="video-thumb" src="./zwischen_asphalt_und_beton_thumb.jpg" alt="">
-            <img class="expand-btn" src="./pfeil.png" alt="Vergrössern"
-                 data-type="video" data-src="./zwischen_asphalt_und_beton.mp4">
-            <img class="ton-btn" src="./ton_aus.png" data-muted="true" alt="Ton">
-          </div>
-          <div class="work-description">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2025<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Sommerprojekt<br>Ein Film über die Graffiti-Kultur in Basel, erzählt aus der Sicht der Stadtreinigung, eines ehemaligen Sprühers und Graffiti-Ladenbesitzers sowie eines aktiven Sprayers. Noah Meyer hat mir mit der Kamera beim ersten Interview mit der Stadtreinigung geholfen. Die Kamera konnten wir von <a class="inline-link" href="https://bilderundschall.ch">Bilder &amp; Schall</a> ausleihen.</div>
-          <div class="img-wrapper" id="zaub-dok1" style="width:25vw; margin-top:26px;">
-            <img src="./zaub_dok1.jpg" alt="">
-            <img class="expand-btn" src="./pfeil.png" alt="Vergrössern" data-type="image" data-src="./zaub_dok1.jpg">
-          </div>
-          <div class="img-wrapper" id="zaub-dok3" style="width:37.5vw; margin-top:80px;">
-            <img src="./zaub_dok3.jpg" alt="">
-            <img class="expand-btn" src="./pfeil.png" alt="Vergrössern" data-type="image" data-src="./zaub_dok3.jpg">
-          </div>
-        </div>
-
-        <!-- Info & Kontakt -->
-        <div class="work-block" id="work-info-kontakt">
-          <div class="info-block">
-            <div class="info-text">
-              Hallo! Mein Name ist Olivier, ich bin 24 Jahre alt und studiere Visuelle Kommunikation.
-              Ich interessiere mich für 3D-, Grafik- und Videodesign sowie für Gestaltung im lokalen Kontext.<br><br>
-              Für Anfragen kontaktiere mich gerne unter<br><br>
-              <a href="mailto:olivier.wick@yahoo.com" class="info-contact-link">olivier.wick@yahoo.com</a><br>
-              <a href="https://www.instagram.com/076_olivier/?hl=af" class="info-contact-link">@076_olivier</a>
-            </div>
-          </div>
-        </div>
-
-        <div id="scroll-spacer" style="height:0;flex-shrink:0;"></div>
-      </main>
-
-      <div class="index-grid-view" id="indexGridView">
-        <div class="grid-container" id="gridContainer"></div>
-      </div>
-
-    </div>
-
-    <div id="mobile-bottom-fill"></div>
-    <div class="footer-left" id="footerLeft">
-      <div class="title"><a href="#">Olivier<br>Wick</a></div>
-    </div>
-    <div class="footer-links" id="footerLinks"></div>
+  <div class="lightbox" id="lightbox" aria-hidden="true">
+    <div class="lb-backdrop" data-close></div>
+    <button class="lb-arrow lb-prev" aria-label="Zurück">Zurück</button>
+    <div class="lb-stage" id="lb-stage"></div>
+    <button class="lb-arrow lb-next" aria-label="Weiter">Weiter</button>
   </div>
 
-  <script data-cfasync="false" src="./cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
+  <!-- Viewer für GLB-Dateien, liegt lokal im Ordner (kein CDN nötig) -->
+  <script type="module" src="model-viewer.min.js"></script>
+
   <script>
-const BIG_ITEMS = [
-  { text: 'All along the white line',      workId: 'work-all-along',          long: true },
-  { text: 'Netz',                          workId: 'work-plakate' },
-  { text: 'pointcloud.xyz',               workId: 'work-pointcloud' },
-  { text: 'The emerald barrell',           workId: 'work-emerald-barrel' },
-  { text: 'Überall bauen, nirgendwo leben',    workId: 'work-ueberall-bauen', long: true },
-  { text: 'Zwischen Asphalt und Beton',    workId: 'work-zwischen-asphalt',   long: true },
-  { text: 'Info & Kontakt',               workId: 'work-info-kontakt' },
-];
-const INDEX_ITEMS = ['Alle', '3D', 'Motion', 'Typo', 'Coding', 'Video'];
+    (function () {
+      var media = Array.prototype.slice.call(
+        document.querySelectorAll(".media-strip > img, .media-strip > video")
+      );
 
-const GRID_IMAGES = [
-  // 0 – work-all-along
-  { type: 'video', src: './all_along_the_white_line.mp4', title: 'All along the white line', thumb: './all_along_the_white_line.jpg', aspectRatio: '16/9', workId: 'work-all-along' },
-  { type: 'empty' },
-  // 2 – work-plakate
-  { type: 'video', src: './netz.mp4',                     title: 'Netz',                     thumb: './netz_thumb.jpg',              aspectRatio: '1/1', workId: 'work-plakate' },
-  { type: 'empty' },
-  // 4 – work-pointcloud
-  { type: 'video', src: './kopf.mp4',                     title: 'pointcloud.xyz',           thumb: './pointcloud_thumb.png',        aspectRatio: '1/1', workId: 'work-pointcloud' },
-  { type: 'image', src: './pointcloudxyz_1.png',          title: '',                         workId: 'work-pointcloud', scrollToId: 'pointcloudxyz-1' },
-  { type: 'image', src: './pointcloudxyz_2.jpg',          title: '',                         workId: 'work-pointcloud', scrollToId: 'pointcloudxyz-2' },
-  { type: 'empty' },
-  // 6 – work-emerald-barrel
-  { type: 'video', src: './TheEmeraldBarrel.mp4',         title: 'The emerald barrell',      thumb: './the_emerald_barrell.jpg',     aspectRatio: '16/9', workId: 'work-emerald-barrel' },
-  { type: '3d',    fbxPath: './billiardkreide.fbx',       title: '',                         manualTextures: [],                    workId: 'work-emerald-barrel', scrollToId: 'wrap-billiardkreide', gridZoom: 1.2, extraLights: [{ type: 'ambient', color: 0xffffff, intensity: 3 }] },
-  { type: '3d',    fbxPath: './zigaretten.fbx',           title: '',                         keepPivot: true, rotation: [0, -2.35, 0], rotAxis: 'y', manualTextures: { 'Material.001': './images.png', 'Material.002': './images.png', 'Material.003': './images.png', 'Material.004': './tabak.jpg', 'Material.005': './cigarette_pixel.png' }, workId: 'work-emerald-barrel', scrollToId: 'wrap-zigaretten', gridZoom: 2.0 },
-  { type: 'empty' },
-  // 10 – work-ueberall-bauen
-  { type: 'video', src: './überall_bauen_mockup.mp4',     title: '',                         thumb: './überall_bauen_thumb.jpg',     aspectRatio: '16/9', workId: 'work-ueberall-bauen' },
-  { type: 'video', src: './überall_bauen2.mp4',           title: 'Überall bauen',            thumb: './überall_bauen_thumb2.jpg',    aspectRatio: '607/1080', workId: 'work-ueberall-bauen', scrollToId: 'ueberall-video' },
-  { type: 'empty' },
-  // 13 – work-zwischen-asphalt
-  { type: 'video', src: './zwischen_asphalt_und_beton.mp4', title: 'Zwischen Asphalt und Beton', thumb: './zwischen_asphalt_und_beton_thumb.jpg', aspectRatio: '16/9', workId: 'work-zwischen-asphalt' },
-  { type: 'image', src: './zaub_dok1.jpg',                title: '',                         workId: 'work-zwischen-asphalt', scrollToId: 'zaub-dok1' },
-  { type: 'image', src: './zaub_dok3.jpg',                title: '',                         workId: 'work-zwischen-asphalt', scrollToId: 'zaub-dok3' },
-];
+      /* Einblenden beim Scrollen: jedes Element erscheint, sobald es in den
+         sichtbaren Bereich kommt. Innerhalb einer Reihe leicht versetzt,
+         damit sie nicht schlagartig komplett dasteht.
+         STEP = Versatz zwischen zwei Elementen derselben Reihe in ms. */
+      var STEP = 120;
 
-const navPrimary    = document.getElementById('navPrimary');
-const navIndex      = document.getElementById('navIndex');
-const navSecondary  = document.getElementById('navSecondary');
-const mainContent   = document.getElementById('mainContent');
-const indexGridView = document.getElementById('indexGridView');
-const gridContainer = document.getElementById('gridContainer');
-const sidebar       = document.getElementById('sidebar');
-const footerLeft    = document.getElementById('footerLeft');
-const footerLinks   = document.getElementById('footerLinks');
-
-let currentMode = 'big';
-window._gridCleanups = [];
-
-// Track IntersectionObservers created for grid items so we can disconnect them
-let _gridObservers = [];
-
-let _scrollingToWork = false;
-let _scrollEndTimer = null;
-let _scrollRaf = null;
-
-function smoothScroll(targetY, duration) {
-  cancelAnimationFrame(_scrollRaf);
-  const startY = window.scrollY;
-  const dist   = targetY - startY;
-  if (Math.abs(dist) < 1) return;
-  const startT = performance.now();
-  function ease(t) {
-    return t < 0.5 ? 4*t*t*t : 1 - Math.pow(-2*t + 2, 3) / 2;
-  }
-  function step(now) {
-    const t = Math.min((now - startT) / duration, 1);
-    window.scrollTo(0, startY + dist * ease(t));
-    if (t < 1) _scrollRaf = requestAnimationFrame(step);
-  }
-  _scrollRaf = requestAnimationFrame(step);
-}
-
-const SCROLL_OFFSET = 5;
-function scrollToWork(workId) {
-  const el = document.getElementById(workId);
-  if (!el) return;
-  _scrollingToWork = true;
-  clearTimeout(_scrollEndTimer);
-  requestAnimationFrame(() => {
-    const dist = Math.abs(el.getBoundingClientRect().top - SCROLL_OFFSET);
-    const duration = Math.min(900, Math.max(400, dist * 0.4));
-    const top = el.getBoundingClientRect().top + window.scrollY - SCROLL_OFFSET;
-    smoothScroll(top, duration);
-  });
-}
-
-function renderBigItems() {
-  cleanHoverBars();
-  navPrimary.innerHTML = '';
-  navPrimary.style.visibility = 'visible';
-  BIG_ITEMS.forEach((item, i) => {
-    const a = document.createElement('a');
-    a.href = '#';
-    a.innerHTML = item.text.replace('\n', '<br>');
-    if (item.workId) {
-      a.addEventListener('click', (e) => {
-        e.preventDefault();
-        // Promote hover bars → active bars (keep same spans, same angle)
-        document.querySelectorAll('.nav-primary a').forEach(other => {
-          if (other === a) return;
-          (other._activeBars || []).forEach(b => b.remove());
-          other._activeBars = [];
-          other.classList.remove('work-active');
-        });
-        if (a._navBars && a._navBars.length) {
-          a._navBars.forEach(b => { b.classList.remove('nav-hover-bar'); b.classList.add('nav-active-bar'); });
-          a._activeBars = [...a._navBars];
-          a._navBars = [];
-          document.body.classList.add('nav-active-hovered');
-        }
-        a.classList.add('work-active');
-        scrollToWork(item.workId);
-      });
-    } else {
-      a.addEventListener('click', (e) => e.preventDefault());
-    }
-    if (item.workId) a.dataset.workId = item.workId;
-    if (item.long) a.dataset.long = 'true';
-    navPrimary.appendChild(a);
-    setTimeout(() => a.classList.add('visible'), i * 80);
-  });
-  setTimeout(positionNavSecondary, 0);
-}
-
-function positionNavSecondary() {
-  if (window.innerWidth <= 880) { navSecondary.style.top = ''; return; }
-  const primaryRect = navPrimary.getBoundingClientRect();
-  const footerRect  = footerLeft.getBoundingClientRect();
-  const secH        = navSecondary.offsetHeight;
-  const top = primaryRect.bottom + (footerRect.top - primaryRect.bottom - secH) / 2;
-  navSecondary.style.top = top + 'px';
-}
-
-const INDEX_FILTER = {
-  'Alle':        null,
-  '3D':          ['work-emerald-barrel', 'work-ueberall-bauen'],
-  'Motion':      ['work-ueberall-bauen'],
-  'Typo':        ['work-plakate', 'work-ueberall-bauen'],
-  'Coding':      ['work-plakate', 'work-pointcloud'],
-  'Video':       ['work-all-along', 'work-zwischen-asphalt'],
-};
-
-function filterGrid(category) {
-  const allowed = INDEX_FILTER[category] || null;
-  stopGridSequencer();
-  gridContainer.querySelectorAll('.grid-filter-gap').forEach(el => el.remove());
-  if (allowed === null) {
-    gridContainer.querySelectorAll('.grid-item, .grid-item-empty').forEach(el => { el.style.display = ''; });
-  } else {
-    gridContainer.querySelectorAll('.grid-item').forEach(el => {
-      el.style.display = allowed.includes(el.dataset.workId) ? '' : 'none';
-    });
-    gridContainer.querySelectorAll('.grid-item-empty').forEach(el => { el.style.display = 'none'; });
-    const visible = [...gridContainer.querySelectorAll('.grid-item')].filter(el => el.style.display !== 'none');
-    let prevWorkId = null;
-    visible.forEach(el => {
-      const wid = el.dataset.workId;
-      if (prevWorkId !== null && wid !== prevWorkId) {
-        const gap = document.createElement('div');
-        gap.className = 'grid-filter-gap';
-        gridContainer.insertBefore(gap, el);
+      function reveal(el, delay) {
+        setTimeout(function () {
+          el.classList.add("is-in");
+          /* 700ms = Dauer der Transition, danach Transform wieder ablegen */
+          setTimeout(function () {
+            el.classList.add("settled");
+          }, 700);
+        }, delay);
       }
-      prevWorkId = wid;
-    });
-  }
-  setTimeout(startGridSequencer, 100);
-}
 
-function renderIndexItems() {
-  navIndex.innerHTML = '';
-  INDEX_ITEMS.forEach((text, i) => {
-    const a = document.createElement('a');
-    a.href = '#';
-    a.textContent = text;
-    a.addEventListener('click', (e) => {
-      e.preventDefault();
-      if (a.classList.contains('index-active')) return;
-      navIndex.querySelectorAll('a').forEach(other => {
-        (other._activeBars || []).forEach(b => b.remove());
-        other._activeBars = [];
-        other.classList.remove('index-active');
-      });
-      if (a._navBars && a._navBars.length) {
-        a._navBars.forEach(b => { b.classList.remove('nav-hover-bar'); b.classList.add('nav-active-bar'); });
-        a._activeBars = [...a._navBars];
-        a._navBars = [];
-        document.body.classList.add('nav-active-hovered');
+      var revealSel =
+        ".p-head, .media-strip > img, .media-strip > video, .media-strip > model-viewer";
+      var toReveal = Array.prototype.slice
+        .call(document.querySelectorAll(revealSel))
+        .filter(function (el) {
+          return getComputedStyle(el).display !== "none";
+        });
+
+      if (!("IntersectionObserver" in window)) {
+        /* ohne Observer alles sofort zeigen, statt es zu verstecken */
+        toReveal.forEach(function (el) {
+          reveal(el, 0);
+        });
       } else {
-        spawnBars(a, { cls: 'nav-active-bar' });
-        a._activeBars = a._navBars;
-        a._navBars = [];
-      }
-      a.classList.add('index-active');
-      filterGrid(text);
-    });
-    navIndex.appendChild(a);
-    setTimeout(() => a.classList.add('visible'), i * 80);
-  });
-  {
-    const first = navIndex.querySelector('a');
-    if (first) {
-      const doSpawn = () => {
-        spawnBars(first, { cls: 'nav-active-bar' });
-        first._activeBars = first._navBars;
-        first._navBars = [];
-        first.classList.add('index-active');
-      };
-      let done = false;
-      first.addEventListener('transitionend', function handler(e) {
-        if (e.propertyName !== 'transform') return;
-        first.removeEventListener('transitionend', handler);
-        if (done) return;
-        done = true;
-        doSpawn();
-      });
-      setTimeout(() => { if (!done) { done = true; doSpawn(); } }, 500);
-    }
-  }
-}
-
-const isTouchDevice = !window.matchMedia('(hover: hover)').matches;
-
-function renderGridView() {
-  gridContainer.innerHTML = '';
-  // Disconnect any previous grid observers
-  _gridObservers.forEach(obs => obs.disconnect());
-  _gridObservers = [];
-
-  const isMobile = window.innerWidth <= 880;
-  // Mobile (2 cols): skip i=3 (empty after netz), i=9 (empty after zigaretten), i=12 (empty before zwischen)
-  // so netz lands col2, ub_mock lands col1, zwischen lands col1.
-  const mobileSkip = new Set([3, 9, 12]);
-  // i=13 (zwischen_asphalt) and its inserted spacer are before zaub docs → 4px gap below
-  const mobileCloseSet = new Set([13]);
-  const itemsToRender = isMobile
-    ? GRID_IMAGES.reduce((acc, item, i) => {
-        if (mobileSkip.has(i)) return acc;
-        const entry = mobileCloseSet.has(i) ? { ...item, mobileCloseRow: true } : item;
-        if (i === 2) acc.push({ type: 'empty' }); // extra empty before netz → netz to col2
-        acc.push(entry);
-        if (i === 4) acc.push({ type: 'empty' }); // extra empty after kopf
-        return acc;
-      }, [])
-    : GRID_IMAGES;
-
-  itemsToRender.forEach(item => {
-    if (item.type === 'empty') {
-      const spacer = document.createElement('div');
-      spacer.className = 'grid-item-empty';
-      if (isMobile && item.mobileCloseRow) spacer.classList.add('grid-row-close');
-      gridContainer.appendChild(spacer);
-      return;
-    }
-
-    const gridItem = document.createElement('div');
-    gridItem.className = 'grid-item';
-    if (item.workId) gridItem.dataset.workId = item.workId;
-    if (isMobile && item.mobileCloseRow) gridItem.classList.add('grid-row-close');
-
-    const inner = document.createElement('div');
-    inner.className = 'grid-item-inner';
-    if (item.aspectRatio) {
-      inner.style.aspectRatio = item.aspectRatio;
-      if (item.type === 'video') inner.classList.add('fixed-ratio');
-    }
-
-    if (item.type === 'video') {
-      const video = document.createElement('video');
-      video.loop = true; video.muted = true; video.playsInline = true; video.preload = 'none';
-      const source = document.createElement('source');
-      source.src  = item.src;
-      source.type = item.src.endsWith('.mov') ? 'video/quicktime' : 'video/mp4';
-      video.appendChild(source);
-      if (item.src.endsWith('.mov')) {
-        const source2 = document.createElement('source');
-        source2.src  = item.src;
-        source2.type = 'video/mp4';
-        video.appendChild(source2);
-      }
-      inner.appendChild(video);
-
-      if (item.thumb) {
-        const thumbImg = document.createElement('img');
-        thumbImg.className = 'grid-thumb';
-        thumbImg.src = item.thumb;
-        thumbImg.alt = '';
-        inner.appendChild(thumbImg);
-      }
-
-      video.load();
-
-    } else if (item.type === '3d') {
-      const canvasEl = document.createElement('canvas');
-      let _canvasDragged = false;
-      canvasEl.addEventListener('pointerdown', () => { _canvasDragged = false; });
-      canvasEl.addEventListener('pointermove', (e) => { if (e.buttons) _canvasDragged = true; });
-      canvasEl.addEventListener('click', e => { if (_canvasDragged) e.stopPropagation(); });
-      canvasEl.dataset.is3d = 'true';
-      inner.appendChild(canvasEl);
-      const capturedItem = item;
-      setTimeout(() => {
-        if (window._initFBXViewer) {
-          const cleanup = window._initFBXViewer(canvasEl, null, capturedItem.fbxPath, {
-            manualTextures: capturedItem.manualTextures || [],
-            keepPivot: capturedItem.keepPivot || false,
-            rotation: capturedItem.gridRotation || capturedItem.rotation,
-            isGrid: true,
-            gridZoom: capturedItem.gridZoom || 1,
-            rotAxis: capturedItem.rotAxis || 'y',
-            extraLights: capturedItem.extraLights || [],
-          });
-          window._gridCleanups.push(cleanup);
-        }
-      }, 100);
-    } else if (item.type === 'image') {
-      const img = document.createElement('img');
-      img.className = 'grid-image';
-      img.src = item.src;
-      img.alt = item.title || '';
-      inner.appendChild(img);
-    }
-
-    gridItem.appendChild(inner);
-    if (item.workId) {
-      gridItem.addEventListener('click', () => {
-        switchToBig(item.workId);
-        setTimeout(() => {
-          const el = document.getElementById(item.scrollToId || item.workId);
-          if (!el) return;
-          const top = el.getBoundingClientRect().top + window.scrollY - SCROLL_OFFSET;
-          window.scrollTo({ top: Math.max(0, top), behavior: 'instant' });
-        }, 50);
-      });
-    }
-    gridContainer.appendChild(gridItem);
-  });
-}
-
-function setActiveNavBtn(mode) {
-  const btnBig   = document.getElementById('btnBig');
-  const btnIndex = document.getElementById('btnIndex');
-  if (btnBig)   btnBig.classList.toggle('active',   mode === 'big');
-  if (btnIndex) btnIndex.classList.toggle('active', mode === 'index');
-}
-
-let _seqTimer = null;
-let _seqIdx = 0;
-let _seqScrollHandler = null;
-
-function stopGridSequencer() {
-  clearTimeout(_seqTimer); _seqTimer = null;
-  if (_seqScrollHandler) {
-    window.removeEventListener('scroll', _seqScrollHandler);
-    _seqScrollHandler = null;
-  }
-  if (!gridContainer) return;
-  gridContainer.querySelectorAll('.grid-item-inner video').forEach(v => {
-    v.pause(); v.currentTime = 0;
-    const th = v.parentElement.querySelector('.grid-thumb');
-    if (th) th.style.opacity = '1';
-  });
-  gridContainer.querySelectorAll('.grid-item-inner canvas').forEach(c => {
-    if (c._fbxStopRotate) c._fbxStopRotate();
-  });
-}
-
-function startGridSequencer() {
-  const items = [];
-  gridContainer.querySelectorAll('.grid-item-inner').forEach(inner => {
-    const gridItem = inner.closest('.grid-item');
-    if (gridItem && gridItem.style.display === 'none') return;
-    const v = inner.querySelector('video');
-    const c = inner.querySelector('canvas[data-is3d]');
-    if (v) items.push({ type: 'video', el: v });
-    else if (c) items.push({ type: '3d', el: c });
-  });
-  if (!items.length) return;
-
-  let lastPlayedEl = null;
-  let currentEl = null;
-  let _seqGen = 0;
-
-  function stopCurrent() {
-    _seqGen++;
-    if (!currentEl) return;
-    if (currentEl.tagName === 'VIDEO') {
-      currentEl.pause(); currentEl.currentTime = 0;
-      const th = currentEl.parentElement.querySelector('.grid-thumb');
-      if (th) th.style.opacity = '1';
-    } else if (currentEl._fbxStopRotate) {
-      currentEl._fbxStopRotate();
-    }
-    currentEl = null;
-  }
-
-  function getNextItem() {
-    const vh = window.innerHeight;
-    const isMobile = window.innerWidth <= 880;
-    const visible = items.filter(item => {
-      const r = item.el.getBoundingClientRect();
-      return isMobile ? r.top >= 0 && r.bottom <= vh : r.bottom > 0 && r.top < vh;
-    });
-    visible.sort((a, b) => a.el.getBoundingClientRect().top - b.el.getBoundingClientRect().top);
-    if (!visible.length) return null;
-    const lastIdx = visible.findIndex(item => item.el === lastPlayedEl);
-    const nextIdx = lastIdx === -1 ? 0 : (lastIdx + 1) % visible.length;
-    return visible[nextIdx];
-  }
-
-  // Scroll-Interrupt: wechseln wenn aktuelles nicht mehr sichtbar ODER oben neues sichtbar
-  _seqScrollHandler = () => {
-    const vh = window.innerHeight;
-    const isMobile = window.innerWidth <= 880;
-    const isFullyVisible = r => r.top >= 0 && r.bottom <= vh;
-    const isPartlyVisible = r => r.bottom > 0 && r.top < vh;
-    const checkVisible = isMobile ? isFullyVisible : isPartlyVisible;
-    const visible = items.filter(item => checkVisible(item.el.getBoundingClientRect()));
-    visible.sort((a, b) => a.el.getBoundingClientRect().top - b.el.getBoundingClientRect().top);
-    const refEl = currentEl || lastPlayedEl;
-    const topEl = visible.length ? visible[0].el : null;
-    // Kein Wechsel nötig: aktuelles Video ist das oberste sichtbare
-    if (refEl && topEl === refEl) return;
-    clearTimeout(_seqTimer);
-    stopCurrent();
-    lastPlayedEl = null;
-    _seqTimer = setTimeout(playNext, 300);
-  };
-  window.addEventListener('scroll', _seqScrollHandler, { passive: true });
-
-  function playNext() {
-    const gen = _seqGen;
-    const item = getNextItem();
-    if (!item) {
-      _seqTimer = setTimeout(playNext, 1000);
-      return;
-    }
-    lastPlayedEl = item.el;
-    currentEl = item.el;
-
-    if (item.type === '3d') {
-      playNext();
-      return;
-    } else {
-      const v = item.el;
-      const th = v.parentElement.querySelector('.grid-thumb');
-      const seekAndPlay = () => {
-        if (_seqGen !== gen) return;
-        const dur = isFinite(v.duration) && v.duration > 0 ? v.duration : null;
-        v.currentTime = dur ? dur * (Math.random() * 0.6 + 0.1) : 3;
-        if (th) th.style.opacity = '0';
-        v.play().catch(() => {});
-        _seqTimer = setTimeout(() => {
-          if (_seqGen !== gen) return;
-          v.pause(); v.currentTime = 0;
-          if (th) th.style.opacity = '1';
-          currentEl = null;
-          _seqTimer = setTimeout(playNext, 600);
-        }, 8000);
-      };
-      if (v.readyState >= 1) {
-        seekAndPlay();
-      } else {
-        let fired = false;
-        const onMeta = () => { fired = true; seekAndPlay(); };
-        v.addEventListener('loadedmetadata', onMeta, { once: true });
-        _seqTimer = setTimeout(() => {
-          if (!fired) { v.removeEventListener('loadedmetadata', onMeta); seekAndPlay(); }
-        }, 1500);
-      }
-    }
-  }
-  playNext();
-}
-
-function switchToBig(targetWorkId, scrollToTarget) {
-  stopGridSequencer();
-  window._gridCleanups.forEach(fn => { try { fn(); } catch(e){} });
-  window._gridCleanups = [];
-  _gridObservers.forEach(obs => obs.disconnect());
-  _gridObservers = [];
-  currentMode = 'big';
-  document.body.classList.remove('mode-index');
-  mainContent.classList.remove('hidden-for-index');
-  indexGridView.classList.remove('active');
-  navIndex.classList.remove('active');
-  navIndex.querySelectorAll('a').forEach(a => {
-    (a._activeBars || []).forEach(b => b.remove()); a._activeBars = [];
-    (a._navBars   || []).forEach(b => b.remove()); a._navBars   = [];
-    a.classList.remove('index-active');
-  });
-  setActiveNavBtn('big');
-  _scrollingToWork = true;
-  clearTimeout(_scrollEndTimer);
-  if (scrollToTarget && targetWorkId) {
-    const el = document.getElementById(targetWorkId);
-    if (el) {
-      const top = el.getBoundingClientRect().top + window.scrollY - SCROLL_OFFSET;
-      window.scrollTo({ top: Math.max(0, top), behavior: 'instant' });
-    }
-  } else {
-    window.scrollTo(0, 0);
-  }
-  renderBigItems();
-  navPrimary.classList.add('has-active');
-  applySkewListeners();
-  setTimeout(fitScrollEnd, 100);
-  const activeWorkId = targetWorkId || (BIG_ITEMS.find(it => it.workId) || {}).workId;
-  if (activeWorkId) {
-    const targetLink = navPrimary.querySelector(`[data-work-id="${activeWorkId}"]`);
-    if (targetLink) {
-      let done = false;
-      const doSpawnActive = () => {
-        if (done) return;
-        done = true;
-        spawnBars(targetLink, { cls: 'nav-active-bar' });
-        targetLink._activeBars = targetLink._navBars;
-        targetLink._navBars = [];
-        targetLink.classList.add('work-active');
-        _scrollingToWork = false;
-      };
-      targetLink.addEventListener('transitionend', function handler(e) {
-        if (e.propertyName !== 'transform') return;
-        targetLink.removeEventListener('transitionend', handler);
-        doSpawnActive();
-      });
-      const targetIdx = BIG_ITEMS.findIndex(it => it.workId === activeWorkId);
-      setTimeout(doSpawnActive, (targetIdx >= 0 ? targetIdx : 0) * 80 + 400);
-    } else {
-      _scrollingToWork = false;
-    }
-  } else {
-    _scrollingToWork = false;
-  }
-}
-
-function switchToIndex() {
-  currentMode = 'index';
-  document.body.classList.add('mode-index');
-  mainContent.classList.add('hidden-for-index');
-  indexGridView.classList.add('active');
-  cleanHoverBars();
-  document.querySelectorAll('.nav-active-bar').forEach(b => b.remove());
-  document.body.classList.remove('nav-active-hovered');
-  navPrimary.innerHTML = '';
-  navPrimary.style.visibility = 'hidden';
-  navIndex.classList.add('active');
-  setActiveNavBtn('index');
-  renderIndexItems();
-  renderGridView();
-  applySkewListeners();
-  window.scrollTo(0, 0);
-  setTimeout(startGridSequencer, 300);
-}
-
-document.getElementById('btnBig').addEventListener('click', (e) => {
-  e.preventDefault(); if (currentMode === 'big') return;
-  const _works = BIG_ITEMS.filter(it => it.workId && it.workId !== 'work-info-kontakt');
-  const _last  = localStorage.getItem('lastLandingWork');
-  const _pool  = _works.filter(it => it.workId !== _last);
-  const _pick  = (_pool.length > 0 ? _pool : _works)[Math.floor(Math.random() * (_pool.length > 0 ? _pool.length : _works.length))];
-  if (_pick) localStorage.setItem('lastLandingWork', _pick.workId);
-  switchToBig(_pick ? _pick.workId : null, true);
-});
-document.getElementById('btnIndex').addEventListener('click', (e) => {
-  e.preventDefault(); if (currentMode === 'index') return; switchToIndex();
-});
-
-let lastActiveWrapper = null;
-if (window.matchMedia('(hover: hover)').matches) {
-  document.querySelectorAll('.video-wrapper').forEach(wrapper => {
-    const video = wrapper.querySelector('video');
-    if (!video) return;
-    wrapper.addEventListener('mouseenter', () => {
-      if (lastActiveWrapper && lastActiveWrapper !== wrapper) {
-        const prevVideo = lastActiveWrapper.querySelector('video');
-        if (prevVideo) { prevVideo.pause(); prevVideo.currentTime = +(prevVideo.dataset.startTime || 0); }
-      }
-      lastActiveWrapper = wrapper;
-      if (video.currentTime === 0 && video.dataset.startTime) video.currentTime = +video.dataset.startTime;
-      video.play().catch(() => {});
-    });
-    wrapper.addEventListener('mouseleave', () => { video.pause().catch?.(() => {}); });
-  });
-}
-
-document.addEventListener('click', (e) => {
-  if (!e.target.classList.contains('ton-btn')) return;
-  e.stopPropagation();
-  const btn = e.target;
-  const wrapper = btn.closest('.video-wrapper');
-  const video = wrapper && wrapper.querySelector('video');
-  if (!video) return;
-  const isMuted = video.muted;
-  video.muted = !isMuted;
-  btn.dataset.muted = (!isMuted).toString();
-  btn.src = isMuted ? './ton_an.png' : './ton_aus.png';
-});
-
-function cleanHoverBars() {
-  document.querySelectorAll('.nav-hover-bar').forEach(b => b.remove());
-}
-
-function getLineRects(link) {
-  const range = document.createRange();
-  range.selectNodeContents(link);
-  const lines = [];
-  Array.from(range.getClientRects()).forEach(r => {
-    if (r.width < 2 || r.height < 2) return;
-    const same = lines.find(l => Math.abs(l.top - r.top) < r.height * 0.4);
-    if (same) { same.right = Math.max(same.right, r.right); same.width = same.right - same.left; }
-    else lines.push({ top: r.top, bottom: r.bottom, left: r.left, right: r.right, width: r.width });
-  });
-  // Use the element's own bottom for consistent bar placement across different text content
-  if (lines.length > 0) {
-    const elBottom = link.getBoundingClientRect().bottom;
-    lines[lines.length - 1].bottom = elBottom;
-  }
-  return lines;
-}
-function spawnBars(link, opts = {}) {
-  if (window.innerWidth <= (opts.mobileOk ? 430 : 880)) return;
-  const isLong = opts.maxSkew !== undefined ? false : link.dataset.long === 'true';
-  const maxSkew = opts.maxSkew !== undefined ? opts.maxSkew : (isLong ? 2 : 3);
-  const height  = opts.height || 8;
-  const cls     = opts.cls || 'nav-hover-bar';
-  (link._navBars || []).forEach(b => b.remove());
-  const lines = getLineRects(link);
-  link._navBars = lines.map(line => {
-    const bar = document.createElement('span');
-    bar.className = cls;
-    const zIndex = opts.mobileOk ? 10000 : 9;
-    bar.style.cssText = `position:fixed;left:${line.left}px;top:${line.bottom - height}px;width:${line.width}px;height:${height}px;background:#000;pointer-events:none;z-index:${zIndex};`;
-    document.body.appendChild(bar);
-    return bar;
-  });
-}
-
-function applySkewListeners() {
-  document.querySelectorAll('.nav-secondary a, .footer-links a').forEach(link => {
-    link.style.setProperty('--skew', '0deg');
-  });
-  document.querySelectorAll('.footer-left a').forEach(link => {
-    if (link._footerBound) return;
-    link._footerBound = true;
-    link.addEventListener('mouseenter', () => spawnBars(link));
-    link.addEventListener('mouseleave', () => { (link._navBars || []).forEach(b => b.remove()); link._navBars = []; });
-    link.addEventListener('click', (e) => { e.preventDefault(); location.reload(); });
-  });
-  document.querySelectorAll('.nav-primary a').forEach(link => {
-    link.addEventListener('mouseenter', () => {
-      if (link._activeBars && link._activeBars.length) {
-        document.body.classList.add('nav-active-hovered');
-        return;
-      }
-      spawnBars(link);
-    });
-    link.addEventListener('mouseleave', () => {
-      document.body.classList.remove('nav-active-hovered');
-      (link._navBars || []).forEach(b => b.remove());
-      link._navBars = [];
-    });
-  });
-  document.querySelectorAll('.nav-index a').forEach(link => {
-    if (link._skewBound) return;
-    link._skewBound = true;
-    link.addEventListener('mouseenter', () => {
-      if (link._activeBars && link._activeBars.length) {
-        document.body.classList.add('nav-active-hovered');
-        return;
-      }
-      spawnBars(link);
-    });
-    link.addEventListener('mouseleave', () => {
-      document.body.classList.remove('nav-active-hovered');
-      (link._navBars || []).forEach(b => b.remove());
-      link._navBars = [];
-    });
-  });
-  document.querySelectorAll('.inline-link').forEach(link => {
-    if (link._skewBound) return;
-    link._skewBound = true;
-    link.addEventListener('mouseenter', () => spawnBars(link, { height: 5, cls: 'inline-hover-bar', mobileOk: true }));
-    link.addEventListener('mouseleave', () => { (link._navBars || []).forEach(b => b.remove()); link._navBars = []; });
-  });
-  document.querySelectorAll('.info-contact-link').forEach(link => {
-    if (link._skewBound) return;
-    link._skewBound = true;
-    link.addEventListener('mouseenter', () => spawnBars(link));
-    link.addEventListener('mouseleave', () => { (link._navBars || []).forEach(b => b.remove()); link._navBars = []; });
-  });
-}
-
-
-// ── Image fullscreen ──────────────────────────────────────────
-const imgOverlay    = document.getElementById('imgOverlay');
-const fullscreenImg = document.getElementById('fullscreenImg');
-const imgClose      = document.getElementById('imgClose');
-function openImgFullscreen(src) { fullscreenImg.src = src; imgOverlay.classList.add('active'); document.body.style.overflow = 'hidden'; }
-function closeImgFullscreen()   { imgOverlay.classList.remove('active'); fullscreenImg.src = ''; document.body.style.overflow = ''; }
-imgClose.addEventListener('click', (e) => { e.stopPropagation(); closeImgFullscreen(); });
-imgOverlay.addEventListener('click', (e) => { if (e.target === imgOverlay) closeImgFullscreen(); });
-
-// ── Video fullscreen ──────────────────────────────────────────
-const videoOverlay     = document.getElementById('videoOverlay');
-const fullscreenVideo  = document.getElementById('fullscreenVideo');
-const videoClose       = document.getElementById('videoClose');
-const fullscreenTonBtn = document.getElementById('fullscreenTonBtn');
-const fsProgressFill   = document.getElementById('fsProgressFill');
-const fsProgressTrack  = document.getElementById('fsProgressTrack');
-let currentSourceVideo = null;
-
-const TON_VIDEOS = ['all_along_the_white_line', 'TheEmeraldBarrel', 'zwischen_asphalt_und_beton'];
-let fsInvertRaf = null;
-
-function pcInvertState(t) {
-  return t < 2.5 || Math.floor((t - 2.5) / 10) % 2 !== 0;
-}
-
-function positionFSControls(hintW, hintH) {
-  const vp = window.visualViewport;
-  const vw = fullscreenVideo.clientWidth  || (vp ? vp.width  : null) || window.innerWidth;
-  const vh = fullscreenVideo.clientHeight || (vp ? vp.height : null) || window.innerHeight;
-  const iw = fullscreenVideo.videoWidth  || hintW || vw;
-  const ih = fullscreenVideo.videoHeight || hintH || vh;
-  const scale = Math.min(vw / iw, vh / ih);
-  const offsetY = Math.round((vh - ih * scale) / 2);
-  const offsetX = Math.round((vw - iw * scale) / 2);
-  fsProgressTrack.style.bottom = offsetY + 'px';
-  fsProgressTrack.style.left   = offsetX + 'px';
-  fsProgressTrack.style.right  = offsetX + 'px';
-  videoClose.style.bottom             = (offsetY + 12) + 'px';
-  videoClose.style.left               = (offsetX + 4)  + 'px';
-  document.querySelector('.fullscreen-controls-br').style.bottom = (offsetY + 12) + 'px';
-  document.querySelector('.fullscreen-controls-br').style.right  = (offsetX + 4)  + 'px';
-}
-if (window.visualViewport) {
-  window.visualViewport.addEventListener('resize', positionFSControls);
-} else {
-  window.addEventListener('resize', positionFSControls);
-}
-window.addEventListener('orientationchange', () => {
-  setTimeout(positionFSControls, 100);
-  setTimeout(positionFSControls, 400);
-});
-fullscreenVideo.addEventListener('loadedmetadata', positionFSControls);
-
-function openVideoFullscreen(src, sourceVideo) {
-  currentSourceVideo = sourceVideo || null;
-  const startTime = sourceVideo ? sourceVideo.currentTime : 0;
-  if (sourceVideo) sourceVideo.pause();
-  fullscreenVideo.src = src;
-  fullscreenVideo.muted = false;
-  fullscreenTonBtn.textContent = 'STUMM';
-  fullscreenPauseBtn.textContent = 'PAUSE';
-  const hasTon = TON_VIDEOS.some(name => src.includes(name));
-  fullscreenTonBtn.style.display = hasTon ? '' : 'none';
-  videoOverlay.classList.add('active');
-  const hintW = sourceVideo ? sourceVideo.videoWidth  : 0;
-  const hintH = sourceVideo ? sourceVideo.videoHeight : 0;
-  positionFSControls(hintW || 0, hintH || 0);
-  fsResetIdle();
-  document.body.style.overflow = 'hidden';
-
-  cancelAnimationFrame(fsInvertRaf);
-  fullscreenVideo.style.filter = '';
-
-  const tryPlay = () => {
-    fullscreenVideo.currentTime = startTime;
-    fullscreenVideo.play().catch(() => {
-      fullscreenVideo.muted = true;
-      fullscreenTonBtn.textContent = 'TON';
-      fullscreenVideo.play();
-    });
-  };
-  if (fullscreenVideo.readyState >= 1) tryPlay();
-  else fullscreenVideo.addEventListener('loadedmetadata', tryPlay, { once: true });
-}
-
-function closeVideoFullscreen() {
-  cancelAnimationFrame(fsInvertRaf);
-  fsInvertRaf = null;
-  fullscreenVideo.style.filter = '';
-  const resumeTime = fullscreenVideo.currentTime;
-  const srcVideo   = currentSourceVideo;
-  videoOverlay.classList.remove('active');
-  document.body.style.overflow = '';
-  fullscreenVideo.pause();
-  fullscreenVideo.src = '';
-  fsProgressFill.style.width = '0%';
-  currentSourceVideo = null;
-  if (srcVideo) {
-    srcVideo.currentTime = resumeTime;
-    srcVideo.play().catch(() => {});
-  }
-}
-
-let fsRafId;
-function fsTick() {
-  if (fullscreenVideo.duration)
-    fsProgressFill.style.width = (fullscreenVideo.currentTime / fullscreenVideo.duration * 100) + '%';
-  fsRafId = requestAnimationFrame(fsTick);
-}
-fullscreenVideo.addEventListener('play',  () => { cancelAnimationFrame(fsRafId); fsRafId = requestAnimationFrame(fsTick); fsResetIdle(); });
-fullscreenVideo.addEventListener('pause', () => { cancelAnimationFrame(fsRafId); clearTimeout(fsIdleTimer); videoOverlay.classList.remove('idle'); });
-
-let fsIdleTimer;
-function fsResetIdle() {
-  videoOverlay.classList.remove('idle');
-  clearTimeout(fsIdleTimer);
-  if (!fullscreenVideo.paused) fsIdleTimer = setTimeout(() => videoOverlay.classList.add('idle'), 5000);
-}
-videoOverlay.addEventListener('touchstart', fsResetIdle, { passive: true });
-if (window.matchMedia('(hover: hover)').matches) {
-  videoOverlay.addEventListener('mousemove', fsResetIdle);
-  videoOverlay.addEventListener('mouseenter', fsResetIdle);
-}
-
-(function() {
-  let dragging = false;
-  function fsSeek(clientX) {
-    if (!fullscreenVideo.duration) return;
-    const rect = fsProgressTrack.getBoundingClientRect();
-    const ratio = Math.max(0, Math.min(1, (clientX - rect.left) / rect.width));
-    fullscreenVideo.currentTime = ratio * fullscreenVideo.duration;
-    if (fullscreenVideo.paused) fsProgressFill.style.width = (ratio * 100) + '%';
-  }
-  fsProgressTrack.addEventListener('mousedown', (e) => { e.stopPropagation(); dragging = true; fsSeek(e.clientX); });
-  document.addEventListener('mousemove', (e) => { if (dragging) fsSeek(e.clientX); });
-  document.addEventListener('mouseup', () => { dragging = false; });
-  fsProgressTrack.addEventListener('touchstart', (e) => { e.stopPropagation(); dragging = true; fsSeek(e.touches[0].clientX); }, { passive: true });
-  document.addEventListener('touchmove', (e) => { if (dragging) fsSeek(e.touches[0].clientX); }, { passive: true });
-  document.addEventListener('touchend', () => { dragging = false; });
-})();
-
-fullscreenTonBtn.addEventListener('click', (e) => {
-  e.stopPropagation();
-  fullscreenVideo.muted = !fullscreenVideo.muted;
-  fullscreenTonBtn.textContent = fullscreenVideo.muted ? 'TON' : 'STUMM';
-});
-const fullscreenPauseBtn = document.getElementById('fullscreenPauseBtn');
-fullscreenPauseBtn.addEventListener('click', (e) => {
-  e.stopPropagation();
-  if (fullscreenVideo.paused) { fullscreenVideo.play(); fullscreenPauseBtn.textContent = 'PAUSE'; }
-  else { fullscreenVideo.pause(); fullscreenPauseBtn.textContent = 'START'; }
-});
-videoClose.addEventListener('click', (e) => { e.stopPropagation(); closeVideoFullscreen(); });
-
-document.addEventListener('click', (e) => {
-  if (!e.target.classList.contains('expand-btn')) return;
-  e.stopPropagation();
-  const type = e.target.dataset.type;
-  const src  = e.target.dataset.src;
-  if (type === 'image') openImgFullscreen(src);
-  if (type === 'video') {
-    const wrapper = e.target.closest('.video-wrapper');
-    const sourceVideo = wrapper ? wrapper.querySelector('video') : null;
-    openVideoFullscreen(src, sourceVideo);
-  }
-});
-document.addEventListener('keydown', (e) => {
-  if (e.key === 'Escape') { closeImgFullscreen(); closeVideoFullscreen(); }
-});
-
-// ── Progress bars (Maus + Touch) ─────────────────────────────
-function initProgressBars() {
-  document.querySelectorAll('.video-wrapper').forEach(wrapper => {
-    const video = wrapper.querySelector('video');
-    if (!video) return;
-    const track = document.createElement('div');
-    track.className = 'video-progress-track';
-    const fill = document.createElement('div');
-    fill.className = 'video-progress-fill';
-    track.appendChild(fill);
-    wrapper.appendChild(track);
-
-    let rafId;
-    function updateProgress() {
-      if (video.duration) {
-        fill.style.width = (video.currentTime / video.duration * 100) + '%';
-      }
-      if (!video.paused && !video.ended) rafId = requestAnimationFrame(updateProgress);
-    }
-    video.addEventListener('play',    () => { rafId = requestAnimationFrame(updateProgress); });
-    video.addEventListener('pause',   () => cancelAnimationFrame(rafId));
-    video.addEventListener('seeking', updateProgress);
-    track.addEventListener('click', (e) => e.stopPropagation());
-
-    let dragging = false;
-    function seek(clientX) {
-      if (!video.duration) return;
-      const rect = track.getBoundingClientRect();
-      video.currentTime = Math.max(0, Math.min(1, (clientX - rect.left) / rect.width)) * video.duration;
-      updateProgress();
-    }
-    track.addEventListener('mousedown', (e) => { e.stopPropagation(); dragging = true; seek(e.clientX); });
-    document.addEventListener('mousemove', (e) => { if (dragging) seek(e.clientX); });
-    document.addEventListener('mouseup', () => { dragging = false; });
-    track.addEventListener('touchstart', (e) => { e.stopPropagation(); dragging = true; seek(e.touches[0].clientX); }, { passive: true });
-    document.addEventListener('touchmove', (e) => { if (dragging) seek(e.touches[0].clientX); }, { passive: true });
-    document.addEventListener('touchend', () => { dragging = false; });
-
-    if (window.matchMedia('(hover: hover)').matches) {
-      let idleTimer;
-      wrapper.addEventListener('mousemove', () => {
-        wrapper.classList.remove('idle');
-        clearTimeout(idleTimer);
-        idleTimer = setTimeout(() => wrapper.classList.add('idle'), 5000);
-      });
-      wrapper.addEventListener('mouseenter', () => {
-        wrapper.classList.remove('idle');
-        clearTimeout(idleTimer);
-        idleTimer = setTimeout(() => wrapper.classList.add('idle'), 5000);
-      });
-      wrapper.addEventListener('mouseleave', () => { clearTimeout(idleTimer); wrapper.classList.add('idle'); });
-    }
-  });
-}
-
-const workObserver = new IntersectionObserver((entries) => {
-  if (_scrollingToWork) return;
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      const workId = entry.target.id;
-      document.querySelectorAll('.nav-primary a').forEach(a => {
-        const isActive = a.dataset.workId === workId;
-        const wasActive = a.classList.contains('work-active');
-        a.classList.toggle('work-active', isActive);
-        if (!isActive) {
-          (a._activeBars || []).forEach(b => b.remove());
-          a._activeBars = [];
-        }
-        if (isActive && !wasActive) {
-          spawnBars(a, { cls: 'nav-active-bar' });
-          a._activeBars = a._navBars;
-          a._navBars = [];
-        }
-      });
-    }
-  });
-}, { threshold: 0, rootMargin: '-30% 0px -60% 0px' });
-
-function observeWorkBlocks() {
-  document.querySelectorAll('.work-block[id]').forEach(el => workObserver.observe(el));
-}
-
-let _infoLimit = null;
-
-function fitScrollEnd() {
-  const main   = document.querySelector('.main');
-  const spacer = document.getElementById('scroll-spacer');
-  const el     = document.getElementById('work-info-kontakt');
-  if (!el) return;
-  requestAnimationFrame(() => {
-    const isMobile  = window.innerWidth <= 880;
-    const spacerH   = spacer ? (parseFloat(spacer.style.height) || 0) : 0;
-    const padH      = parseFloat(getComputedStyle(main).paddingBottom) || 0;
-    const currentExtra      = spacerH + padH;
-    const naturalMaxScroll  = document.body.scrollHeight - window.innerHeight - currentExtra;
-    const elTop  = el.getBoundingClientRect().top + window.scrollY;
-    const needed = Math.max(0, elTop - SCROLL_OFFSET - naturalMaxScroll);
-    if (isMobile && spacer) {
-      spacer.style.height    = needed + 'px';
-      main.style.paddingBottom = '0';
-    } else {
-      if (spacer) spacer.style.height = '0';
-      main.style.paddingBottom = needed + 'px';
-    }
-    requestAnimationFrame(() => {
-      _infoLimit = el.getBoundingClientRect().top + window.scrollY - SCROLL_OFFSET;
-    });
-  });
-}
-window.addEventListener('load', () => {
-  fitScrollEnd();
-  setTimeout(fitScrollEnd, 600);
-  setTimeout(fitScrollEnd, 1500);
-  const content = document.getElementById('mainContent');
-  if (content && window.ResizeObserver) {
-    new ResizeObserver(fitScrollEnd).observe(content);
-  }
-});
-
-let _resizeTimer = null;
-let _resizeAnchor = null;
-
-function getResizeAnchorEl() {
-  let best = null, bestDist = Infinity;
-  document.querySelectorAll('.work-block').forEach(el => {
-    const dist = Math.abs(el.getBoundingClientRect().top);
-    if (dist < bestDist) { bestDist = dist; best = el; }
-  });
-  return best;
-}
-
-let _wasAbove1024 = window.innerWidth > 880;
-let _savedIndexFilter = null;
-let _prevResizeWidth = window.innerWidth;
-window.addEventListener('resize', () => {
-  const isAbove1024 = window.innerWidth > 880;
-  const widthChanged = window.innerWidth !== _prevResizeWidth;
-  _prevResizeWidth = window.innerWidth;
-  if (!isAbove1024 && _wasAbove1024 && currentMode === 'index') {
-    const activeLink = navIndex.querySelector('a.index-active');
-    _savedIndexFilter = activeLink ? activeLink.textContent : null;
-    renderGridView();
-    filterGrid('Alle');
-    navIndex.querySelectorAll('a').forEach(a => {
-      (a._activeBars || []).forEach(b => b.remove()); a._activeBars = [];
-      a.classList.remove('index-active');
-    });
-    const first = navIndex.querySelector('a');
-    if (first) {
-      spawnBars(first, { cls: 'nav-active-bar' });
-      first._activeBars = first._navBars;
-      first._navBars = [];
-      first.classList.add('index-active');
-    }
-  } else if (isAbove1024 && !_wasAbove1024 && currentMode === 'index') {
-    renderGridView();
-    if (_savedIndexFilter && _savedIndexFilter !== 'Alle') {
-      filterGrid(_savedIndexFilter);
-      navIndex.querySelectorAll('a').forEach(a => {
-        (a._activeBars || []).forEach(b => b.remove()); a._activeBars = [];
-        a.classList.remove('index-active');
-      });
-      const target = [...navIndex.querySelectorAll('a')].find(a => a.textContent === _savedIndexFilter);
-      if (target) {
-        spawnBars(target, { cls: 'nav-active-bar' });
-        target._activeBars = target._navBars;
-        target._navBars = [];
-        target.classList.add('index-active');
-      }
-    }
-    _savedIndexFilter = null;
-  }
-  _wasAbove1024 = isAbove1024;
-  if (currentMode !== 'index') positionNavSecondary();
-  if (widthChanged && !_resizeAnchor) {
-    _resizeAnchor = { el: getResizeAnchorEl() };
-  }
-  clearTimeout(_resizeTimer);
-  _resizeTimer = setTimeout(() => {
-    const el = _resizeAnchor && _resizeAnchor.el;
-    _resizeAnchor = null;
-    fitScrollEnd();
-    if (el) requestAnimationFrame(() => {
-      const top = el.getBoundingClientRect().top + window.scrollY - SCROLL_OFFSET;
-      window.scrollTo({ top: Math.max(0, top), behavior: 'instant' });
-    });
-  }, 100);
-});
-function repositionBars(link, bars) {
-  if (!bars || !bars.length) return;
-  const lines = getLineRects(link);
-  const height = parseInt(bars[0].style.height) || 8;
-  if (lines.length !== bars.length) {
-    bars.forEach(b => b.remove());
-    const cls = bars[0].className;
-    const newBars = lines.map((line) => {
-      const bar = document.createElement('span');
-      bar.className = cls;
-      bar.style.cssText = `position:fixed;left:${line.left}px;top:${line.bottom - height}px;width:${line.width}px;height:${height}px;background:#000;pointer-events:none;z-index:9;`;
-      document.body.appendChild(bar);
-      return bar;
-    });
-    return newBars;
-  } else {
-    lines.forEach((line, i) => {
-      bars[i].style.left = line.left + 'px';
-      bars[i].style.top  = (line.bottom - height) + 'px';
-      bars[i].style.width = line.width + 'px';
-    });
-    return bars;
-  }
-}
-(function() {
-  const navSec = document.getElementById('navSecondary');
-  const sidebar = document.getElementById('sidebar');
-  if (!navSec || !sidebar) return;
-  let moved = false;
-  function checkVertical() {
-    const small = window.innerWidth > 1024 && window.innerHeight <= 650;
-    if (small && !moved) {
-      document.body.appendChild(navSec);
-      moved = true;
-    } else if (!small && moved) {
-      sidebar.appendChild(navSec);
-      moved = false;
-    }
-  }
-  window.addEventListener('resize', checkVertical);
-  checkVertical();
-})();
-
-window.addEventListener('resize', () => {
-  document.querySelectorAll('.nav-primary a, .nav-index a').forEach(link => {
-    if (link._activeBars && link._activeBars.length) {
-      link._activeBars = repositionBars(link, link._activeBars) || link._activeBars;
-    }
-    if (link._navBars && link._navBars.length) {
-      link._navBars = repositionBars(link, link._navBars) || link._navBars;
-    }
-  });
-});
-window.addEventListener('scroll', () => {
-  document.querySelectorAll('.inline-link, .info-contact-link').forEach(link => {
-    (link._navBars || []).forEach(b => b.remove());
-    link._navBars = [];
-  });
-  if (_scrollingToWork) {
-    clearTimeout(_scrollEndTimer);
-    _scrollEndTimer = setTimeout(() => { _scrollingToWork = false; }, 150);
-  }
-}, { passive: true });
-
-window.addEventListener('scroll', () => {
-  if (window.innerWidth <= 880 && _infoLimit !== null && currentMode === 'big' && window.scrollY > _infoLimit) {
-    window.scrollTo(0, _infoLimit);
-  }
-}, { passive: true });
-
-history.scrollRestoration = 'manual';
-const _landingWorks = BIG_ITEMS.filter(it => it.workId && it.workId !== 'work-info-kontakt');
-const _lastLandingId = localStorage.getItem('lastLandingWork');
-const _landingPool = _landingWorks.filter(it => it.workId !== _lastLandingId);
-const _landingPick = (_landingPool.length > 0 ? _landingPool : _landingWorks)[Math.floor(Math.random() * (_landingPool.length > 0 ? _landingPool.length : _landingWorks.length))];
-const _landingWorkId = _landingPick.workId;
-localStorage.setItem('lastLandingWork', _landingWorkId);
-switchToBig(_landingWorkId, false);
-observeWorkBlocks();
-let _pageShown = false;
-const _removeCover = () => { document.getElementById('_page_cover')?.remove(); };
-const _showPage = () => {
-  if (_pageShown) return; _pageShown = true;
-  const el = document.getElementById(_landingWorkId);
-  if (!el) { _removeCover(); return; }
-  void document.body.offsetHeight;
-  const top = el.getBoundingClientRect().top + window.scrollY - SCROLL_OFFSET;
-  window.scrollTo({ top: Math.max(0, top), behavior: 'instant' });
-  requestAnimationFrame(() => {
-    void document.body.offsetHeight;
-    const drift = el.getBoundingClientRect().top - SCROLL_OFFSET;
-    if (Math.abs(drift) > 1) window.scrollTo({ top: window.scrollY + drift, behavior: 'instant' });
-    _removeCover();
-    requestAnimationFrame(() => {
-      document.querySelectorAll('.nav-primary a').forEach(link => {
-        if (link._activeBars && link._activeBars.length) {
-          link._activeBars = repositionBars(link, link._activeBars) || link._activeBars;
-        }
-      });
-    });
-  });
-};
-document.fonts.load('1em NimbusRoman')
-  .then(() => {
-    void document.body.offsetHeight;
-    let _prevTop = null, _stableCount = 0;
-    const _waitStable = () => {
-      if (_pageShown) return;
-      void document.body.offsetHeight;
-      const el = document.getElementById(_landingWorkId);
-      const curTop = el ? Math.round(el.getBoundingClientRect().top) : null;
-      if (curTop !== null && curTop === _prevTop) {
-        if (++_stableCount >= 2) { _showPage(); return; }
-      } else { _stableCount = 0; _prevTop = curTop; }
-      requestAnimationFrame(_waitStable);
-    };
-    requestAnimationFrame(_waitStable);
-  })
-  .catch(() => _showPage());
-setTimeout(_showPage, 1200);
-initProgressBars();
-
-document.querySelectorAll('.video-wrapper video[data-start-time]').forEach(v => {
-  const t = +v.dataset.startTime;
-  if (v.readyState >= 1) { v.currentTime = t; }
-  else v.addEventListener('loadedmetadata', () => { v.currentTime = t; }, { once: true });
-});
-
-// Touch-Cleanup: einmalig, entfernt alle spawned Bars beim nächsten Touch
-document.addEventListener('touchstart', () => {
-  document.querySelectorAll('.nav-primary a, .inline-link').forEach(link => {
-    (link._navBars || []).forEach(b => b.remove());
-    link._navBars = [];
-  });
-}, { passive: true });
-
-(function () {
-  if (window.matchMedia('(hover: hover)').matches) return;
-  let _activeWrapper = null;
-  function stopWrapper(w) {
-    if (!w) return;
-    const v = w.querySelector('video');
-    const th = w.querySelector('.video-thumb');
-    clearTimeout(w._playDelay);
-    if (w._canplayHandler && v) { v.removeEventListener('canplay', w._canplayHandler); w._canplayHandler = null; }
-    w.classList.remove('playing');
-    w.classList.add('idle');
-    if (th) th.style.opacity = '1';
-    if (v) { v.pause(); v.currentTime = +(v.dataset.startTime || 0); }
-    if (_activeWrapper === w) _activeWrapper = null;
-  }
-  document.querySelectorAll('.video-wrapper').forEach(wrapper => {
-    const video = wrapper.querySelector('video');
-    const thumb = wrapper.querySelector('.video-thumb');
-    if (!video) return;
-    video.muted = true; video.loop = true; video.load();
-    const expandBtn = wrapper.querySelector('.expand-btn');
-    const tonBtn    = wrapper.querySelector('.ton-btn');
-    wrapper._playDelay = null;
-    let _idleTimer = null;
-    const IDLE_MS = 5000;
-
-    function showControls() {
-      wrapper.classList.remove('idle');
-      clearTimeout(_idleTimer);
-      _idleTimer = setTimeout(() => wrapper.classList.add('idle'), IDLE_MS);
-    }
-    function hideControls() {
-      clearTimeout(_idleTimer);
-      wrapper.classList.remove('playing');
-      wrapper.classList.add('idle');
-    }
-
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          wrapper._playDelay = setTimeout(() => {
-            if (_activeWrapper && _activeWrapper !== wrapper) stopWrapper(_activeWrapper);
-            _activeWrapper = wrapper;
-            if (video.currentTime === 0 && video.dataset.startTime) video.currentTime = +video.dataset.startTime;
-            video.play().catch(() => {});
-            wrapper.classList.add('playing');
-            showControls();
-            if (thumb) {
-              if (video.readyState >= 3) {
-                thumb.style.opacity = '0';
-              } else {
-                wrapper._canplayHandler = () => {
-                  if (_activeWrapper === wrapper) thumb.style.opacity = '0';
-                  wrapper._canplayHandler = null;
-                };
-                video.addEventListener('canplay', wrapper._canplayHandler, { once: true });
-              }
-            }
-          }, 1000);
-        } else {
-          clearTimeout(wrapper._playDelay);
-          if (wrapper._canplayHandler) { video.removeEventListener('canplay', wrapper._canplayHandler); wrapper._canplayHandler = null; }
-          hideControls();
-          if (thumb) thumb.style.opacity = '1';
-          video.pause(); video.currentTime = +(video.dataset.startTime || 0);
-          if (_activeWrapper === wrapper) _activeWrapper = null;
-        }
-      });
-    }, { threshold: 0.4 });
-    observer.observe(wrapper);
-
-    wrapper.addEventListener('click', (e) => {
-      if (e.target === expandBtn || e.target === tonBtn) return;
-      if (!wrapper.classList.contains('playing')) return;
-      if (wrapper.classList.contains('idle')) {
-        showControls();
-      } else {
-        clearTimeout(_idleTimer);
-        wrapper.classList.add('idle');
-      }
-    });
-
-    if (tonBtn) {
-      tonBtn.addEventListener('click', (e) => {
-        e.stopPropagation();
-        video.muted = !video.muted;
-        tonBtn.src = video.muted ? './ton_aus.png' : './ton_an.png';
-      });
-    }
-  });
-})();
-
-// ── pointcloud.xyz preview: Farben sync zu video.currentTime ──
-(function() {
-  const pcBlock = document.getElementById('work-pointcloud');
-  if (!pcBlock) return;
-  const pcVideo = pcBlock.querySelector('video');
-  const pcThumb = pcBlock.querySelector('.video-thumb');
-
-  // Thumbnail: über 819px invertiert, darunter normal — auch beim Resize
-  const updateThumb = () => {
-    if (pcThumb) pcThumb.style.filter = window.innerWidth > 880 ? 'invert(1)' : 'invert(0)';
-  };
-  updateThumb();
-  window.addEventListener('resize', updateThumb);
-
-  if (pcVideo) pcVideo.style.filter = '';
-})();
-
-// ── kopf video: kopf2.mov über 819px, kopf.mov darunter ──
-(function() {
-  const video     = document.getElementById('kopf-video');
-  if (!video) return;
-  const wrapper   = video.closest('.video-wrapper');
-  const expandBtn = wrapper ? wrapper.querySelector('.expand-btn') : null;
-  const kopfEntry = GRID_IMAGES.find(item => item.src && item.src.includes('kopf'));
-  let lastSrc = null;
-
-  function updateKopfSrc() {
-    const src = window.innerWidth > 880 ? './kopf2.mp4' : './kopf.mp4';
-    if (src === lastSrc) return;
-    lastSrc = src;
-    video.querySelectorAll('source').forEach(s => { s.src = src; });
-    video.load();
-    if (expandBtn) expandBtn.dataset.src = src;
-    if (kopfEntry) kopfEntry.src = src;
-  }
-
-  updateKopfSrc();
-  window.addEventListener('resize', updateKopfSrc);
-})();
-
-  </script>
-
-  <!-- ── Three.js: FBX viewer factory ─────────────────────────── -->
-  <script type="module">
-    import * as THREE from 'three';
-    import { FBXLoader }     from 'three/addons/loaders/FBXLoader.js';
-    import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
-
-    function makeScene() {
-      const scene = new THREE.Scene();
-      scene.add(new THREE.AmbientLight(0xffffff, 1.5));
-      const d1 = new THREE.DirectionalLight(0xffffff, 0.6);
-      d1.position.set(150, 300, 150); scene.add(d1);
-      const d2 = new THREE.DirectionalLight(0xffffff, 0.6);
-      d2.position.set(-150, 80, -150); scene.add(d2);
-      return scene;
-    }
-
-    function normalise(obj, targetSize) {
-      const box = new THREE.Box3().setFromObject(obj);
-      const sz  = box.getSize(new THREE.Vector3());
-      obj.scale.setScalar(targetSize / Math.max(sz.x, sz.y, sz.z));
-      box.setFromObject(obj);
-      obj.position.sub(box.getCenter(new THREE.Vector3()));
-    }
-
-    function initFBXViewer(canvasEl, loadingEl, fbxPath, opts = {}) {
-      const { manualTextures = [], keepPivot = false, isGrid = false, rotation = [0, -0.7, 0], gridZoom = 1, rotAxis = 'y', viewerZoom = 1, mobileViewerZoom = null, smallViewerZoom = null, extraLights = [], onDragEnd = null, directRotate = false, targetOffsetY = 0, cameraFov = 40, modelScale = 1 } = opts;
-      const targetSize = isGrid ? 80 : 100;
-      const container = canvasEl.parentElement;
-      function getW() {
-        if (isGrid) return (container.parentElement?.offsetWidth || container.offsetWidth) || 400;
-        if (window.innerWidth <= 430) return window.innerWidth || container.offsetWidth || 400;
-        return container.offsetWidth || document.documentElement.clientWidth || 400;
-      }
-      function getH() {
-        if (isGrid) return container.offsetHeight || Math.round(getW() * 9 / 16);
-        return Math.round(getW() * 9 / 16);
-      }
-      const renderer = new THREE.WebGLRenderer({ canvas: canvasEl, antialias: true, alpha: true });
-      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-      renderer.setSize(getW(), getH(), false);
-      renderer.shadowMap.enabled = true;
-      renderer.shadowMap.type    = THREE.PCFSoftShadowMap;
-      renderer.outputColorSpace  = THREE.SRGBColorSpace;
-
-      const scene  = makeScene();
-      extraLights.forEach(cfg => {
-        let light;
-        if (cfg.type === 'ambient') {
-          light = new THREE.AmbientLight(cfg.color ?? 0xffffff, cfg.intensity ?? 1);
-        } else if (cfg.type === 'point') {
-          light = new THREE.PointLight(cfg.color ?? 0xffffff, cfg.intensity ?? 0.5, cfg.distance ?? 0);
-        } else if (cfg.type === 'hemisphere') {
-          light = new THREE.HemisphereLight(cfg.skyColor ?? 0xffffff, cfg.groundColor ?? 0x444444, cfg.intensity ?? 0.5);
-        } else {
-          light = new THREE.DirectionalLight(cfg.color ?? 0xffffff, cfg.intensity ?? 0.5);
-        }
-        if (cfg.position) light.position.set(...cfg.position);
-        scene.add(light);
-      });
-      const camera = new THREE.PerspectiveCamera(cameraFov, getW() / getH(), 0.1, 20000);
-      camera.position.set(0, 150, 300);
-      const controls = new OrbitControls(camera, canvasEl);
-      controls.enableZoom = false; controls.enablePan = false;
-      controls.enableDamping = true; controls.dampingFactor = 0.08;
-      if (isGrid) controls.enabled = false;
-      if (directRotate) {
-        controls.enabled = false;
-        let isDragging = false, startX = 0, startY = 0, baseRotX = 0, baseRotY = 0;
-        canvasEl.addEventListener('pointerdown', e => {
-          if (!obj3d) return;
-          isDragging = true;
-          startX = e.clientX; startY = e.clientY;
-          baseRotX = obj3d.rotation.x; baseRotY = obj3d.rotation.y;
-          canvasEl.setPointerCapture(e.pointerId);
-        });
-        canvasEl.addEventListener('pointermove', e => {
-          if (!isDragging || !obj3d) return;
-          obj3d.rotation.x = baseRotX + (e.clientY - startY) * 0.01;
-          obj3d.rotation.y = baseRotY + (e.clientX - startX) * 0.01;
-        });
-        canvasEl.addEventListener('pointerup', () => {
-          if (!isDragging || !obj3d) return;
-          isDragging = false;
-          if (onDragEnd) onDragEnd([obj3d.rotation.x, obj3d.rotation.y, obj3d.rotation.z]);
+        var revealObserver = new IntersectionObserver(
+          function (entries, obs) {
+            entries.forEach(function (entry) {
+              if (!entry.isIntersecting) return;
+              obs.unobserve(entry.target); /* einmal einblenden genügt */
+              reveal(entry.target, Number(entry.target.dataset.step || 0) * STEP);
+            });
+          },
+          /* erst wenn das Element ein Stück im Bild ist */
+          { rootMargin: "0px 0px -10% 0px" }
+        );
+
+        toReveal.forEach(function (el) {
+          var row = el.closest(".p-row");
+          var sibs = row ? row.querySelectorAll(revealSel) : [el];
+          el.dataset.step = Array.prototype.indexOf.call(sibs, el);
+          revealObserver.observe(el);
         });
       }
 
-      let obj3d = null;
-      let visObs = null;
-      let savedMaxS = 0;
-      let autoRotating = false;
-      let rotDelta = 0;
-      canvasEl._fbxStartRotate = () => { autoRotating = true; };
-      canvasEl._fbxStopRotate  = () => {
-        autoRotating = false;
-        canvasEl.style.transition = 'opacity 0.6s ease-in-out';
-        canvasEl.style.opacity = '0.04';
-        setTimeout(() => {
-          rotDelta = 0;
-          if (obj3d) obj3d.rotation[rotAxis] = rotation['xyz'.indexOf(rotAxis)];
-          canvasEl.style.opacity = '1';
-          setTimeout(() => { canvasEl.style.transition = ''; }, 600);
-        }, 600);
-      };
+      /* Volle Deckkraft bekommt die Sparte, in der man sich gerade
+         befindet – auf jedem Gerät gleich. Massstab ist die Bildschirm-
+         mitte: aktiv ist die Reihe, deren Mitte ihr am nächsten liegt. */
+      var rows = Array.prototype.slice.call(
+        document.querySelectorAll(".p-row")
+      );
+      var activeRow = null;
 
-      let rafId;
-      let _fbxVisible = false;
-      const tick = () => {
-        if (!_fbxVisible) { rafId = null; return; }
-        rafId = requestAnimationFrame(tick);
-        if (autoRotating && obj3d) { rotDelta += 0.008; obj3d.rotation[rotAxis] = rotation['xyz'.indexOf(rotAxis)] + rotDelta; }
-        if (!isGrid) controls.update();
-        renderer.render(scene, camera);
-      };
-      const _fbxVisObs = new IntersectionObserver(([e]) => {
-        _fbxVisible = e.isIntersecting;
-        if (_fbxVisible && !rafId) tick();
-      }, { threshold: 0 });
-      _fbxVisObs.observe(canvasEl);
+      /* Bei offener Lightbox oder offenem Info-Text bleibt alles eingefroren */
+      function isFrozen() {
+        return document.documentElement.classList.contains("lb-open");
+      }
 
-      const getActiveZoom = () => {
-        if (isGrid) return gridZoom;
-        if (smallViewerZoom !== null && window.innerWidth <= 430) return smallViewerZoom;
-        if (mobileViewerZoom !== null && window.innerWidth <= 880) return mobileViewerZoom;
-        return viewerZoom;
-      };
-      const onResize = () => {
-        const w = getW(), h = getH();
-        if (!w || !h) return;
-        renderer.setSize(w, h, false);
-        camera.aspect = w / h; camera.updateProjectionMatrix();
-        if (!isGrid && (mobileViewerZoom !== null || smallViewerZoom !== null) && savedMaxS > 0) {
-          const dist = 1 / getActiveZoom();
-          const dir = camera.position.clone().sub(controls.target).normalize();
-          camera.position.copy(controls.target).addScaledVector(dir, savedMaxS * Math.sqrt(13) * dist);
-          controls.update();
-        }
-      };
-      window.addEventListener('resize', onResize);
+      function setActive(row) {
+        if (activeRow === row) return;
+        activeRow = row;
+        rows.forEach(function (r) {
+          r.classList.toggle("active", r === activeRow);
+        });
+      }
 
-      const loader = new FBXLoader();
-      loader.setResourcePath('./');
-      loader.load(fbxPath, (obj) => {
-        if (keepPivot && !isGrid) {
-          const box = new THREE.Box3().setFromObject(obj);
-          const sz  = box.getSize(new THREE.Vector3());
-          obj.scale.setScalar(targetSize / Math.max(sz.x, sz.y, sz.z));
-        } else {
-          normalise(obj, targetSize);
-        }
-        obj.rotation.set(...rotation);
-        { const cb = new THREE.Box3().setFromObject(obj); obj.position.sub(cb.getCenter(new THREE.Vector3())); }
-        if (modelScale !== 1) {
-          obj.scale.multiplyScalar(modelScale);
-          const rb = new THREE.Box3().setFromObject(obj);
-          obj.position.sub(rb.getCenter(new THREE.Vector3()));
-        }
-        const isTexMap = !Array.isArray(manualTextures) && typeof manualTextures === 'object' && Object.keys(manualTextures).length > 0;
-        const hasTexArr = Array.isArray(manualTextures) && manualTextures.length > 0;
-        if (isTexMap || hasTexArr) {
-          const tl = new THREE.TextureLoader();
-          let texs, texMap;
-          if (isTexMap) {
-            texMap = {};
-            for (const [name, path] of Object.entries(manualTextures)) {
-              const t = tl.load(path); t.colorSpace = THREE.SRGBColorSpace; texMap[name] = t;
-            }
-          } else {
-            texs = manualTextures.map(p => { const t = tl.load(p); t.colorSpace = THREE.SRGBColorSpace; return t; });
+      function nearestRow() {
+        var mid = window.innerHeight / 2;
+        var best = null;
+        var bestDist = Infinity;
+        rows.forEach(function (r) {
+          var b = r.getBoundingClientRect();
+          var d = Math.abs(b.top + b.height / 2 - mid);
+          if (d < bestDist) {
+            bestDist = d;
+            best = r;
           }
-          const meshes = [];
-          obj.traverse(child => { if (child.isMesh) meshes.push(child); });
-          let globalSlot = 0;
-          meshes.forEach((child, i) => {
-            child.castShadow = child.receiveShadow = true;
-            const meshName = child.name || '';
-            if (isTexMap) {
-              const texVals = Object.values(texMap);
-              const findTex = n => texMap[n] || texMap[n.toLowerCase()] ||
-                Object.entries(texMap).find(([k]) => n.toLowerCase().includes(k.toLowerCase()))?.[1];
-              const mats = Array.isArray(child.material) ? child.material : [child.material];
-              const newMats = mats.map((mat) => {
-                const matName = mat?.name || '';
-                const tex = findTex(matName) || findTex(meshName) || texVals[globalSlot % texVals.length];
-                globalSlot++;
-                return new THREE.MeshStandardMaterial({ map: tex, roughness: 1, metalness: 0 });
-              });
-              child.material = newMats.length === 1 ? newMats[0] : newMats;
-            } else {
-              const tex = texs[i % texs.length];
-              child.material = new THREE.MeshStandardMaterial({ map: tex, roughness: 1, metalness: 0 });
-            }
+        });
+        return best;
+      }
+
+      function onScroll() {
+        if (isFrozen()) return;
+        setActive(nearestRow());
+      }
+
+      onScroll();
+      window.addEventListener("scroll", onScroll, { passive: true });
+      window.addEventListener("resize", onScroll);
+
+      /* zufällige 10-Sekunden-Ausschnitte für ausgewählte Videos.
+         startMin = früheste Startzeit, endTrim = am Ende ausgespart (Sekunden) */
+      function randomClips(video, startMin, endTrim) {
+        var CLIP = 10;
+        var clipEnd = 0;
+        function newClip() {
+          var dur = video.duration;
+          if (!dur || isNaN(dur)) return;
+          var lo = startMin || 0;
+          var hi = dur - (endTrim || 0) - CLIP;
+          if (hi < lo) hi = Math.max(0, dur - CLIP);
+          var start = lo + Math.random() * Math.max(0, hi - lo);
+          clipEnd = start + CLIP;
+          try {
+            video.currentTime = start;
+          } catch (e) {}
+          var p = video.play();
+          if (p && p.catch) p.catch(function () {});
+        }
+        video.removeAttribute("loop");
+        if (video.readyState >= 1) newClip();
+        video.addEventListener("loadedmetadata", newClip);
+        video.addEventListener("timeupdate", function () {
+          if (video.currentTime >= clipEnd) newClip();
+        });
+      }
+
+      var vAll = document.querySelector(
+        'video[src="all_along_the_white_line.mp4"]'
+      );
+      var vZwischen = document.querySelector(
+        'video[src="zwischen_asphalt_und_beton.mp4"]'
+      );
+      /* All along: keine Ausschnitte aus den ersten 33s und den letzten 2min */
+      if (vAll) randomClips(vAll, 33, 120);
+      /* Zwischen Asphalt und Beton: gesamter Film */
+      if (vZwischen) randomClips(vZwischen, 0, 0);
+
+      /* Videos mit data-start: beim Laden EINMAL zum Startpunkt springen,
+         danach ganz normal weiterlaufen/loopen (loop bleibt aktiv). */
+      document.querySelectorAll("video[data-start]").forEach(function (v) {
+        var start = parseFloat(v.getAttribute("data-start")) || 0;
+        var done = false;
+        function seekOnce() {
+          if (done) return;
+          done = true;
+          try {
+            v.currentTime = start;
+          } catch (e) {}
+          var p = v.play();
+          if (p && p.catch) p.catch(function () {});
+        }
+        if (v.readyState >= 1) seekOnce();
+        else v.addEventListener("loadedmetadata", seekOnce, { once: true });
+      });
+
+      var lightbox = document.getElementById("lightbox");
+      var stage = document.getElementById("lb-stage");
+      var current = -1;
+      /* aktuelle Kategorie (Medien eines Projekts) – Weiter/Zurück bleibt darin */
+      var currentList = media;
+
+      function render(i) {
+        current = (i + currentList.length) % currentList.length;
+        var el = currentList[current];
+        var tag = el.tagName.toLowerCase();
+        stage.innerHTML = "";
+        var node;
+        if (tag === "video") {
+          node = document.createElement("video");
+          node.src = el.getAttribute("src");
+          node.autoplay = true;
+          node.loop = true;
+          node.playsInline = true;
+          node.muted = el.muted;
+          /* dort weiterlaufen, wo die Vorschau gerade steht – der Wert
+             lässt sich erst setzen, wenn die Metadaten geladen sind */
+          var ab = el.currentTime;
+          if (ab > 0) {
+            node.addEventListener(
+              "loadedmetadata",
+              function () {
+                if (isFinite(node.duration) && ab < node.duration) {
+                  node.currentTime = ab;
+                }
+              },
+              { once: true }
+            );
+          }
+          /* keine Controls; Klick aufs Video -> echter Fullscreen */
+          node.addEventListener("click", function (e) {
+            e.stopPropagation();
+            if (node.requestFullscreen) node.requestFullscreen();
+            else if (node.webkitRequestFullscreen) node.webkitRequestFullscreen();
+            else if (node.webkitEnterFullscreen) node.webkitEnterFullscreen();
           });
         } else {
-          obj.traverse(child => {
-            if (!child.isMesh) return;
-            child.castShadow = child.receiveShadow = true;
-            const mats = Array.isArray(child.material) ? child.material : [child.material];
-            mats.forEach(m => { if (m?.map) m.map.colorSpace = THREE.SRGBColorSpace; });
-          });
+          node = document.createElement("img");
+          node.src = el.getAttribute("src");
         }
-        scene.add(obj);
-        obj3d = obj;
-        const box = new THREE.Box3().setFromObject(obj);
-        const sz  = box.getSize(new THREE.Vector3());
-        const maxS = Math.max(sz.x, sz.y, sz.z);
-        savedMaxS = maxS;
-        const camDist = 1 / getActiveZoom();
-        camera.position.set(0, maxS * 2 * camDist, maxS * 3 * camDist);
-        controls.target.set(0, maxS * targetOffsetY, 0); controls.update();
-        onResize();
-        setTimeout(onResize, 100);
-        const resetRot = () => {
-          if (!obj3d) return;
-          obj3d.rotation.set(...rotation);
-          rotDelta = 0;
-          if (!directRotate) {
-            const d = savedMaxS / getActiveZoom();
-            camera.position.set(0, d * 2, d * 3);
-            controls.target.set(0, savedMaxS * targetOffsetY, 0);
-            controls.update();
-          }
+        stage.appendChild(node);
+      }
+
+      function animateIn(thumb) {
+        var node = stage.firstChild;
+        if (!node) return;
+        var run = function () {
+          var first = thumb.getBoundingClientRect();
+          var last = node.getBoundingClientRect();
+          if (!last.width || !last.height) return;
+          var sx = first.width / last.width;
+          var sy = first.height / last.height;
+          var dx = first.left + first.width / 2 - (last.left + last.width / 2);
+          var dy = first.top + first.height / 2 - (last.top + last.height / 2);
+          node.style.transformOrigin = "center center";
+          node.style.transition = "none";
+          node.style.transform =
+            "translate(" + dx + "px," + dy + "px) scale(" + sx + "," + sy + ")";
+          node.getBoundingClientRect(); /* reflow erzwingen */
+          requestAnimationFrame(function () {
+            node.style.transition = "transform 0.35s ease";
+            node.style.transform = "none";
+          });
         };
-        canvasEl._fbxResetRotation = resetRot;
-        visObs = new IntersectionObserver(([e]) => { if (!e.isIntersecting) resetRot(); }, { threshold: 0 });
-        visObs.observe(canvasEl);
-        if (loadingEl) { loadingEl.classList.add('hidden'); setTimeout(() => { loadingEl.style.display = 'none'; }, 600); }
-      }, undefined, (err) => {
-        console.warn('FBX load error:', fbxPath, err);
-        if (loadingEl) loadingEl.textContent = 'Ladefehler';
+        var tag = node.tagName.toLowerCase();
+        if (tag === "img" && !node.complete) {
+          node.addEventListener("load", run, { once: true });
+        } else if (tag === "video" && !node.videoWidth) {
+          node.addEventListener("loadedmetadata", run, { once: true });
+        } else {
+          run();
+        }
+      }
+
+      /* Sobald etwas gross angezeigt wird, laufen die Videos im Hintergrund
+         nur noch mit einem Drittel der Geschwindigkeit. */
+      var BG_RATE = 0.33;
+
+      function backgroundRate(rate, except) {
+        media.forEach(function (el) {
+          if (el.tagName.toLowerCase() !== "video") return;
+          if (el === except) return;
+          el.playbackRate = rate;
+        });
+      }
+
+      function open(el) {
+        /* nur die Medien aus dem gleichen Projekt (media-strip) als Kategorie */
+        var strip = el.closest(".media-strip");
+        currentList = strip
+          ? Array.prototype.slice.call(strip.querySelectorAll("img, video"))
+          : media;
+        var idx = currentList.indexOf(el);
+        if (idx < 0) idx = 0;
+        render(idx);
+        lightbox.classList.add("open");
+        lightbox.setAttribute("aria-hidden", "false");
+        animateIn(el);
+        backgroundRate(BG_RATE);
+        /* keine Reihe bleibt voll gedeckt – auch die zuletzt berührte nicht */
+        setActive(null);
+        /* Seite dahinter einfrieren: kein Scrollen, keine Hover-Deckkraft */
+        measureScrollbar();
+        document.documentElement.classList.add("lb-open");
+      }
+
+      function close() {
+        lightbox.classList.remove("open");
+        lightbox.setAttribute("aria-hidden", "true");
+        stage.innerHTML = "";
+        current = -1;
+        backgroundRate(1);
+        document.documentElement.classList.remove("lb-open");
+      }
+
+      lightbox.querySelector(".lb-prev").addEventListener("click", function () {
+        render(current - 1);
+      });
+      lightbox.querySelector(".lb-next").addEventListener("click", function () {
+        render(current + 1);
+      });
+      lightbox.querySelector("[data-close]").addEventListener("click", close);
+
+      /* Auf dem Handy gehen Videos, die ohnehin die volle Breite haben
+         (also ohne Breitenklasse), direkt in den Vollbildmodus des
+         Browsers statt in die Lightbox. */
+      function nativeFullscreen(el) {
+        var fn =
+          el.webkitEnterFullscreen || /* iOS Safari, nur auf <video> */
+          el.requestFullscreen ||
+          el.webkitRequestFullscreen;
+        if (!fn) return false;
+        try {
+          fn.call(el);
+          return true;
+        } catch (err) {
+          return false;
+        }
+      }
+
+      media.forEach(function (el) {
+        el.addEventListener("click", function () {
+          if (
+            window.innerWidth <= 600 &&
+            el.tagName.toLowerCase() === "video" &&
+            !el.classList.contains("w70") &&
+            nativeFullscreen(el)
+          ) {
+            /* im Vollbild gilt dasselbe: der Rest läuft langsamer weiter */
+            backgroundRate(BG_RATE, el);
+            el.addEventListener(
+              "webkitendfullscreen",
+              function () {
+                backgroundRate(1);
+              },
+              { once: true }
+            );
+            document.addEventListener("fullscreenchange", function onFs() {
+              if (document.fullscreenElement) return;
+              backgroundRate(1);
+              document.removeEventListener("fullscreenchange", onFs);
+            });
+            return;
+          }
+          open(el);
+        });
       });
 
-      return function cleanup() { cancelAnimationFrame(rafId); window.removeEventListener('resize', onResize); renderer.dispose(); if (visObs) visObs.disconnect(); };
-    }
+      /* Text-Cursor beim Hovern */
+      var cursorLabel = document.getElementById("cursor-label");
+      document.addEventListener("mousemove", function (e) {
+        cursorLabel.style.left = e.clientX + "px";
+        cursorLabel.style.top = e.clientY + "px";
+      });
+      document.querySelectorAll("[data-cursor]").forEach(function (el) {
+        el.addEventListener("mouseenter", function () {
+          cursorLabel.innerHTML = el
+            .getAttribute("data-cursor")
+            .split("|")
+            .join("<br>");
+          cursorLabel.classList.add("show");
+        });
+        el.addEventListener("mouseleave", function () {
+          cursorLabel.classList.remove("show");
+        });
+      });
 
-    window._initFBXViewer = initFBXViewer;
+      /* Info-Text: "Info" schaltet um und heisst dann "Schliessen".
+         Die Seite dahinter wird weichgezeichnet und festgehalten – dafür
+         dient dieselbe Klasse wie bei der Lightbox. */
+      /* Höhe der Kopfzeile merken. Sie wird gebraucht, sobald die Zeile
+         fixiert wird und ihren Platz im Fluss verliert – bei Info wie bei
+         der Lightbox. Einmal beim Start und bei jeder Fensteränderung. */
+      function measureHeader() {
+        var h = document.querySelector(".header");
+        if (h) {
+          document.documentElement.style.setProperty(
+            "--header-h",
+            h.offsetHeight + "px"
+          );
+        }
+      }
 
-    const canvasBk = document.getElementById('canvas-billiardkreide');
-    if (canvasBk) initFBXViewer(canvasBk, null, './billiardkreide.fbx', {
-      manualTextures: [],
-      rotation: [0, -0.7, 0],
-      viewerZoom: 1.2,
-      mobileViewerZoom: 1.2,
-      smallViewerZoom: 1.4,
-      extraLights: [
-        { type: 'ambient', color: 0xffffff, intensity: 3 },
-      ],
-    });
+      /* Breite der Scrollleiste festhalten, solange sie noch da ist.
+         Muss vor dem Sperren laufen – danach ist die Differenz null. */
+      function measureScrollbar() {
+        var sbw = window.innerWidth - document.documentElement.clientWidth;
+        document.documentElement.style.setProperty("--sbw", sbw + "px");
+      }
 
-    const canvasZig = document.getElementById('canvas-zigaretten');
-    if (canvasZig) initFBXViewer(canvasZig, null, './zigaretten.fbx', {
-      keepPivot: true,
-      rotation: [0, -2.35, 0],
-      manualTextures: {
-        'Material.001': './images.png',
-        'Material.002': './images.png',
-        'Material.003': './images.png',
-        'Material.004': './tabak.jpg',
-        'Material.005': './cigarette_pixel.png',
-      },
-      viewerZoom: 2.2,
-      mobileViewerZoom: 2.0,
-      smallViewerZoom: 2.3,
-      targetOffsetY: 0,
-    });
+      measureHeader();
+      window.addEventListener("resize", measureHeader);
+
+      var info = document.getElementById("info");
+      var infoToggle = document.querySelector(".h-info");
+
+      function setInfo(open) {
+        /* zuerst abwählen, dann einfrieren – sonst bliebe die zuletzt
+           berührte Reihe voll gedeckt hinter dem Text stehen */
+        if (open) {
+          setActive(null);
+          measureScrollbar();
+        }
+        info.classList.toggle("open", open);
+        info.setAttribute("aria-hidden", open ? "false" : "true");
+        infoToggle.textContent = open ? "Schliessen" : "Info";
+        document.documentElement.classList.toggle("lb-open", open);
+        document.documentElement.classList.toggle("info-open", open);
+      }
+
+      infoToggle.addEventListener("click", function () {
+        setInfo(!info.classList.contains("open"));
+      });
+
+      info.querySelector("[data-close-info]").addEventListener("click", function () {
+        setInfo(false);
+      });
+
+      document.addEventListener("keydown", function (e) {
+        if (info.classList.contains("open") && e.key === "Escape") {
+          setInfo(false);
+          return;
+        }
+        if (!lightbox.classList.contains("open")) return;
+        if (e.key === "Escape") close();
+        else if (e.key === "ArrowLeft") render(current - 1);
+        else if (e.key === "ArrowRight") render(current + 1);
+      });
+    })();
   </script>
-
 </body>
 </html>
