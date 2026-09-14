@@ -73,8 +73,10 @@
        die Filter-Pipeline und erfasst auch diese Ebenen. */
     .p-row {
       display: flex;
-      gap: 0.3rem;
+      /* Titel oben, Medien darunter */
+      flex-direction: column;
       align-items: flex-start;
+      gap: 0.6rem;
       filter: opacity(0.5);
       transition: filter 0.3s ease;
     }
@@ -145,9 +147,12 @@
        Feste Höhe pro Element, die Breite ergibt sich aus dem Seitenverhältnis.
        Passt eine Zeile nicht, bricht sie um. */
     .media-strip {
-      flex: 1;
+      /* in der Spalte nicht mitwachsen, sonst kollabiert die Höhe */
+      flex: 0 0 auto;
+      width: 100%;
       display: flex;
       flex-wrap: wrap;
+      /* alle Medien am rechten Rand ausgerichtet */
       justify-content: flex-end;
       gap: 0.5rem;
       min-width: 0;
@@ -174,6 +179,15 @@
        eigene Zeile bildet, zählt der row-gap sonst zweimal – senkrecht
        stünde also der doppelte Abstand. Deshalb übernimmt der Umbruch
        den Abstand selbst und der row-gap fällt weg. */
+    /* einzelne Medien höher als der Rest (nur Desktop) */
+    .media-strip > .h-mid {
+      height: clamp(175px, 30vw, 430px);
+    }
+
+    .media-strip > .h-big {
+      height: clamp(200px, 35vw, 500px);
+    }
+
     .media-strip > .row-break {
       flex: 0 0 100%;
       height: 0.5rem;
@@ -181,21 +195,6 @@
 
     .media-strip:has(> .row-break) {
       row-gap: 0;
-    }
-
-    /* Nie ein einzelnes Bild allein in einer Zeile. Bei fünf Plakaten gibt
-       es dafür nur zwei Aufteilungen: alle fünf, oder drei plus zwei. Die
-       Breiten sind deshalb fest in Spalten geteilt, statt sich aus der
-       Höhe zu ergeben – sonst würde als Rest ein einzelnes übrig bleiben. */
-    .media-strip.no-orphan > * {
-      width: calc((100% - 2rem) / 5);
-      height: auto;
-    }
-
-    @media (max-width: 1200px) {
-      .media-strip.no-orphan > * {
-        width: calc((100% - 1rem) / 3);
-      }
     }
 
     /* 3D-Modell: anders als Bild und Video hat es kein eigenes
@@ -226,6 +225,40 @@
       padding-left: 3px;
       font-size: 1.5rem;
       line-height: 1;
+    }
+
+    /* eigener Cursor: gefüllter Kreis, überall statt des Systemzeigers.
+       Auch auf allen Kindern, sonst blitzt bei Links, Knöpfen und Text
+       der Systemzeiger wieder durch. */
+    html,
+    body,
+    body * {
+      cursor: none;
+    }
+
+    .cursor-dot {
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 210;
+      pointer-events: none;
+      width: 1.5rem;
+      height: 1.5rem;
+      border-radius: 50%;
+      background: #fff;
+      mix-blend-mode: difference;
+      transform: translate(-50%, -50%);
+      display: none;
+    }
+
+    .cursor-dot.show {
+      display: block;
+    }
+
+    /* über Medien mit Beschriftung: nur der Text, kein Kreis */
+    html.cursor-text .cursor-dot,
+    html.cursor-text .cursor-dot.show {
+      display: none;
     }
 
     /* Bild mit Text-Cursor */
@@ -286,51 +319,22 @@
       margin-left: 50%;
       padding-right: 2rem;
       font-size: 1.5rem;
-      line-height: 1.15;
+      /* gleiche Zeilenhöhe wie die Angaben bei den Arbeiten */
+      line-height: 1;
     }
 
-    .info-text p + p {
-      margin-top: 1em;
+    /* Einzüge exakt wie bei den Arbeiten: Nummer leicht eingezogen,
+       Titel bündig, Angaben weit eingezogen. Keine Leerzeilen dazwischen. */
+    .info-text p {
+      margin: 0;
     }
 
-    .info-text a {
-      color: inherit;
+    .info-text p:nth-child(1) {
+      padding-left: 1em;
     }
 
-    /* ---------- Info-Text ---------- */
-    .info {
-      display: none;
-      position: fixed;
-      inset: 0;
-      /* über den Projekten, aber unter der Lightbox und dem Header */
-      z-index: 40;
-    }
-
-    .info.open {
-      display: block;
-    }
-
-    /* gleicher weichgezeichneter Hintergrund wie in der Lightbox */
-    .info-backdrop {
-      position: absolute;
-      inset: 0;
-      background: rgba(255, 255, 255, 0.12);
-      backdrop-filter: blur(2.5px);
-      -webkit-backdrop-filter: blur(2.5px);
-    }
-
-    /* Text beginnt bei der Hälfte der Fensterbreite */
-    .info-text {
-      position: relative;
-      z-index: 2;
-      margin-left: 50%;
-      padding-right: 2rem;
-      font-size: 1.5rem;
-      line-height: 1.15;
-    }
-
-    .info-text p + p {
-      margin-top: 1em;
+    .info-text p:nth-child(3) {
+      padding-left: 2em;
     }
 
     .info-text a {
@@ -338,7 +342,6 @@
     }
 
     .h-info {
-      cursor: pointer;
       user-select: none;
     }
 
@@ -443,7 +446,6 @@
       z-index: 3;
       background: none;
       border: none;
-      cursor: pointer;
       font-family: inherit;
       font-size: 1.5rem;
       line-height: 1;
@@ -498,7 +500,6 @@
     }
 
     .header .h-name {
-      cursor: pointer;
       /* nimmt das erste Viertel ein, dadurch beginnt "Info" bei 25% */
       flex: 0 0 25%;
     }
@@ -511,12 +512,22 @@
 
       /* kein Hover auf Touch: Cursor-Texte weg, normaler Cursor zurück */
       .cursor-label,
-      .cursor-label.show {
+      .cursor-label.show,
+      .cursor-dot,
+      .cursor-dot.show {
         display: none;
       }
 
-      .has-cursor {
+      html,
+      body,
+      body * {
         cursor: auto;
+      }
+
+      .h-info,
+      .header .h-name,
+      .lb-arrow {
+        cursor: pointer;
       }
 
       /* Titel oben, Medien darunter – beide linksbündig */
@@ -537,41 +548,19 @@
         padding-right: 0;
       }
 
-      /* Medien untereinander: eins pro Reihe, abwechselnd links und rechts.
-         Breite gesetzt, Höhe folgt dem Seitenverhältnis. */
-      .media-strip > * {
-        width: 72%;
-        height: auto;
-      }
-
-      .media-strip > *:nth-child(even) {
-        margin-left: auto;
-      }
-
-      /* Videos laufen über die volle Breite, nicht versetzt.
-         Die :nth-child-Variante ist nötig, um die Regel darüber zu schlagen. */
-      .media-strip > video,
-      .media-strip > video:nth-child(even) {
+      /* Medien untereinander, jedes über die volle Breite.
+         Höhe folgt dem Seitenverhältnis. */
+      .media-strip > *,
+      .media-strip > .h-mid,
+      .media-strip > .h-big {
         width: 100%;
+        height: auto;
         margin-left: 0;
       }
 
-      /* einzelne Medien schmaler. Die :nth-child-Variante muss die
-         Video-Regel darüber schlagen, daher die höhere Spezifität. */
-      .media-strip > .w70,
-      .media-strip > .w70:nth-child(even) {
-        width: 70%;
-      }
-
-      /* auf geraden Positionen weiter nach rechts gesetzt */
-      .media-strip > .w70:nth-child(even) {
-        margin-left: auto;
-      }
-
-      /* Plakate: zwei pro Reihe über die volle Breite */
+      /* Plakate und freie Bildserie: zwei pro Reihe */
       .media-strip.two-up > * {
         width: calc((100% - 0.5rem) / 2);
-        margin-left: 0;
       }
 
       /* Lightbox: Medium oben, darunter Zurück/Weiter links und rechts.
@@ -623,6 +612,11 @@
         display: none;
       }
 
+      /* der erzwungene Umbruch passt nicht zur Zweierstapelung */
+      .media-strip > .row-break {
+        display: none;
+      }
+
       /* nur ein Strich statt zwei */
       .d2 {
         display: none;
@@ -654,7 +648,7 @@
         <div class="p-desc">kurze Beschreibung der Arbeit …</div>
         <div class="media-strip" id="kly-strip">
           <img src="100.png" alt="" class="has-cursor" data-cursor="klycheck.ch|Plakat" />
-          <video src="INSTALLATION_DOKUMENTATION.mp4" autoplay loop muted playsinline class="has-cursor" style="height: clamp(175px, 30vw, 430px)" data-cursor="Installation|dokumentiert"></video>
+          <video src="INSTALLATION_DOKUMENTATION.mp4" autoplay loop muted playsinline class="has-cursor h-mid" data-cursor="Installation|dokumentiert"></video>
           <div class="row-break"></div>
           <video src="huhuhaha.mp4" autoplay loop muted playsinline class="has-cursor" data-start="5" data-cursor="Story eins|Instagram"></video>
         </div>      </div>
@@ -671,8 +665,8 @@
         <div class="p-head"><div class="p-num">2</div>All along the white line<div class="p-kind">Kurzfilm</div><div class="p-meta">2026<br />Critical Media<br />Berenice Serra</div></div>
         <div class="p-desc">«All along the white line» gewährt einen Einblick in die Subkultur illegaler Straßenrennen und Drifts und erzählt drei verschiedene Geschichten aus der ganzen Welt. Entstanden 2026 im Kurs Critical Media bei Berenice Serra. Im Zentrum stehen nicht die Fahrzeuge, sondern die Menschen, die sich Nacht für Nacht an denselben Orten treffen, und die Regeln, die sie sich dabei selbst geben. Gezeigt wird die Videoarbeit zusammen mit einer Ausstellungssituation in der Burgunderstrasse.</div>
         <div class="media-strip">
-          <video src="all_along_the_white_line.mp4" autoplay loop muted playsinline class="has-cursor" data-cursor="Drift bei Nacht|irgendwo im Nirgendwo"></video>
-          <img src="tvnight_web.jpeg" alt="" class="has-cursor w70" style="height: clamp(200px, 35vw, 500px)" data-cursor="Ausstellung in der|Burgunderstrasse" />
+          <video src="all_along_the_white_line.mp4" autoplay loop muted playsinline class="has-cursor"></video>
+          <img src="tvnight_web.jpeg" alt="" class="has-cursor w70 h-big" data-cursor="Ausstellung in der|Burgunderstrasse" />
         </div>      </div>
       <div class="text">
         <div class="t">All along the white line</div>
@@ -686,12 +680,12 @@
       <div class="p-row">
         <div class="p-head"><div class="p-num">3</div>Fiktive Plakate<div class="p-kind">Freie Serie</div><div class="p-meta">seit 2025<br />Eigenes Projekt</div></div>
         <div class="p-desc">Im Workshop von <a href="https://veravandeseyp.com">Vera van de Seyp</a> haben wir eine Plakatreihe via Creative Coding in P5.js erstellt. Die Arbeit entstand in Zusammenarbeit mit Laurel Biolley. Statt jedes Plakat einzeln zu setzen, entsteht die Reihe aus einem Programm: Typografie, Bildausschnitt und Farbe werden über Parameter gesteuert, jede Ausgabe ist eine Variante derselben Regel. Die Motive sind frei erfunden und laden zu Veranstaltungen ein, die es nicht gibt. Die Serie wächst seit 2025 weiter, jedes neue Plakat erweitert das Set.</div>
-        <div class="media-strip two-up no-orphan">
-          <img src="plakate/brunnen_web.png" alt="" class="has-cursor" data-cursor="Brunnen gehen|Pisoni-Brunnen" />
-          <img src="plakate/plakate_verschiedenste_web.jpg" alt="" class="has-cursor" data-cursor="Stadtspaziergänge|Schritt für Schritt Basel" />
-          <img src="plakate/caramelo_web.png" alt="" class="has-cursor" data-cursor="Caramelo|Kaschemme Basel" />
-          <img src="plakate/plakate_verschiedenste1_web.jpg" alt="" class="has-cursor" data-cursor="Der Zwischenraum|weder Stadt noch Land" />
-          <img src="plakate/hoffnung_web.jpg" alt="" class="has-cursor" data-cursor="Hoffnung|Plakat" />
+        <div class="media-strip two-up">
+          <img src="plakate/brunnen_web.png" alt="" class="has-cursor" />
+          <img src="plakate/plakate_verschiedenste_web.jpg" alt="" class="has-cursor" />
+          <img src="plakate/caramelo_web.png" alt="" class="has-cursor" />
+          <img src="plakate/plakate_verschiedenste1_web.jpg" alt="" class="has-cursor" />
+          <img src="plakate/hoffnung_web.jpg" alt="" class="has-cursor" />
         </div>      </div>
       <div class="text">
         <div class="t">Plakate</div>
@@ -706,8 +700,8 @@
         <div class="p-head"><div class="p-num">4</div>pointcloud.xyz<div class="p-kind">Webtool</div><div class="p-meta">2025<br />Tool Making<br />Ted Davis</div></div>
         <div class="p-desc">«pointcloud.xyz» lässt ein OBJ-File in eine Pointcloud umwandeln. Mittels verschiedener Parameter kann die Pointcloud manipuliert und abstrahiert werden. Das Tool kannst du <a href="https://olivierwick.github.io/pointcloud.xyz/" target="_blank">hier</a> testen. Entstanden 2025 im Kurs Tool Making bei Ted Davis. Aus einem geschlossenen Volumen wird eine offene Wolke aus einzelnen Punkten – je nach Dichte und Streuung bleibt die Form erkennbar oder löst sich vollständig auf. Alles läuft direkt im Browser, das Ergebnis lässt sich als Bild weiterverwenden.</div>
         <div class="media-strip" id="ref-strip">
-          <video src="kopf2.mp4" autoplay loop muted playsinline class="has-cursor w70" data-cursor="Kopf im Raum|rotierend"></video>
-          <img src="pointcloudxyz_1_web.jpg" alt="" class="has-cursor" style="height: clamp(200px, 35vw, 500px)" data-cursor="Punktwolke|Ansicht eins" />
+          <video src="kopf2.mp4" autoplay loop muted playsinline class="has-cursor w70"></video>
+          <img src="pointcloudxyz_1_web.jpg" alt="" class="has-cursor h-big" data-cursor="Punktwolke|Ansicht eins" />
         </div>      </div>
       <div class="text">
         <div class="t">pointcloud.xyz</div>
@@ -781,10 +775,8 @@
         <div class="p-head"><div class="p-num">5</div>Zwischen Asphalt und Beton<div class="p-kind">Dokumentation</div><div class="p-meta">2025<br />Sommerprojekt</div></div>
         <div class="p-desc">Ein Film über die Graffiti-Kultur in Basel, erzählt aus der Sicht der Stadtreinigung, eines ehemaligen Sprühers und Graffiti-Ladenbesitzers sowie eines aktiven Sprayers. Die drei Perspektiven stehen nebeneinander, ohne gegeneinander ausgespielt zu werden. Gedreht an den Orten, an denen die Arbeit der einen die der anderen sichtbar macht. Entstanden als Sommerprojekt 2025. Noah Meyer hat mir mit der Kamera beim ersten Interview mit der Stadtreinigung geholfen. Die Kamera konnten wir von <a href="https://bilderundschall.ch">Bilder &amp; Schall</a> ausleihen.</div>
         <div class="media-strip">
-          <video src="zwischen_asphalt_und_beton.mp4" autoplay loop muted playsinline class="has-cursor" data-cursor="Sprüher|bei der Arbeit"></video>
-          <div class="row-break"></div>
-          <img src="zaub_dok1.jpg" alt="" class="has-cursor w70" style="height: clamp(200px, 35vw, 500px)" data-cursor="Doku|Bild eins" />
-          <img src="zaub_dok3.jpg" alt="" class="has-cursor w70" style="height: clamp(200px, 35vw, 500px)" data-cursor="Doku|Bild drei" />
+          <img src="zaub_dok1.jpg" alt="" class="has-cursor w70 h-big" data-cursor="Doku|Bild eins" />
+          <video src="zwischen_asphalt_und_beton.mp4" autoplay loop muted playsinline class="has-cursor"></video>
         </div>      </div>
       <div class="text">
         <div class="t">Zwischen Asphalt und Beton</div>
@@ -799,8 +791,8 @@
         <div class="p-head"><div class="p-num">6</div>Überall bauen, nirgendwo leben<div class="p-kind">Animation</div><div class="p-meta">2024<br />Moving Graphics<br />Dirk Koy</div></div>
         <div class="p-desc">Die Arbeit geht auf die Verdrängung autonomer Räume in der Stadt Basel ein. Daraus ist eine Serie entstanden, die Orte zeigt, die vor einer Bebauung stehen. Darunter das Lysbüchelareal, der Wagenplatz sowie das DB-Areal. Entstanden 2024 im Kurs Moving Graphics bei Dirk Koy. Die bewegten Bilder halten einen Zustand fest, den es beim Erscheinen der Arbeit womöglich schon nicht mehr gibt – Zwischennutzung, Brache, Baustelle. Was danach kommt, ist auf den Visualisierungen der Investoren längst zu sehen.</div>
         <div class="media-strip">
-          <video src="überall_bauen_mockup.mp4" autoplay loop muted playsinline class="has-cursor" data-cursor="Mockup|an der Wand"></video>
-          <video src="überall_bauen2.mp4" autoplay loop muted playsinline class="has-cursor w70" style="height: clamp(200px, 35vw, 500px)" data-cursor="Verdrängte|Räume"></video>
+          <video src="überall_bauen_mockup.mp4" autoplay loop muted playsinline class="has-cursor"></video>
+          <video src="überall_bauen2.mp4" autoplay loop muted playsinline class="has-cursor w70 h-big"></video>
         </div>      </div>
       <div class="text">
         <div class="t">Überall bauen nirgendwo leben</div>
@@ -814,11 +806,11 @@
       <div class="p-row">
         <div class="p-head"><div class="p-num">7</div>Fotos<div class="p-kind">Fotoserie</div><div class="p-meta">2023<br />Freie Arbeit</div></div>
         <div class="p-desc">Analoge Aufnahmen, entstanden 2023.</div>
-        <div class="media-strip">
-          <img src="IMG_6675.jpg" alt="" class="has-cursor" data-cursor="Napoli|an der Wand" />
-          <img src="IMG_6676.jpg" alt="" class="has-cursor" data-cursor="Küche|nach Feierabend" />
-          <img src="IMG_6681.jpg" alt="" class="has-cursor" data-cursor="Überfahrt|im Sitzen" />
-          <img src="IMG_6694.jpg" alt="" class="has-cursor" data-cursor="Schalter|Telefon und Tastatur" />
+        <div class="media-strip two-up">
+          <img src="IMG_6675.jpg" alt="" class="has-cursor" />
+          <img src="IMG_6676.jpg" alt="" class="has-cursor" />
+          <img src="IMG_6681.jpg" alt="" class="has-cursor" />
+          <img src="IMG_6694.jpg" alt="" class="has-cursor" />
         </div>
       </div>
       <div class="text">
@@ -830,8 +822,9 @@
 
   </div>
 
-  <footer class="footer">© 2026</footer>
+  <footer class="footer">Alle Rechte vorbehalten<br />© 2026</footer>
 
+  <div class="cursor-dot" id="cursor-dot"></div>
   <div class="cursor-label" id="cursor-label"></div>
 
   <div class="lightbox" id="lightbox" aria-hidden="true">
@@ -1118,6 +1111,10 @@
         current = -1;
         backgroundRate(1);
         document.documentElement.classList.remove("lb-open");
+        /* Sperre ist weg – sofort neu bestimmen, welche Sparte gerade
+           in der Bildschirmmitte liegt. Sonst bliebe alles abgedunkelt,
+           bis das nächste Mal gescrollt wird. */
+        onScroll();
       }
 
       lightbox.querySelector(".lb-prev").addEventListener("click", function () {
@@ -1173,23 +1170,47 @@
         });
       });
 
-      /* Text-Cursor beim Hovern */
+      /* Cursor: entweder Kreis oder Beschriftung, nie beides.
+         Beides hängt am selben mousemove und wird bei jeder Bewegung neu
+         bestimmt. Über mouseenter je Element ginge es nicht: rutscht ein
+         Element beim Scrollen unter den stehenden Zeiger, feuert kein
+         mouseenter, und die Beschriftung bliebe aus. */
       var cursorLabel = document.getElementById("cursor-label");
-      document.addEventListener("mousemove", function (e) {
+      var cursorDot = document.getElementById("cursor-dot");
+      var cursorOn = null;
+
+      function moveCursor(e) {
         cursorLabel.style.left = e.clientX + "px";
         cursorLabel.style.top = e.clientY + "px";
-      });
-      document.querySelectorAll("[data-cursor]").forEach(function (el) {
-        el.addEventListener("mouseenter", function () {
-          cursorLabel.innerHTML = el
-            .getAttribute("data-cursor")
-            .split("|")
-            .join("<br>");
-          cursorLabel.classList.add("show");
-        });
-        el.addEventListener("mouseleave", function () {
-          cursorLabel.classList.remove("show");
-        });
+        cursorDot.style.left = e.clientX + "px";
+        cursorDot.style.top = e.clientY + "px";
+
+        /* was liegt gerade unter dem Zeiger? */
+        var el = document.elementFromPoint(e.clientX, e.clientY);
+        var target = el && el.closest ? el.closest("[data-cursor]") : null;
+
+        if (target !== cursorOn) {
+          cursorOn = target;
+          if (target) {
+            cursorLabel.innerHTML = target
+              .getAttribute("data-cursor")
+              .split("|")
+              .join("<br>");
+          }
+          cursorLabel.classList.toggle("show", !!target);
+          document.documentElement.classList.toggle("cursor-text", !!target);
+        }
+        cursorDot.classList.toggle("show", !target);
+      }
+
+      document.addEventListener("mousemove", moveCursor);
+
+      /* verlässt der Zeiger das Fenster, verschwindet beides */
+      document.addEventListener("mouseleave", function () {
+        cursorOn = null;
+        cursorDot.classList.remove("show");
+        cursorLabel.classList.remove("show");
+        document.documentElement.classList.remove("cursor-text");
       });
 
       /* Info-Text: "Info" schaltet um und heisst dann "Schliessen".
@@ -1233,6 +1254,7 @@
         infoToggle.textContent = open ? "Schliessen" : "Info";
         document.documentElement.classList.toggle("lb-open", open);
         document.documentElement.classList.toggle("info-open", open);
+        if (!open) onScroll();
       }
 
       infoToggle.addEventListener("click", function () {
