@@ -3,7 +3,10 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Olivier Wick—Kontakt</title>
+  <title>Olivier Wick</title>
+  <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+  <link rel="icon" href="favicon.png" type="image/png" sizes="64x64" />
+  <link rel="apple-touch-icon" href="apple-touch-icon.png" />
   <style>
     @font-face {
       font-family: "Ronzino";
@@ -558,9 +561,14 @@
         margin-left: 0;
       }
 
-      /* Plakate und freie Bildserie: zwei pro Reihe */
+      /* Plakate und freie Bildserie: zwei pro Reihe, alle gleich hoch.
+         Die Fotos (1228x1818) sind etwas schlanker als die Plakate
+         (1273x1800); mit festem Seitenverhältnis werden sie minimal
+         oben und unten beschnitten statt höher zu werden. */
       .media-strip.two-up > * {
         width: calc((100% - 0.5rem) / 2);
+        aspect-ratio: 1273 / 1800;
+        object-fit: cover;
       }
 
       /* Lightbox: Medium oben, darunter Zurück/Weiter links und rechts.
@@ -647,10 +655,8 @@
         <div class="p-head"><div class="p-num">1</div>klycheck.ch<div class="p-kind">Installation, Website</div><div class="p-meta">2026<br />Abschlussarbeit<br />Martin Fuchs<br />Annik Troxler</div></div>
         <div class="p-desc">kurze Beschreibung der Arbeit …</div>
         <div class="media-strip" id="kly-strip">
-          <img src="100.png" alt="" class="has-cursor" data-cursor="klycheck.ch|Plakat" />
-          <video src="INSTALLATION_DOKUMENTATION.mp4" autoplay loop muted playsinline class="has-cursor h-mid" data-cursor="Installation|dokumentiert"></video>
-          <div class="row-break"></div>
-          <video src="huhuhaha.mp4" autoplay loop muted playsinline class="has-cursor" data-start="5" data-cursor="Story eins|Instagram"></video>
+          <img src="100.png" alt="" class="has-cursor h-big" data-cursor="" data-rotate="100.png|400.png|2.png" />
+          <video src="INSTALLATION_DOKUMENTATION.mp4" autoplay loop muted playsinline class="has-cursor" data-cursor="Installation|dokumentiert"></video>
         </div>      </div>
       <div class="text">
         <div class="t">klycheck.ch</div>
@@ -666,7 +672,7 @@
         <div class="p-desc">«All along the white line» gewährt einen Einblick in die Subkultur illegaler Straßenrennen und Drifts und erzählt drei verschiedene Geschichten aus der ganzen Welt. Entstanden 2026 im Kurs Critical Media bei Berenice Serra. Im Zentrum stehen nicht die Fahrzeuge, sondern die Menschen, die sich Nacht für Nacht an denselben Orten treffen, und die Regeln, die sie sich dabei selbst geben. Gezeigt wird die Videoarbeit zusammen mit einer Ausstellungssituation in der Burgunderstrasse.</div>
         <div class="media-strip">
           <video src="all_along_the_white_line.mp4" autoplay loop muted playsinline class="has-cursor"></video>
-          <img src="tvnight_web.jpeg" alt="" class="has-cursor w70 h-big" data-cursor="Ausstellung in der|Burgunderstrasse" />
+          <img src="tvnight_web.jpeg" alt="" class="has-cursor w70 h-big" data-cursor="Ausstellung an der|Burgunderstrasse" />
         </div>      </div>
       <div class="text">
         <div class="t">All along the white line</div>
@@ -701,7 +707,7 @@
         <div class="p-desc">«pointcloud.xyz» lässt ein OBJ-File in eine Pointcloud umwandeln. Mittels verschiedener Parameter kann die Pointcloud manipuliert und abstrahiert werden. Das Tool kannst du <a href="https://olivierwick.github.io/pointcloud.xyz/" target="_blank">hier</a> testen. Entstanden 2025 im Kurs Tool Making bei Ted Davis. Aus einem geschlossenen Volumen wird eine offene Wolke aus einzelnen Punkten – je nach Dichte und Streuung bleibt die Form erkennbar oder löst sich vollständig auf. Alles läuft direkt im Browser, das Ergebnis lässt sich als Bild weiterverwenden.</div>
         <div class="media-strip" id="ref-strip">
           <video src="kopf2.mp4" autoplay loop muted playsinline class="has-cursor w70"></video>
-          <img src="pointcloudxyz_1_web.jpg" alt="" class="has-cursor h-big" data-cursor="Punktwolke|Ansicht eins" />
+          <img src="pointcloudxyz_1_web.jpg" alt="" class="has-cursor h-big" data-cursor="Erschienen im|Slanted Magazine|«Digital Tools»" />
         </div>      </div>
       <div class="text">
         <div class="t">pointcloud.xyz</div>
@@ -775,7 +781,7 @@
         <div class="p-head"><div class="p-num">5</div>Zwischen Asphalt und Beton<div class="p-kind">Dokumentation</div><div class="p-meta">2025<br />Sommerprojekt</div></div>
         <div class="p-desc">Ein Film über die Graffiti-Kultur in Basel, erzählt aus der Sicht der Stadtreinigung, eines ehemaligen Sprühers und Graffiti-Ladenbesitzers sowie eines aktiven Sprayers. Die drei Perspektiven stehen nebeneinander, ohne gegeneinander ausgespielt zu werden. Gedreht an den Orten, an denen die Arbeit der einen die der anderen sichtbar macht. Entstanden als Sommerprojekt 2025. Noah Meyer hat mir mit der Kamera beim ersten Interview mit der Stadtreinigung geholfen. Die Kamera konnten wir von <a href="https://bilderundschall.ch">Bilder &amp; Schall</a> ausleihen.</div>
         <div class="media-strip">
-          <img src="zaub_dok1.jpg" alt="" class="has-cursor w70 h-big" data-cursor="Doku|Bild eins" />
+          <img src="zaub_dok1.jpg" alt="" class="has-cursor w70 h-big" data-cursor="Dreh mit der Stadt- |reinigung in Basel" />
           <video src="zwischen_asphalt_und_beton.mp4" autoplay loop muted playsinline class="has-cursor"></video>
         </div>      </div>
       <div class="text">
@@ -801,20 +807,21 @@
       </div>
     </div>
 
-    <!-- Fotos -->
+    <!-- Napoli -->
     <div class="project">
       <div class="p-row">
-        <div class="p-head"><div class="p-num">7</div>Fotos<div class="p-kind">Fotoserie</div><div class="p-meta">2023<br />Freie Arbeit</div></div>
+        <div class="p-head"><div class="p-num">7</div>Napoli<div class="p-kind">Fotoserie</div><div class="p-meta">2023<br />Freie Arbeit</div></div>
         <div class="p-desc">Analoge Aufnahmen, entstanden 2023.</div>
         <div class="media-strip two-up">
           <img src="IMG_6675.jpg" alt="" class="has-cursor" />
           <img src="IMG_6676.jpg" alt="" class="has-cursor" />
+          <img src="IMG_6680.jpg" alt="" class="has-cursor" />
           <img src="IMG_6681.jpg" alt="" class="has-cursor" />
           <img src="IMG_6694.jpg" alt="" class="has-cursor" />
         </div>
       </div>
       <div class="text">
-        <div class="t">Fotos</div>
+        <div class="t">Napoli</div>
         <div class="m">2023 · Freie Arbeit</div>
         <div class="d">Analoge Aufnahmen, entstanden 2023.</div>
       </div>
@@ -1168,6 +1175,24 @@
           }
           open(el);
         });
+      });
+
+      /* Plakat-Rotation: Bilder mit data-rotate="a|b|c" wechseln alle
+         20 Sekunden zum nächsten Motiv. Die übrigen Motive werden vorab
+         geladen, damit der Wechsel ohne Aufblitzen passiert. */
+      var ROTATE_MS = 20000;
+      document.querySelectorAll("img[data-rotate]").forEach(function (img) {
+        var srcs = img.getAttribute("data-rotate").split("|");
+        if (srcs.length < 2) return;
+        srcs.forEach(function (src) {
+          var pre = new Image();
+          pre.src = src;
+        });
+        var i = Math.max(0, srcs.indexOf(img.getAttribute("src")));
+        setInterval(function () {
+          i = (i + 1) % srcs.length;
+          img.src = srcs[i];
+        }, ROTATE_MS);
       });
 
       /* Cursor: entweder Kreis oder Beschriftung, nie beides.
