@@ -655,8 +655,8 @@
         <div class="p-head"><div class="p-num">1</div>klycheck.ch<div class="p-kind">Installation, Website</div><div class="p-meta">2026<br />Abschlussarbeit<br />Martin Fuchs<br />Annik Troxler</div></div>
         <div class="p-desc">kurze Beschreibung der Arbeit …</div>
         <div class="media-strip" id="kly-strip">
-          <img src="100.png" alt="" class="has-cursor h-big" data-cursor="" data-rotate="100.png|400.png|2.png" />
-          <video src="INSTALLATION_DOKUMENTATION.mp4" autoplay loop muted playsinline class="has-cursor" data-cursor="Installation|dokumentiert"></video>
+          <img src="100.png" alt="" class="has-cursor h-big" data-rotate="100.png|400.png|2.png" />
+          <video src="INSTALLATION_DOKUMENTATION.mp4" autoplay loop muted playsinline class="has-cursor"></video>
         </div>      </div>
       <div class="text">
         <div class="t">klycheck.ch</div>
@@ -1213,6 +1213,9 @@
         /* was liegt gerade unter dem Zeiger? */
         var el = document.elementFromPoint(e.clientX, e.clientY);
         var target = el && el.closest ? el.closest("[data-cursor]") : null;
+        /* leeres data-cursor="" zählt nicht – sonst gäbe es weder Kreis
+           noch Text */
+        if (target && !target.getAttribute("data-cursor")) target = null;
 
         if (target !== cursorOn) {
           cursorOn = target;
