@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="de-CH">
+<html lang="de">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -54,7 +54,9 @@
       font-weight: 400;
       /* Zeilenabstand gleich der Schriftgrösse */
       line-height: 1;
-      /* Silbentrennung (nutzt lang="de-CH" am html-Element) */
+      /* Silbentrennung (nutzt lang="de" am html-Element). Bewusst nicht
+         de-CH: dafür liefert Chrome das Wörterbuch der Rechtschreibung von
+         1901 (ck -> k-k), was zu seltsamen Trennungen führt. */
       -webkit-hyphens: auto;
       hyphens: auto;
       display: flex;
@@ -1395,12 +1397,23 @@
 
       document.addEventListener("mousemove", moveCursor);
 
-      /* verlässt der Zeiger das Fenster, verschwindet beides */
-      document.addEventListener("mouseleave", function () {
+      /* verlässt der Zeiger das Fenster oder wechselt man Tab/Programm,
+         verschwindet beides. mouseleave auf document feuert nicht in
+         allen Browsern zuverlässig, deshalb zusätzlich mouseout ohne
+         Zielelement (= Zeiger ist draussen) und blur des Fensters. */
+      function hideCursor() {
         cursorOn = null;
         cursorDot.classList.remove("show");
         cursorLabel.classList.remove("show");
         document.documentElement.classList.remove("cursor-text");
+      }
+      document.documentElement.addEventListener("mouseleave", hideCursor);
+      document.addEventListener("mouseout", function (e) {
+        if (!e.relatedTarget) hideCursor();
+      });
+      window.addEventListener("blur", hideCursor);
+      document.addEventListener("visibilitychange", function () {
+        if (document.hidden) hideCursor();
       });
 
       /* Info-Text: "Info" schaltet um und heisst dann "Schliessen".
