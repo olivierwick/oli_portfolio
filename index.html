@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="de">
+<html lang="de-CH">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -11,6 +11,14 @@
     @font-face {
       font-family: "Ronzino";
       src: url("Ronzino-Medium.otf") format("opentype");
+      font-weight: 400;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    @font-face {
+      font-family: "Zurich";
+      src: url("ZurichBT-Regular.ttf") format("truetype");
       font-weight: 400;
       font-style: normal;
       font-display: swap;
@@ -42,11 +50,11 @@
       min-height: 100vh;
       background: #ffffff;
       color: #000000;
-      font-family: "Ronzino", sans-serif;
+      font-family: "Zurich", sans-serif;
       font-weight: 400;
       /* Zeilenabstand gleich der Schriftgrösse */
       line-height: 1;
-      /* Silbentrennung (nutzt lang="de" am html-Element) */
+      /* Silbentrennung (nutzt lang="de-CH" am html-Element) */
       -webkit-hyphens: auto;
       hyphens: auto;
       display: flex;
@@ -79,7 +87,7 @@
       /* Titel oben, Medien darunter */
       flex-direction: column;
       align-items: flex-start;
-      gap: 0.6rem;
+      gap: 3rem;
       filter: opacity(0.5);
       transition: filter 0.3s ease;
     }
@@ -92,10 +100,72 @@
       filter: opacity(1);
     }
 
-    /* Beschreibungen ausgeblendet – Text bleibt im HTML erhalten */
+    /* Beschreibung: steckt im Titelblock, ist zu Beginn ausgeblendet.
+       Der Pfeil darunter blendet sie unter den Angaben ein, alles andere
+       bleibt stehen. Umbruch erlaubt, aber nicht breiter als die halbe
+       Seite. */
     .p-desc {
       display: none;
+      /* bündig am linken Rand, wie der Titel */
+      padding-left: 0;
+      max-width: 50vw;
+      white-space: normal;
     }
+
+    .p-head.info-on .p-desc {
+      display: block;
+    }
+
+    /* Umschalter: Pfeil aus pfeil2.png (weiss auf transparent), als
+       Maske über eine schwarze Fläche gelegt. Das Bild zeigt nach unten
+       links, darum um 45° gedreht – geschlossen zeigt er nach unten,
+       offen nach oben. Eine Zeile hoch, Einzug wie die Angaben. */
+    .p-info {
+      --size: 0.9em;
+      display: block;
+      width: var(--size);
+      height: var(--size);
+      /* durch die Drehung ragt der Pfeil 20,5 % seiner Breite über die
+         linke Kante der Box hinaus – das wird dazugerechnet, damit sein
+         linkster Punkt bündig mit der Nummer (1em) liegt */
+      margin-left: calc(1em + 0.205 * var(--size));
+      margin-top: 0.4em;
+      background: #000000;
+      -webkit-mask: url("pfeil2.png") no-repeat center / contain;
+      mask: url("pfeil2.png") no-repeat center / contain;
+      transform: rotate(-45deg);
+      transition: transform 0.6s ease;
+      user-select: none;
+    }
+
+    .p-head.info-on .p-info {
+      transform: rotate(135deg);
+    }
+
+    .p-head.no-anim .p-info {
+      transition: none;
+    }
+
+    /* Ruhiger Flattersatz für die Fliesstexte (kein Blocksatz – bei
+       dieser Zeilenlänge reisst der zu grosse Löcher). text-wrap: pretty
+       lässt den Browser mehrere Zeilen vorausschauen (Chrome 117+,
+       Safari 26+, sonst ignoriert). Trennung nur bei Wörtern ab 6
+       Buchstaben mit je 3 vor und nach dem Strich, in Safari höchstens
+       2 Trennungen in Folge. */
+    .p-desc,
+    .info-text {
+      text-align: left;
+      text-wrap: pretty;
+      hyphenate-limit-chars: 6 3 3;
+      -webkit-hyphenate-limit-lines: 2;
+    }
+
+    /* Links im Text unauffällig, wie im Info-Text */
+    .p-desc a {
+      color: inherit;
+      text-decoration: none;
+    }
+
 
     /* Beim Laden erscheint ein Element nach dem anderen: erst der Titel,
        dann die Medien des Projekts, dann das nächste Projekt.
@@ -162,6 +232,8 @@
       /* fester Abstand vom rechten Rand, je Reihe im HTML als --inset
          gesetzt. Reihen ohne Angabe schliessen bündig ab. */
       padding-right: var(--inset, 0);
+      /* links nie ganz an der Kante */
+      padding-left: 2px;
     }
 
     .media-strip > * {
@@ -258,6 +330,16 @@
       display: block;
     }
 
+    /* Im echten Vollbild (Browser-Fullscreen mit Controls) wird nur das
+       Video gezeichnet, der Kreis existiert dort nicht – also den
+       Systemzeiger zurückgeben, sonst gibt es gar keinen Cursor. */
+    :fullscreen,
+    :fullscreen *,
+    :-webkit-full-screen,
+    :-webkit-full-screen * {
+      cursor: auto;
+    }
+
     /* über Medien mit Beschriftung: nur der Text, kein Kreis */
     html.cursor-text .cursor-dot,
     html.cursor-text .cursor-dot.show {
@@ -275,7 +357,7 @@
       left: 0;
       z-index: 200;
       pointer-events: none;
-      font-family: "Ronzino", sans-serif;
+      font-family: "Zurich", sans-serif;
       font-size: 1.5rem;
       line-height: 1;
       color: #fff;
@@ -315,12 +397,14 @@
       -webkit-backdrop-filter: blur(2.5px);
     }
 
-    /* Text beginnt bei der Hälfte der Fensterbreite */
+    /* Text linksbündig an der Kante, halb so breit wie das Fenster,
+       unterhalb der Kopfzeile – also unter "Schliessen" */
     .info-text {
       position: relative;
       z-index: 2;
-      margin-left: 50%;
-      padding-right: 2rem;
+      margin-left: 0;
+      width: 50%;
+      padding-top: var(--header-h, 0px);
       font-size: 1.5rem;
       /* gleiche Zeilenhöhe wie die Angaben bei den Arbeiten */
       line-height: 1;
@@ -507,13 +591,16 @@
       flex: 0 0 25%;
     }
 
-    /* ---------- iPhone / kleine Screens ---------- */
-    @media (max-width: 600px) {
+    /* Nur auf echten Touch-Geräten (Handy, Tablet): kleinere Schrift und
+       kein eigener Cursor. Ein schmal gezogenes Desktop-Fenster behält
+       beides, auch wenn darunter das Handy-Layout greift. */
+    @media (max-width: 800px) and (pointer: coarse) {
       html {
         font-size: 95%;
       }
 
-      /* kein Hover auf Touch: Cursor-Texte weg, normaler Cursor zurück */
+      /* kein Hover auf Touch: Cursor-Texte weg, normaler Cursor zurück.
+         Ein schmales Desktop-Fenster behält Kreis und Beschriftungen. */
       .cursor-label,
       .cursor-label.show,
       .cursor-dot,
@@ -532,13 +619,28 @@
       .lb-arrow {
         cursor: pointer;
       }
+    }
+
+    /* ---------- iPhone / kleine Screens ---------- */
+    @media (max-width: 800px) {
+
+      /* Beschreibung darf hier die ganze Breite nutzen */
+      .p-desc {
+        max-width: 100%;
+      }
+
+      /* Info-Text: hier über die ganze Breite */
+      .info-text {
+        width: auto;
+        padding-right: 2px;
+      }
 
       /* Titel oben, Medien darunter – beide linksbündig */
       .p-row {
         flex-direction: column;
         align-items: flex-start;
-        /* hier wirkt der gap vertikal, deshalb wieder grosszügiger */
-        gap: 0.6rem;
+        /* Pfeil zu erstem Medium: gleicher Abstand wie zwischen den Medien */
+        gap: 1.5rem;
       }
 
       /* in der Spalte nicht mitwachsen, sonst kollabiert die Höhe.
@@ -549,6 +651,9 @@
         width: 100%;
         justify-content: flex-start;
         padding-right: 0;
+        padding-left: 0;
+        /* untereinander dreimal so viel Luft wie nebeneinander */
+        row-gap: 1.5rem;
       }
 
       /* Medien untereinander, jedes über die volle Breite.
@@ -559,6 +664,29 @@
         width: 100%;
         height: auto;
         margin-left: 0;
+      }
+
+      /* klycheck-Plakat, die Bilder bei All along und Zwischen Asphalt
+         (img.w70) und das Hochkant-Video bei Überall bauen (video.h-big):
+         ein Drittel schmaler und mittig */
+      #kly-strip > img,
+      .media-strip > img.w70,
+      .media-strip > video.h-big {
+        width: 66.67%;
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      /* Videos in voller Breite: 2px Abstand zum Bildschirmrand */
+      .media-strip > video {
+        width: calc(100% - 4px);
+        margin-left: 2px;
+        margin-right: 2px;
+      }
+
+      /* Plakate und Napoli: enger Abstand wie nebeneinander */
+      .media-strip.two-up {
+        row-gap: 0.5rem;
       }
 
       /* Plakate und freie Bildserie: zwei pro Reihe, alle gleich hoch.
@@ -572,39 +700,44 @@
       }
 
       /* Lightbox: Medium oben, darunter Zurück/Weiter links und rechts.
-         Als Grid, damit der Abstand exakt dem Abstand zwischen den
-         Medien entspricht (0.5rem) statt am Bildschirmrand zu kleben. */
+         Als Grid, damit die Knöpfe direkt unter dem Medium sitzen statt
+         am Bildschirmrand zu kleben. */
       .lightbox.open {
         display: grid;
-        grid-template-columns: 1fr 1fr;
+        /* Spalten so breit wie das Medium, das über beide läuft – dann
+           liegen Zurück/Weiter bündig an dessen linker und rechter Kante */
+        grid-template-columns: auto auto;
         grid-template-rows: auto auto;
         align-content: center;
-        row-gap: 0.5rem;
+        justify-content: center;
+        /* Zurück/Weiter direkt unter dem Medium */
+        row-gap: 0;
       }
 
       .lb-stage {
         grid-row: 1;
         grid-column: 1 / 3;
+        width: fit-content;
       }
 
       .lb-arrow {
         position: static;
         transform: none;
-        align-self: center;
+        align-self: start;
+        /* kein Innenabstand nach oben, der Text hängt direkt am Medium */
+        padding-top: 0;
       }
 
       .lb-prev {
         grid-row: 2;
         grid-column: 1;
         justify-self: start;
-        margin-left: 1rem;
       }
 
       .lb-next {
         grid-row: 2;
         grid-column: 2;
         justify-self: end;
-        margin-right: 1rem;
       }
 
       /* fast volle Breite, aber ein schmaler Rand bleibt links und rechts */
@@ -652,8 +785,7 @@
     <!-- klycheck.ch -->
     <div class="project">
       <div class="p-row">
-        <div class="p-head"><div class="p-num">1</div>klycheck.ch<div class="p-kind">Installation, Website</div><div class="p-meta">2026<br />Abschlussarbeit<br />Martin Fuchs<br />Annik Troxler</div></div>
-        <div class="p-desc">kurze Beschreibung der Arbeit …</div>
+        <div class="p-head"><div class="p-num">1</div><span class="p-title">klycheck.ch</span><div class="p-kind">Installation, Website</div><div class="p-meta">2026<br />Abschlussarbeit<br />Martin Fuchs<br />Annik Troxler</div><div class="p-desc">Das Klybeck in Basel ist das grösste Transformationsareal der Schweiz und wird bis 2050 neu gestaltet. Die Stimmen der Menschen, die dort leben, bleiben dabei meist unsichtbar. Auf einer Website konnten Anwohner:innen anonym ihre Haltung äussern; die Stimmen wurden mitten im Klybeck auf eine Fassade der ehemaligen Chemieindustrie projiziert. Besucher:innen markierten per Smartphone Wörter in ihrer eigenen Farbe, so entstand ein kollektives Stimmungsbild des Quartiers.</div><div class="p-info" aria-label="Info"></div></div>
         <div class="media-strip" id="kly-strip">
           <img src="100.png" alt="" class="has-cursor h-big" data-rotate="100.png|400.png|2.png" />
           <video src="INSTALLATION_DOKUMENTATION.mp4" autoplay loop muted playsinline class="has-cursor"></video>
@@ -668,11 +800,10 @@
     <!-- All along the white line -->
     <div class="project">
       <div class="p-row">
-        <div class="p-head"><div class="p-num">2</div>All along the white line<div class="p-kind">Kurzfilm</div><div class="p-meta">2026<br />Critical Media<br />Berenice Serra</div></div>
-        <div class="p-desc">«All along the white line» gewährt einen Einblick in die Subkultur illegaler Straßenrennen und Drifts und erzählt drei verschiedene Geschichten aus der ganzen Welt. Entstanden 2026 im Kurs Critical Media bei Berenice Serra. Im Zentrum stehen nicht die Fahrzeuge, sondern die Menschen, die sich Nacht für Nacht an denselben Orten treffen, und die Regeln, die sie sich dabei selbst geben. Gezeigt wird die Videoarbeit zusammen mit einer Ausstellungssituation in der Burgunderstrasse.</div>
+        <div class="p-head"><div class="p-num">2</div><span class="p-title">All along the white line</span><div class="p-kind">Kurzfilm</div><div class="p-meta">2026<br />Critical Media<br />Berenice Serra</div><div class="p-desc">«All along the white line» gibt Einblick in die Subkultur illegaler Strassenrennen und Drifts und erzählt drei Geschichten aus Georgien, Nord-Amerika und Saudi-Arabien. Was bringt die Akteure dazu, sich selber und dritte Personen in Gefahr zu bringen? Der Film wurde im Rahmen der Ausstellung «TvNight» in der Burgunderstrasse gezeigt.</div><div class="p-info" aria-label="Info"></div></div>
         <div class="media-strip">
           <video src="all_along_the_white_line.mp4" autoplay loop muted playsinline class="has-cursor"></video>
-          <img src="tvnight_web.jpeg" alt="" class="has-cursor w70 h-big" data-cursor="Ausstellung an der|Burgunderstrasse" />
+          <img src="tvnight_web.jpeg" alt="" class="has-cursor w70 h-big" />
         </div>      </div>
       <div class="text">
         <div class="t">All along the white line</div>
@@ -684,8 +815,7 @@
     <!-- Plakate -->
     <div class="project">
       <div class="p-row">
-        <div class="p-head"><div class="p-num">3</div>Fiktive Plakate<div class="p-kind">Freie Serie</div><div class="p-meta">seit 2025<br />Eigenes Projekt</div></div>
-        <div class="p-desc">Im Workshop von <a href="https://veravandeseyp.com">Vera van de Seyp</a> haben wir eine Plakatreihe via Creative Coding in P5.js erstellt. Die Arbeit entstand in Zusammenarbeit mit Laurel Biolley. Statt jedes Plakat einzeln zu setzen, entsteht die Reihe aus einem Programm: Typografie, Bildausschnitt und Farbe werden über Parameter gesteuert, jede Ausgabe ist eine Variante derselben Regel. Die Motive sind frei erfunden und laden zu Veranstaltungen ein, die es nicht gibt. Die Serie wächst seit 2025 weiter, jedes neue Plakat erweitert das Set.</div>
+        <div class="p-head"><div class="p-num">3</div><span class="p-title">Fiktive Plakate</span><div class="p-kind">Freie Serie</div><div class="p-meta">seit 2025<br />Eigenes Projekt</div><div class="p-desc">Um mein grafisches Verständnis weiterzuentwickeln, gestalte ich seit 2025 spontane Plakate zu fiktiven Themen. Jedes entsteht unter Zeitdruck, in 30 Minuten bis einer Stunde: Die Beschränkung zwingt zu schnellen Entscheidungen und lässt keinen Raum für Perfektionismus. Die Serie wächst kontinuierlich weiter.</div><div class="p-info" aria-label="Info"></div></div>
         <div class="media-strip two-up">
           <img src="plakate/brunnen_web.png" alt="" class="has-cursor" />
           <img src="plakate/plakate_verschiedenste_web.jpg" alt="" class="has-cursor" />
@@ -703,11 +833,10 @@
     <!-- pointcloud.xyz -->
     <div class="project">
       <div class="p-row">
-        <div class="p-head"><div class="p-num">4</div>pointcloud.xyz<div class="p-kind">Webtool</div><div class="p-meta">2025<br />Tool Making<br />Ted Davis</div></div>
-        <div class="p-desc">«pointcloud.xyz» lässt ein OBJ-File in eine Pointcloud umwandeln. Mittels verschiedener Parameter kann die Pointcloud manipuliert und abstrahiert werden. Das Tool kannst du <a href="https://olivierwick.github.io/pointcloud.xyz/" target="_blank">hier</a> testen. Entstanden 2025 im Kurs Tool Making bei Ted Davis. Aus einem geschlossenen Volumen wird eine offene Wolke aus einzelnen Punkten – je nach Dichte und Streuung bleibt die Form erkennbar oder löst sich vollständig auf. Alles läuft direkt im Browser, das Ergebnis lässt sich als Bild weiterverwenden.</div>
+        <div class="p-head"><div class="p-num">4</div><span class="p-title">pointcloud.xyz</span><div class="p-kind">Webtool</div><div class="p-meta">2025<br />Tool Making<br />Ted Davis</div><div class="p-desc">«pointcloud.xyz» lässt ein OBJ-File in eine Pointcloud umwandeln. Mittels verschiedener Parameter kann die Pointcloud manipuliert und abstrahiert werden. Das Tool wurde in der 47. Ausgabe des Slanted Magazine «Digital Tools» gezeigt. Das Tool kannst du <a href="https://olivierwick.github.io/pointcloud.xyz/" target="_blank">hier</a> testen.</div><div class="p-info" aria-label="Info"></div></div>
         <div class="media-strip" id="ref-strip">
           <video src="kopf2.mp4" autoplay loop muted playsinline class="has-cursor w70"></video>
-          <img src="pointcloudxyz_1_web.jpg" alt="" class="has-cursor h-big" data-cursor="Erschienen im|Slanted Magazine|«Digital Tools»" />
+          <img src="pointcloudxyz_1_web.jpg" alt="" class="has-cursor h-big" />
         </div>      </div>
       <div class="text">
         <div class="t">pointcloud.xyz</div>
@@ -722,8 +851,7 @@
 
     <div class="project">
       <div class="p-row">
-        <div class="p-head"><div class="p-num">5</div>3D-Modelle<div class="p-meta">2026</div></div>
-        <div class="p-desc">Sammlung eigener 3D-Modelle, direkt im Browser drehbar.</div>
+        <div class="p-head"><div class="p-num">5</div><span class="p-title">3D-Modelle</span><div class="p-meta">2026</div><div class="p-desc">Sammlung eigener 3D-Modelle, direkt im Browser drehbar.</div><div class="p-info" aria-label="Info"></div></div>
         <div class="media-strip">
           <model-viewer
             src="warteckd.glb"
@@ -778,10 +906,9 @@
     <!-- Zwischen Asphalt und Beton -->
     <div class="project">
       <div class="p-row">
-        <div class="p-head"><div class="p-num">5</div>Zwischen Asphalt und Beton<div class="p-kind">Dokumentation</div><div class="p-meta">2025<br />Sommerprojekt</div></div>
-        <div class="p-desc">Ein Film über die Graffiti-Kultur in Basel, erzählt aus der Sicht der Stadtreinigung, eines ehemaligen Sprühers und Graffiti-Ladenbesitzers sowie eines aktiven Sprayers. Die drei Perspektiven stehen nebeneinander, ohne gegeneinander ausgespielt zu werden. Gedreht an den Orten, an denen die Arbeit der einen die der anderen sichtbar macht. Entstanden als Sommerprojekt 2025. Noah Meyer hat mir mit der Kamera beim ersten Interview mit der Stadtreinigung geholfen. Die Kamera konnten wir von <a href="https://bilderundschall.ch">Bilder &amp; Schall</a> ausleihen.</div>
+        <div class="p-head"><div class="p-num">5</div><span class="p-title">Zwischen Asphalt und Beton</span><div class="p-kind">Dokumentation</div><div class="p-meta">2025<br />Sommerprojekt</div><div class="p-desc">Ein Film über die Graffiti-Kultur in Basel, erzählt aus der Sicht der Stadtreinigung, eines ehemaligen Sprühers und Ladenbesitzers sowie eines aktiven Sprayers. Die drei Perspektiven stehen nebeneinander, ohne gegeneinander ausgespielt zu werden. Noah Meyer hat beim ersten Interview mit der Kamera geholfen, geliehen von Bilder &amp; Schall.</div><div class="p-info" aria-label="Info"></div></div>
         <div class="media-strip">
-          <img src="zaub_dok1.jpg" alt="" class="has-cursor w70 h-big" data-cursor="Dreh mit der Stadt- |reinigung in Basel" />
+          <img src="zaub_dok1.jpg" alt="" class="has-cursor w70 h-big" />
           <video src="zwischen_asphalt_und_beton.mp4" autoplay loop muted playsinline class="has-cursor"></video>
         </div>      </div>
       <div class="text">
@@ -794,8 +921,7 @@
     <!-- Überall bauen nirgendwo leben -->
     <div class="project">
       <div class="p-row">
-        <div class="p-head"><div class="p-num">6</div>Überall bauen, nirgendwo leben<div class="p-kind">Animation</div><div class="p-meta">2024<br />Moving Graphics<br />Dirk Koy</div></div>
-        <div class="p-desc">Die Arbeit geht auf die Verdrängung autonomer Räume in der Stadt Basel ein. Daraus ist eine Serie entstanden, die Orte zeigt, die vor einer Bebauung stehen. Darunter das Lysbüchelareal, der Wagenplatz sowie das DB-Areal. Entstanden 2024 im Kurs Moving Graphics bei Dirk Koy. Die bewegten Bilder halten einen Zustand fest, den es beim Erscheinen der Arbeit womöglich schon nicht mehr gibt – Zwischennutzung, Brache, Baustelle. Was danach kommt, ist auf den Visualisierungen der Investoren längst zu sehen.</div>
+        <div class="p-head"><div class="p-num">6</div><span class="p-title">Überall bauen, nirgendwo leben</span><div class="p-kind">Animation</div><div class="p-meta">2024<br />Moving Graphics<br />Dirk Koy</div><div class="p-desc">Die Arbeit geht auf die Verdrängung autonomer Räume in der Stadt Basel ein. Daraus ist eine Serie entstanden, die Orte zeigt, die vor einer Bebauung stehen. Darunter das Lysbüchelareal, der Wagenplatz sowie das DB-Areal.</div><div class="p-info" aria-label="Info"></div></div>
         <div class="media-strip">
           <video src="überall_bauen_mockup.mp4" autoplay loop muted playsinline class="has-cursor"></video>
           <video src="überall_bauen2.mp4" autoplay loop muted playsinline class="has-cursor w70 h-big"></video>
@@ -810,8 +936,7 @@
     <!-- Napoli -->
     <div class="project">
       <div class="p-row">
-        <div class="p-head"><div class="p-num">7</div>Napoli<div class="p-kind">Fotoserie</div><div class="p-meta">2023<br />Freie Arbeit</div></div>
-        <div class="p-desc">Analoge Aufnahmen, entstanden 2023.</div>
+        <div class="p-head"><div class="p-num">7</div><span class="p-title">Napoli</span><div class="p-kind">Fotoserie</div><div class="p-meta">2023<br />Freie Arbeit</div><div class="p-desc">Analoge Fotoserie in Neapel, aufgenommen während meiner Ferien in den Strassen der Stadt. Die Bilder sind spontan entstanden, aus alltäglichen Begegnungen und Situationen, die sich im Vorbeigehen ergeben haben.</div><div class="p-info" aria-label="Info"></div></div>
         <div class="media-strip two-up">
           <img src="IMG_6675.jpg" alt="" class="has-cursor" />
           <img src="IMG_6676.jpg" alt="" class="has-cursor" />
@@ -829,7 +954,7 @@
 
   </div>
 
-  <footer class="footer">Alle Rechte vorbehalten<br />© 2026</footer>
+  <footer class="footer">©2026, Alle Rechte vorbehalten</footer>
 
   <div class="cursor-dot" id="cursor-dot"></div>
   <div class="cursor-label" id="cursor-label"></div>
@@ -921,6 +1046,33 @@
         });
       }
 
+      /* Offene Beschreibungen zuklappen – aber erst, wenn der ganze
+         Titelblock aus dem Bild ist. So sieht man weder den Pfeil drehen
+         noch den Text verschwinden. Liegt der Block oberhalb, schrumpft
+         die Seite über dem Fenster; dann wird der Scrollstand um genau
+         diese Höhe nachgeführt, damit nichts springt (Safari kennt
+         kein automatisches Scroll-Anchoring). */
+      function closeHiddenInfos() {
+        var heads = document.querySelectorAll(".p-head.info-on");
+        Array.prototype.forEach.call(heads, function (head) {
+          var b = head.getBoundingClientRect();
+          var above = b.bottom < 0;
+          var below = b.top > window.innerHeight;
+          if (!above && !below) return;
+          var h0 = head.offsetHeight;
+          head.classList.add("no-anim");
+          head.classList.remove("info-on");
+          if (above) {
+            var dh = h0 - head.offsetHeight;
+            if (dh) window.scrollBy(0, -dh);
+          }
+          /* Animation erst wieder zulassen, wenn der Zustand steht */
+          requestAnimationFrame(function () {
+            head.classList.remove("no-anim");
+          });
+        });
+      }
+
       function nearestRow() {
         var mid = window.innerHeight / 2;
         var best = null;
@@ -939,6 +1091,7 @@
       function onScroll() {
         if (isFrozen()) return;
         setActive(nearestRow());
+        closeHiddenInfos();
       }
 
       onScroll();
@@ -1177,6 +1330,15 @@
         });
       });
 
+      /* "Info" im Titelblock: tauscht Gattung und Angaben gegen die
+         Beschreibung und heisst dann "Schliessen". */
+      document.querySelectorAll(".p-info").forEach(function (btn) {
+        btn.addEventListener("click", function () {
+          var head = btn.closest(".p-head");
+          head.classList.toggle("info-on");
+        });
+      });
+
       /* Plakat-Rotation: Bilder mit data-rotate="a|b|c" wechseln alle
          20 Sekunden zum nächsten Motiv. Die übrigen Motive werden vorab
          geladen, damit der Wechsel ohne Aufblitzen passiert. */
@@ -1213,7 +1375,7 @@
         /* was liegt gerade unter dem Zeiger? */
         var el = document.elementFromPoint(e.clientX, e.clientY);
         var target = el && el.closest ? el.closest("[data-cursor]") : null;
-        /* leeres data-cursor="" zählt nicht – sonst gäbe es weder Kreis
+        /* leeres zählt nicht – sonst gäbe es weder Kreis
            noch Text */
         if (target && !target.getAttribute("data-cursor")) target = null;
 
