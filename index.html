@@ -1064,6 +1064,41 @@
         }, delay);
       }
 
+      /* Grosse Bildvariante vorladen: Bilder mit srcset zeigen in der
+         Reihe eine kleine Datei; die Lightbox braucht die grosse. Damit
+         das Öffnen nie aufs Netz wartet, wird sie im Hintergrund geholt,
+         sobald das Bild beim Scrollen ins Bild kommt (niedrige
+         Priorität). Ein unsichtbares Image mit denselben srcset/sizes
+         wählt dieselbe Datei wie später das Element – Cache-Treffer.
+         data-big merkt, dass sie da ist. */
+      function preloadBig(el, done) {
+        if (el.tagName.toLowerCase() !== "img" || !el.getAttribute("srcset")) {
+          if (done) done();
+          return;
+        }
+        if (el.dataset.big) {
+          if (done) done();
+          return;
+        }
+        if (!el._bigWaiters) {
+          el._bigWaiters = [];
+          var pre = new Image();
+          pre.fetchPriority = "low";
+          pre.onload = function () {
+            el.dataset.big = "1";
+            var w = el._bigWaiters;
+            el._bigWaiters = null;
+            w.forEach(function (fn) { fn(); });
+          };
+          pre.onerror = function () {
+            el._bigWaiters = null;
+          };
+          pre.sizes = "100vw";
+          pre.srcset = el.getAttribute("srcset");
+        }
+        if (done) el._bigWaiters.push(done);
+      }
+
       var revealSel =
         ".p-head, .media-strip > img, .media-strip > video, .media-strip > model-viewer";
       var toReveal = Array.prototype.slice
@@ -1084,6 +1119,7 @@
               if (!entry.isIntersecting) return;
               obs.unobserve(entry.target); /* einmal einblenden genügt */
               reveal(entry.target, Number(entry.target.dataset.step || 0) * STEP);
+              preloadBig(entry.target);
             });
           },
           /* erst wenn das Element ein Stück im Bild ist */
@@ -1331,6 +1367,10 @@
         copy.setAttribute("aria-hidden", "true");
         copy.classList.add("lb-standin");
         delete copy.dataset.inView;
+        delete copy.dataset.big;
+        if (el.tagName.toLowerCase() === "img") {
+          copy.loading = "eager"; /* liegt im Cache, sofort zeichnen */
+        }
         if (el.tagName.toLowerCase() === "video") {
           copy.removeAttribute("src");
           copy.removeAttribute("autoplay");
@@ -1373,7 +1413,13 @@
         el.parentNode.replaceChild(placeholder, el);
         if (tag === "img") {
           shownSizes = el.getAttribute("sizes");
-          if (shownSizes !== null) el.setAttribute("sizes", "100vw");
+          if (shownSizes !== null) {
+            /* erst auf die grosse Variante umschalten, wenn sie geladen
+               ist – so bleibt die kleine stehen und nichts wartet */
+            preloadBig(el, function () {
+              if (shown === el) el.setAttribute("sizes", "100vw");
+            });
+          }
         }
         stage.appendChild(el);
         shown = el;
