@@ -186,16 +186,30 @@
 
 
     /* Links im Text unauffällig, wie im Info-Text */
-    /* Links im Text: unauffällig, Unterstrich erst beim Hover */
+    /* Links im Text: kein Unterstrich; stattdessen rütteln sie alle
+       15 Sekunden kurz (0.6s) und leicht (2px) hin und her.
+       inline-block, weil transform auf reinen Inline-Elementen nicht
+       greift. */
     .p-desc a,
     .info-text a {
       color: inherit;
       text-decoration: none;
+      display: inline-block;
+      animation: link-wiggle 15s ease-in-out infinite;
     }
 
-    .p-desc a:hover,
-    .info-text a:hover {
-      text-decoration: underline;
+    @keyframes link-wiggle {
+      0%, 4%, 100% { transform: translateX(0); }
+      1% { transform: translateX(-2px); }
+      2% { transform: translateX(2px); }
+      3% { transform: translateX(-1px); }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .p-desc a,
+      .info-text a {
+        animation: none;
+      }
     }
 
 
@@ -370,7 +384,9 @@
     :fullscreen *,
     :-webkit-full-screen,
     :-webkit-full-screen * {
-      cursor: auto;
+      /* !important: das Video trägt .has-cursor (cursor: none), das steht
+         weiter unten und würde sonst gewinnen */
+      cursor: auto !important;
     }
 
     /* über Medien mit Beschriftung: nur der Text, kein Kreis */
@@ -1256,8 +1272,22 @@
         if (p && p.catch) p.catch(function () {});
       }
 
+      /* steht dieses Video gerade im Vollbild? (Fullscreen-API in
+         Chrome/Firefox, -webkit- in Safari, webkitDisplayingFullscreen
+         im nativen Player von iOS) */
+      function inFullscreen(v) {
+        return (
+          document.fullscreenElement === v ||
+          document.webkitFullscreenElement === v ||
+          !!v.webkitDisplayingFullscreen
+        );
+      }
+
       function resumeVisible() {
         videos.forEach(function (v) {
+          /* im Vollbild bedient der Nutzer selbst – ein Klick auf die
+             Controls darf nicht sofort wieder play() auslösen */
+          if (inFullscreen(v)) return;
           if (v.dataset.inView && v.paused) playVideo(v);
         });
       }
@@ -1305,15 +1335,31 @@
       window.addEventListener("pageshow", resumeSoon);
       document.addEventListener("touchend", resumeVisible, { passive: true });
       document.addEventListener("click", resumeVisible);
+      /* Nach dem Vollbild: Ton wieder aus (im Vollbild lässt er sich über
+         die Controls einschalten) und alles Sichtbare weiterlaufen lassen */
+      function leftFullscreen() {
+        videos.forEach(function (v) {
+          v.muted = true;
+          v.controls = false;
+        });
+        resumeSoon();
+      }
+      /* Im Vollbild der Fullscreen-API (Chrome, Firefox) zeigt der
+         Browser von sich aus keine Controls – hier einschalten, damit
+         man wie im nativen Player von Safari/iOS spulen und den Ton
+         regeln kann. */
+      function fullscreenChanged() {
+        var any = document.fullscreenElement || document.webkitFullscreenElement;
+        videos.forEach(function (v) {
+          v.controls = inFullscreen(v);
+        });
+        if (!any) leftFullscreen();
+      }
       videos.forEach(function (v) {
-        v.addEventListener("webkitendfullscreen", resumeSoon);
+        v.addEventListener("webkitendfullscreen", leftFullscreen);
       });
-      document.addEventListener("fullscreenchange", function () {
-        if (!document.fullscreenElement) resumeSoon();
-      });
-      document.addEventListener("webkitfullscreenchange", function () {
-        if (!document.webkitFullscreenElement) resumeSoon();
-      });
+      document.addEventListener("fullscreenchange", fullscreenChanged);
+      document.addEventListener("webkitfullscreenchange", fullscreenChanged);
 
       /* zufällige 10-Sekunden-Ausschnitte für ausgewählte Videos.
          startMin = früheste Startzeit, endTrim = am Ende ausgespart (Sekunden) */
@@ -1337,7 +1383,22 @@
         if (video.readyState >= 1) newClip();
         video.addEventListener("loadedmetadata", newClip);
         video.addEventListener("timeupdate", function () {
+          /* im Vollbild schaut man den Film selbst und spult – da darf
+             kein Zufallssprung dazwischenfunken */
+          if (inFullscreen(video)) return;
           if (video.currentTime >= clipEnd) newClip();
+        });
+        /* nach dem Vollbild: von der aktuellen Stelle aus noch einen
+           Ausschnitt lang weiter, dann wieder zufällig */
+        function afterFullscreen() {
+          clipEnd = video.currentTime + CLIP;
+        }
+        video.addEventListener("webkitendfullscreen", afterFullscreen);
+        document.addEventListener("fullscreenchange", function () {
+          if (!document.fullscreenElement) afterFullscreen();
+        });
+        document.addEventListener("webkitfullscreenchange", function () {
+          if (!document.webkitFullscreenElement) afterFullscreen();
         });
       }
 
@@ -1619,6 +1680,7 @@
             return;
           }
           if (el.tagName.toLowerCase() !== "video") return;
+          if (inFullscreen(el)) return; /* Klick auf die Controls */
           if (el.requestFullscreen) el.requestFullscreen();
           else if (el.webkitRequestFullscreen) el.webkitRequestFullscreen();
           else if (el.webkitEnterFullscreen) el.webkitEnterFullscreen();
