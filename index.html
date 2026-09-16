@@ -1280,59 +1280,61 @@
       /* aktuelle Kategorie (Medien eines Projekts) – Weiter/Zurück bleibt darin */
       var currentList = media;
 
+      /* Die Lightbox zeigt nicht eine Kopie, sondern das Element aus der
+         Reihe selbst: es wird in die Bühne verschoben, ein Platzhalter
+         in seiner Grösse hält den Platz in der Reihe frei, beim
+         Schliessen kommt es zurück. So muss nichts ein zweites Mal
+         geladen werden – das Video läuft einfach weiter, das Bild ist
+         sofort da. Beim Bild wird nur "sizes" auf die volle Breite
+         gesetzt; der Browser holt dann die grössere Variante nach und
+         tauscht sie ein, sobald sie geladen ist. */
+      var shown = null; /* Element, das gerade in der Bühne steht */
+      var placeholder = null;
+      var shownSizes = null;
+
+      function putBack() {
+        if (!shown) return;
+        shown.style.transform = "";
+        shown.style.transition = "";
+        shown.style.transformOrigin = "";
+        if (shown.tagName.toLowerCase() === "img") {
+          if (shownSizes === null) shown.removeAttribute("sizes");
+          else shown.setAttribute("sizes", shownSizes);
+        }
+        placeholder.parentNode.replaceChild(shown, placeholder);
+        shown = null;
+        placeholder = null;
+      }
+
       function render(i) {
         current = (i + currentList.length) % currentList.length;
         var el = currentList[current];
         var tag = el.tagName.toLowerCase();
-        stage.innerHTML = "";
-        var node;
-        if (tag === "video") {
-          node = document.createElement("video");
-          node.src = el.getAttribute("src");
-          node.autoplay = true;
-          node.loop = true;
-          node.playsInline = true;
-          node.muted = el.muted;
-          /* dort weiterlaufen, wo die Vorschau gerade steht – der Wert
-             lässt sich erst setzen, wenn die Metadaten geladen sind */
-          var ab = el.currentTime;
-          if (ab > 0) {
-            node.addEventListener(
-              "loadedmetadata",
-              function () {
-                if (isFinite(node.duration) && ab < node.duration) {
-                  node.currentTime = ab;
-                }
-              },
-              { once: true }
-            );
-          }
-          /* iOS hält das Video beim Verlassen des Vollbilds an */
-          node.addEventListener("webkitendfullscreen", function () {
-            playVideo(node);
-            setTimeout(function () {
-              playVideo(node);
-            }, 300);
-          });
-          /* keine Controls; Klick aufs Video -> echter Fullscreen */
-          node.addEventListener("click", function (e) {
-            e.stopPropagation();
-            if (node.requestFullscreen) node.requestFullscreen();
-            else if (node.webkitRequestFullscreen) node.webkitRequestFullscreen();
-            else if (node.webkitEnterFullscreen) node.webkitEnterFullscreen();
-          });
-        } else {
-          node = document.createElement("img");
-          node.src = el.getAttribute("src");
+        putBack();
+        var r = el.getBoundingClientRect();
+        placeholder = document.createElement("span");
+        placeholder.style.display = "block";
+        placeholder.style.width = r.width + "px";
+        placeholder.style.height = r.height + "px";
+        el.parentNode.replaceChild(placeholder, el);
+        if (tag === "img") {
+          shownSizes = el.getAttribute("sizes");
+          if (shownSizes !== null) el.setAttribute("sizes", "100vw");
         }
-        stage.appendChild(node);
+        stage.appendChild(el);
+        shown = el;
+        if (tag === "video") {
+          el.playbackRate = 1;
+          playVideo(el);
+        }
+        /* alle anderen Videos laufen derweil langsamer */
+        backgroundRate(BG_RATE, el);
       }
 
-      function animateIn(thumb) {
+      function animateIn(first) {
         var node = stage.firstChild;
         if (!node) return;
         var run = function () {
-          var first = thumb.getBoundingClientRect();
           var last = node.getBoundingClientRect();
           if (!last.width || !last.height) return;
           var sx = first.width / last.width;
@@ -1350,7 +1352,10 @@
           });
         };
         var tag = node.tagName.toLowerCase();
-        if (tag === "img" && !node.complete) {
+        /* naturalWidth statt complete: während die grössere Variante
+           nachgeladen wird, ist complete false, obwohl schon ein Bild
+           dasteht – die Animation soll nicht darauf warten */
+        if (tag === "img" && !node.naturalWidth) {
           node.addEventListener("load", run, { once: true });
         } else if (tag === "video" && !node.videoWidth) {
           node.addEventListener("loadedmetadata", run, { once: true });
@@ -1379,11 +1384,11 @@
           : media;
         var idx = currentList.indexOf(el);
         if (idx < 0) idx = 0;
+        var first = el.getBoundingClientRect();
         render(idx);
         lightbox.classList.add("open");
         lightbox.setAttribute("aria-hidden", "false");
-        animateIn(el);
-        backgroundRate(BG_RATE);
+        animateIn(first);
         /* keine Reihe bleibt voll gedeckt – auch die zuletzt berührte nicht */
         setActive(null);
         /* Seite dahinter einfrieren: kein Scrollen, keine Hover-Deckkraft */
@@ -1394,7 +1399,7 @@
       function close() {
         lightbox.classList.remove("open");
         lightbox.setAttribute("aria-hidden", "true");
-        stage.innerHTML = "";
+        putBack();
         current = -1;
         backgroundRate(1);
         resumeSoon();
@@ -1414,11 +1419,18 @@
       lightbox.querySelector("[data-close]").addEventListener("click", close);
 
       /* Jedes Medium öffnet die Lightbox mit Zurück/Weiter – auch auf dem
-         Handy. Ein Tipp aufs Video in der Lightbox führt dann ins
-         native Vollbild (siehe render). */
+         Handy. Steht es schon in der Bühne, führt ein Tipp aufs Video
+         ins native Vollbild; nach dem Verlassen läuft es weiter. */
       media.forEach(function (el) {
         el.addEventListener("click", function () {
-          open(el);
+          if (shown !== el) {
+            open(el);
+            return;
+          }
+          if (el.tagName.toLowerCase() !== "video") return;
+          if (el.requestFullscreen) el.requestFullscreen();
+          else if (el.webkitRequestFullscreen) el.webkitRequestFullscreen();
+          else if (el.webkitEnterFullscreen) el.webkitEnterFullscreen();
         });
       });
 
