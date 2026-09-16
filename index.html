@@ -528,6 +528,23 @@
       -webkit-backdrop-filter: blur(2.5px);
     }
 
+    /* Schleier und Zurück/Weiter blenden ein statt zu erscheinen –
+       gleich lang wie das Aufzoomen des Mediums (0.35s). Das Skript
+       setzt "in" einen Frame nach dem Öffnen (sonst greift die Transition
+       wegen display:none nicht) und "arrows", sobald die Knöpfe dran
+       sind: am Desktop sofort, auf dem Handy erst, wenn das Medium an
+       seinem Platz steht – dort sitzen die Knöpfe direkt darunter. */
+    .lb-backdrop,
+    .lb-arrow {
+      opacity: 0;
+      transition: opacity 0.35s ease;
+    }
+
+    .lightbox.in .lb-backdrop,
+    .lightbox.arrows .lb-arrow {
+      opacity: 1;
+    }
+
     .lb-stage {
       position: relative;
       z-index: 2;
@@ -1331,12 +1348,18 @@
         backgroundRate(BG_RATE, el);
       }
 
-      function animateIn(first) {
+      function animateIn(first, done) {
         var node = stage.firstChild;
         if (!node) return;
+        var finished = false;
+        function finish() {
+          if (finished) return;
+          finished = true;
+          if (done) done();
+        }
         var run = function () {
           var last = node.getBoundingClientRect();
-          if (!last.width || !last.height) return;
+          if (!last.width || !last.height) return finish();
           var sx = first.width / last.width;
           var sy = first.height / last.height;
           var dx = first.left + first.width / 2 - (last.left + last.width / 2);
@@ -1349,6 +1372,9 @@
           requestAnimationFrame(function () {
             node.style.transition = "transform 0.35s ease";
             node.style.transform = "none";
+            node.addEventListener("transitionend", finish, { once: true });
+            /* Sicherheitsnetz, falls transitionend ausbleibt */
+            setTimeout(finish, 450);
           });
         };
         var tag = node.tagName.toLowerCase();
@@ -1388,7 +1414,15 @@
         render(idx);
         lightbox.classList.add("open");
         lightbox.setAttribute("aria-hidden", "false");
-        animateIn(first);
+        var mobile = window.innerWidth <= 800;
+        lightbox.getBoundingClientRect(); /* display:flex erst festschreiben */
+        requestAnimationFrame(function () {
+          lightbox.classList.add("in");
+          if (!mobile) lightbox.classList.add("arrows");
+        });
+        animateIn(first, function () {
+          if (mobile) lightbox.classList.add("arrows");
+        });
         /* keine Reihe bleibt voll gedeckt – auch die zuletzt berührte nicht */
         setActive(null);
         /* Seite dahinter einfrieren: kein Scrollen, keine Hover-Deckkraft */
@@ -1397,7 +1431,7 @@
       }
 
       function close() {
-        lightbox.classList.remove("open");
+        lightbox.classList.remove("open", "in", "arrows");
         lightbox.setAttribute("aria-hidden", "true");
         putBack();
         current = -1;
