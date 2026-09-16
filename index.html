@@ -186,9 +186,16 @@
 
 
     /* Links im Text unauffällig, wie im Info-Text */
-    .p-desc a {
+    /* Links im Text: unauffällig, Unterstrich erst beim Hover */
+    .p-desc a,
+    .info-text a {
       color: inherit;
       text-decoration: none;
+    }
+
+    .p-desc a:hover,
+    .info-text a:hover {
+      text-decoration: underline;
     }
 
 
@@ -448,10 +455,6 @@
 
     .info-text p:nth-child(3) {
       padding-left: 2em;
-    }
-
-    .info-text a {
-      color: inherit;
     }
 
     .h-info {
