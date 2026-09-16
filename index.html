@@ -151,16 +151,34 @@
     /* Ruhiger Flattersatz für die Fliesstexte (kein Blocksatz – bei
        dieser Zeilenlänge reisst der zu grosse Löcher). text-wrap: pretty
        lässt den Browser mehrere Zeilen vorausschauen (Chrome 117+,
-       Safari 26+, sonst ignoriert). Trennung nur bei Wörtern ab 6
-       Buchstaben mit je 3 vor und nach dem Strich, in Safari höchstens
-       2 Trennungen in Folge. */
+       Safari 26+, sonst ignoriert).
+
+       Die Trennstellen setzt Hyphenopoly (siehe head) als weiche
+       Trennzeichen in den Text – in jedem Browser dieselben, aus den
+       TeX-Mustern für Deutsch. Der Browser selbst trennt hier nicht
+       mehr (manual): iOS Safari hat ein dürftiges Wörterbuch, kennt
+       hyphenate-limit-chars nicht ("Georgi-en") und trennt Wörter mit
+       Bindestrich nochmals ("Sau-di-Arabien"). Lädt Hyphenopoly nicht,
+       setzt das Skript hyph-fallback und der Browser übernimmt wieder. */
     .p-desc,
     .info-text {
       text-align: left;
       text-wrap: pretty;
+      -webkit-hyphens: manual;
+      hyphens: manual;
+      -webkit-hyphenate-limit-before: 3;
+      -webkit-hyphenate-limit-after: 3;
       hyphenate-limit-chars: 6 3 3;
       -webkit-hyphenate-limit-lines: 2;
+      hyphenate-limit-lines: 2;
     }
+
+    html.hyph-fallback .p-desc,
+    html.hyph-fallback .info-text {
+      -webkit-hyphens: auto;
+      hyphens: auto;
+    }
+
 
     /* Links im Text unauffällig, wie im Info-Text */
     .p-desc a {
@@ -766,6 +784,32 @@
       }
     }
   </style>
+
+  <!-- Silbentrennung für die Fliesstexte: liegt lokal im Ordner hyph/
+       (Loader, Kern, deutsche Trennmuster als WebAssembly). Wird in
+       jedem Browser erzwungen, damit die Trennungen überall gleich
+       sind. Wörter ab 6 Buchstaben, mindestens 3 vor und 3 nach dem
+       Strich; Wörter mit Bindestrich brechen nur am Bindestrich. -->
+  <script src="hyph/Hyphenopoly_Loader.js"></script>
+  <script>
+    Hyphenopoly.config({
+      require: { de: "FORCEHYPHENOPOLY" },
+      paths: { patterndir: "hyph/", maindir: "hyph/" },
+      setup: {
+        hide: "element",
+        selectors: {
+          ".p-desc": { leftmin: 3, rightmin: 3, minWordLength: 6, compound: "hyphen" },
+          ".info-text": { leftmin: 3, rightmin: 3, minWordLength: 6, compound: "hyphen" }
+        }
+      },
+      handleEvent: {
+        error: function (e) {
+          /* Skript oder Muster nicht geladen: Browser trennt selbst */
+          document.documentElement.classList.add("hyph-fallback");
+        }
+      }
+    });
+  </script>
 </head>
 <body>
   <div class="header">
