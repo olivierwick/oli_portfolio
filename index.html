@@ -187,7 +187,7 @@
 
     /* Links im Text unauffällig, wie im Info-Text */
     /* Links im Text: kein Unterstrich; stattdessen rütteln sie alle
-       7.5 Sekunden 0.6s lang leicht (2px) hin und her, ein Ausschlag
+       7.5 Sekunden 0.45s lang leicht (2px) hin und her, ein Ausschlag
        alle 75ms – und einmal sofort beim Hover sowie beim Aufklappen
        des Textes (Klasse wiggle-now, setzt das Skript). Das periodische
        Rütteln liegt am Ende des Zyklus, damit nach Hover/Aufklappen
@@ -211,18 +211,16 @@
     .info-text a:hover,
     .p-desc a.wiggle-now,
     .info-text a.wiggle-now {
-      animation: link-wiggle-once 0.6s ease-in-out;
+      animation: link-wiggle-once 0.45s ease-in-out;
     }
 
     .info-text a.wiggle-now:nth-of-type(2) {
       animation-delay: 0.4s;
     }
 
-    /* 0.6s von 7.5s = 8 % des Zyklus, ein Ausschlag pro Prozent */
+    /* 0.45s von 7.5s = 6 % des Zyklus, ein Ausschlag pro Prozent */
     @keyframes link-wiggle {
-      0%, 92%, 100% { transform: translateX(0); }
-      93% { transform: translateX(-2px); }
-      94% { transform: translateX(2px); }
+      0%, 94%, 100% { transform: translateX(0); }
       95% { transform: translateX(-2px); }
       96% { transform: translateX(2px); }
       97% { transform: translateX(-2px); }
@@ -232,13 +230,11 @@
 
     @keyframes link-wiggle-once {
       0%, 100% { transform: translateX(0); }
-      12.5% { transform: translateX(-2px); }
-      25% { transform: translateX(2px); }
-      37.5% { transform: translateX(-2px); }
-      50% { transform: translateX(2px); }
-      62.5% { transform: translateX(-2px); }
-      75% { transform: translateX(2px); }
-      87.5% { transform: translateX(-1px); }
+      16.667% { transform: translateX(-2px); }
+      33.333% { transform: translateX(2px); }
+      50% { transform: translateX(-2px); }
+      66.667% { transform: translateX(2px); }
+      83.333% { transform: translateX(-1px); }
     }
 
     @media (prefers-reduced-motion: reduce) {
