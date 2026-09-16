@@ -551,8 +551,11 @@
     }
 
     /* Double in der Reihe, solange das Original in der Lightbox steht */
-    .lb-standin {
+    .media-strip > .lb-standin {
       pointer-events: none;
+      opacity: 1;
+      transform: none;
+      transition: none;
     }
 
     .lb-stage {
@@ -1378,31 +1381,65 @@
       var shownSizes = null;
 
       function standIn(el) {
-        var copy = el.cloneNode(false);
-        copy.removeAttribute("id");
+        var tag = el.tagName.toLowerCase();
+        var r = el.getBoundingClientRect();
+        var cs = getComputedStyle(el);
+        var copy = null;
+
+        /* Erste Wahl: eine Leinwand, in die das schon gezeichnete Bild
+           bzw. der laufende Videoframe kopiert wird. Lädt nichts – kein
+           Netz, kein Cache – und steht sofort. Zeichnung wie object-fit
+           des Originals (cover schneidet, contain lässt Rand). */
+        try {
+          var iw = tag === "video" ? el.videoWidth : el.naturalWidth;
+          var ih = tag === "video" ? el.videoHeight : el.naturalHeight;
+          if (iw && ih && r.width && r.height) {
+            var dpr = Math.min(window.devicePixelRatio || 1, 3);
+            var c = document.createElement("canvas");
+            c.width = Math.round(r.width * dpr);
+            c.height = Math.round(r.height * dpr);
+            var ctx = null;
+            try {
+              ctx = c.getContext("2d", { colorSpace: "display-p3" });
+            } catch (e) {}
+            if (!ctx) ctx = c.getContext("2d");
+            var fit = cs.objectFit === "cover" ? Math.max : Math.min;
+            var sc = fit(c.width / iw, c.height / ih);
+            var dw = iw * sc, dh = ih * sc;
+            ctx.drawImage(el, (c.width - dw) / 2, (c.height - dh) / 2, dw, dh);
+            copy = c;
+          }
+        } catch (e) {
+          copy = null;
+        }
+
+        /* Rückfall: Klon des Elements (Bild aus dem Cache, Video ohne
+           Datei) */
+        if (!copy) {
+          copy = el.cloneNode(false);
+          copy.removeAttribute("id");
+          delete copy.dataset.inView;
+          delete copy.dataset.big;
+          if (tag === "video") {
+            copy.removeAttribute("src");
+            copy.removeAttribute("autoplay");
+            copy.preload = "none";
+          } else {
+            copy.loading = "eager";
+          }
+        }
+
+        copy.className = el.className + " lb-standin";
         copy.setAttribute("aria-hidden", "true");
-        copy.classList.add("lb-standin");
-        delete copy.dataset.inView;
-        delete copy.dataset.big;
-        if (el.tagName.toLowerCase() === "img") {
-          copy.loading = "eager"; /* liegt im Cache, sofort zeichnen */
-        }
-        if (el.tagName.toLowerCase() === "video") {
-          copy.removeAttribute("src");
-          copy.removeAttribute("autoplay");
-          copy.preload = "none";
-          try {
-            var vw = el.videoWidth, vh = el.videoHeight;
-            if (vw && vh) {
-              var scale = Math.min(1, 800 / vw);
-              var c = document.createElement("canvas");
-              c.width = Math.round(vw * scale);
-              c.height = Math.round(vh * scale);
-              c.getContext("2d").drawImage(el, 0, 0, c.width, c.height);
-              copy.poster = c.toDataURL("image/jpeg", 0.8);
-            }
-          } catch (e) {}
-        }
+        /* gemessene Grösse und Ränder festschreiben, damit das Layout
+           in der Reihe unverändert bleibt */
+        copy.style.display = "block";
+        copy.style.width = r.width + "px";
+        copy.style.height = r.height + "px";
+        copy.style.marginTop = cs.marginTop;
+        copy.style.marginRight = cs.marginRight;
+        copy.style.marginBottom = cs.marginBottom;
+        copy.style.marginLeft = cs.marginLeft;
         return copy;
       }
 
