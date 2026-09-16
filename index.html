@@ -1413,47 +1413,11 @@
       });
       lightbox.querySelector("[data-close]").addEventListener("click", close);
 
-      /* Auf dem Handy gehen alle Videos direkt in den Vollbildmodus des
-         Browsers statt in die Lightbox. */
-      function nativeFullscreen(el) {
-        var fn =
-          el.webkitEnterFullscreen || /* iOS Safari, nur auf <video> */
-          el.requestFullscreen ||
-          el.webkitRequestFullscreen;
-        if (!fn) return false;
-        try {
-          fn.call(el);
-          return true;
-        } catch (err) {
-          return false;
-        }
-      }
-
+      /* Jedes Medium öffnet die Lightbox mit Zurück/Weiter – auch auf dem
+         Handy. Ein Tipp aufs Video in der Lightbox führt dann ins
+         native Vollbild (siehe render). */
       media.forEach(function (el) {
         el.addEventListener("click", function () {
-          if (
-            window.innerWidth <= 600 &&
-            el.tagName.toLowerCase() === "video" &&
-            nativeFullscreen(el)
-          ) {
-            /* im Vollbild gilt dasselbe: der Rest läuft langsamer weiter */
-            backgroundRate(BG_RATE, el);
-            /* das Weiterlaufen nach dem Vollbild übernimmt resumeSoon
-               (siehe oben), hier nur das Tempo zurücksetzen */
-            el.addEventListener(
-              "webkitendfullscreen",
-              function () {
-                backgroundRate(1);
-              },
-              { once: true }
-            );
-            document.addEventListener("fullscreenchange", function onFs() {
-              if (document.fullscreenElement) return;
-              backgroundRate(1);
-              document.removeEventListener("fullscreenchange", onFs);
-            });
-            return;
-          }
           open(el);
         });
       });
