@@ -550,6 +550,11 @@
       opacity: 1;
     }
 
+    /* Double in der Reihe, solange das Original in der Lightbox steht */
+    .lb-standin {
+      pointer-events: none;
+    }
+
     .lb-stage {
       position: relative;
       z-index: 2;
@@ -1303,16 +1308,47 @@
       var currentList = media;
 
       /* Die Lightbox zeigt nicht eine Kopie, sondern das Element aus der
-         Reihe selbst: es wird in die Bühne verschoben, ein Platzhalter
-         in seiner Grösse hält den Platz in der Reihe frei, beim
-         Schliessen kommt es zurück. So muss nichts ein zweites Mal
-         geladen werden – das Video läuft einfach weiter, das Bild ist
-         sofort da. Beim Bild wird nur "sizes" auf die volle Breite
-         gesetzt; der Browser holt dann die grössere Variante nach und
-         tauscht sie ein, sobald sie geladen ist. */
+         Reihe selbst: es wird in die Bühne verschoben, beim Schliessen
+         kommt es zurück. So muss nichts ein zweites Mal geladen werden –
+         das Video läuft einfach weiter, das Bild ist sofort da. Beim
+         Bild wird nur "sizes" auf die volle Breite gesetzt; der Browser
+         holt dann die grössere Variante nach und tauscht sie ein, sobald
+         sie geladen ist.
+
+         In der Reihe hält derweil ein Double den Platz: ein Klon mit
+         denselben Klassen und Rändern, damit sich das Layout dahinter
+         nicht bewegt, und damit das Medium hinter dem Schleier sichtbar
+         bleibt. Beim Bild kommt der Klon aus dem Cache; beim Video ist
+         es ein Klon ohne Videodatei, der als Standbild den Frame zeigt,
+         der gerade lief. */
       var shown = null; /* Element, das gerade in der Bühne steht */
       var placeholder = null;
       var shownSizes = null;
+
+      function standIn(el) {
+        var copy = el.cloneNode(false);
+        copy.removeAttribute("id");
+        copy.setAttribute("aria-hidden", "true");
+        copy.classList.add("lb-standin");
+        delete copy.dataset.inView;
+        if (el.tagName.toLowerCase() === "video") {
+          copy.removeAttribute("src");
+          copy.removeAttribute("autoplay");
+          copy.preload = "none";
+          try {
+            var vw = el.videoWidth, vh = el.videoHeight;
+            if (vw && vh) {
+              var scale = Math.min(1, 800 / vw);
+              var c = document.createElement("canvas");
+              c.width = Math.round(vw * scale);
+              c.height = Math.round(vh * scale);
+              c.getContext("2d").drawImage(el, 0, 0, c.width, c.height);
+              copy.poster = c.toDataURL("image/jpeg", 0.8);
+            }
+          } catch (e) {}
+        }
+        return copy;
+      }
 
       function putBack() {
         if (!shown) return;
@@ -1333,11 +1369,7 @@
         var el = currentList[current];
         var tag = el.tagName.toLowerCase();
         putBack();
-        var r = el.getBoundingClientRect();
-        placeholder = document.createElement("span");
-        placeholder.style.display = "block";
-        placeholder.style.width = r.width + "px";
-        placeholder.style.height = r.height + "px";
+        placeholder = standIn(el);
         el.parentNode.replaceChild(placeholder, el);
         if (tag === "img") {
           shownSizes = el.getAttribute("sizes");
