@@ -1413,8 +1413,7 @@
       });
       lightbox.querySelector("[data-close]").addEventListener("click", close);
 
-      /* Auf dem Handy gehen Videos, die ohnehin die volle Breite haben
-         (also ohne Breitenklasse), direkt in den Vollbildmodus des
+      /* Auf dem Handy gehen alle Videos direkt in den Vollbildmodus des
          Browsers statt in die Lightbox. */
       function nativeFullscreen(el) {
         var fn =
@@ -1435,7 +1434,6 @@
           if (
             window.innerWidth <= 600 &&
             el.tagName.toLowerCase() === "video" &&
-            !el.classList.contains("w70") &&
             nativeFullscreen(el)
           ) {
             /* im Vollbild gilt dasselbe: der Rest läuft langsamer weiter */
