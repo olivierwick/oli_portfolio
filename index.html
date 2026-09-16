@@ -131,7 +131,12 @@
          linke Kante der Box hinaus – das wird dazugerechnet, damit sein
          linkster Punkt bündig mit dem Titel am linken Rand liegt */
       margin-left: calc(0.205 * var(--size));
-      margin-top: 0.4em;
+      /* Abstand zur Textzeile darüber wie zwischen zwei Textzeilen: die
+         Oberkante des sichtbaren Pfeils liegt dort, wo in einer weiteren
+         Zeile die Versalhöhe begänne (Zurich: 0.144em unter der
+         Zeilenoberkante). Der gedrehte Pfeil ragt je nach Richtung 0.08
+         bzw. 0.135em über seine Box hinaus – 0.25em ist die Mitte. */
+      margin-top: 0.25em;
       background: #000000;
       -webkit-mask: url("pfeil2.png") no-repeat center / contain;
       mask: url("pfeil2.png") no-repeat center / contain;
