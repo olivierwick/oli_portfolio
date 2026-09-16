@@ -563,14 +563,31 @@
       justify-content: center;
     }
 
+    .lb-stage {
+      /* Platz an den Seiten frei lassen, damit breite Medien die
+         Zurück-/Weiter-Buttons nicht überlappen */
+      --lb-w: calc(100vw - 16rem);
+      --lb-h: 92vh;
+    }
+
     .lb-stage img,
     .lb-stage video {
-      /* Platz an den Seiten frei lassen, damit breite Videos die
-         Zurück-/Weiter-Buttons nicht überlappen */
-      max-width: calc(100vw - 16rem);
-      max-height: 92vh;
+      max-width: var(--lb-w);
+      max-height: var(--lb-h);
       object-fit: contain;
       display: block;
+    }
+
+    /* Bilder: Grösse ausdrücklich setzen statt sie der Datei zu
+       überlassen. Bei Bildern mit srcset leitet der Browser die
+       Eigengrösse aus "Dateibreite / sizes" ab – solange in der Lightbox
+       noch die kleine Variante steckt, wäre das Bild winzig. So füllt es
+       immer die Bühne, egal welche Variante gerade geladen ist.
+       --ratio (Breite/Höhe) setzt das Skript. */
+    .lb-stage img {
+      width: min(var(--lb-w), calc(var(--lb-h) * var(--ratio, 1)));
+      height: auto;
+      aspect-ratio: var(--ratio, auto);
     }
 
     .lb-arrow {
@@ -788,10 +805,9 @@
       }
 
       /* fast volle Breite, aber ein schmaler Rand bleibt links und rechts */
-      .lb-stage img,
-      .lb-stage video {
-        max-width: calc(100vw - 2rem);
-        max-height: 82vh;
+      .lb-stage {
+        --lb-w: calc(100vw - 2rem);
+        --lb-h: 82vh;
       }
 
       /* Kopfzeile: nur Name links, Info rechts */
@@ -1412,6 +1428,14 @@
         placeholder = standIn(el);
         el.parentNode.replaceChild(placeholder, el);
         if (tag === "img") {
+          /* Seitenverhältnis für die CSS-Grösse in der Bühne */
+          var setRatio = function () {
+            if (el.naturalWidth && el.naturalHeight) {
+              el.style.setProperty("--ratio", el.naturalWidth / el.naturalHeight);
+            }
+          };
+          setRatio();
+          if (!el.naturalWidth) el.addEventListener("load", setRatio, { once: true });
           shownSizes = el.getAttribute("sizes");
           if (shownSizes !== null) {
             /* erst auf die grosse Variante umschalten, wenn sie geladen
