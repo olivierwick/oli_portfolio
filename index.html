@@ -187,11 +187,13 @@
 
     /* Links im Text unauffällig, wie im Info-Text */
     /* Links im Text: kein Unterstrich; stattdessen rütteln sie alle
-       7.5 Sekunden kurz (0.3s) und leicht (2px) hin und her – und beim
-       Hover sofort einmal. Das Rütteln liegt am Ende des Zyklus, damit
-       nach dem Hover (der die Animation neu startet) erst wieder Ruhe
-       ist. inline-block, weil transform auf reinen Inline-Elementen
-       nicht greift. */
+       7.5 Sekunden 0.6s lang leicht (2px) hin und her, ein Ausschlag
+       alle 75ms – und einmal sofort beim Hover sowie beim Aufklappen
+       des Textes (Klasse wiggle-now, setzt das Skript). Das periodische
+       Rütteln liegt am Ende des Zyklus, damit nach Hover/Aufklappen
+       (die Animation startet dann neu) erst wieder Ruhe ist.
+       inline-block, weil transform auf reinen Inline-Elementen nicht
+       greift. */
     .p-desc a,
     .info-text a {
       color: inherit;
@@ -200,14 +202,29 @@
       animation: link-wiggle 7.5s ease-in-out infinite;
     }
 
-    .p-desc a:hover,
-    .info-text a:hover {
-      animation: link-wiggle-once 0.3s ease-in-out;
+    /* Email und Instagram nicht gleichzeitig: der zweite Link versetzt */
+    .info-text a:nth-of-type(2) {
+      animation-delay: 1.5s;
     }
 
-    /* 0.3s von 7.5s = 4 % des Zyklus */
+    .p-desc a:hover,
+    .info-text a:hover,
+    .p-desc a.wiggle-now,
+    .info-text a.wiggle-now {
+      animation: link-wiggle-once 0.6s ease-in-out;
+    }
+
+    .info-text a.wiggle-now:nth-of-type(2) {
+      animation-delay: 0.4s;
+    }
+
+    /* 0.6s von 7.5s = 8 % des Zyklus, ein Ausschlag pro Prozent */
     @keyframes link-wiggle {
-      0%, 96%, 100% { transform: translateX(0); }
+      0%, 92%, 100% { transform: translateX(0); }
+      93% { transform: translateX(-2px); }
+      94% { transform: translateX(2px); }
+      95% { transform: translateX(-2px); }
+      96% { transform: translateX(2px); }
       97% { transform: translateX(-2px); }
       98% { transform: translateX(2px); }
       99% { transform: translateX(-1px); }
@@ -215,16 +232,22 @@
 
     @keyframes link-wiggle-once {
       0%, 100% { transform: translateX(0); }
-      25% { transform: translateX(-2px); }
+      12.5% { transform: translateX(-2px); }
+      25% { transform: translateX(2px); }
+      37.5% { transform: translateX(-2px); }
       50% { transform: translateX(2px); }
-      75% { transform: translateX(-1px); }
+      62.5% { transform: translateX(-2px); }
+      75% { transform: translateX(2px); }
+      87.5% { transform: translateX(-1px); }
     }
 
     @media (prefers-reduced-motion: reduce) {
       .p-desc a,
       .info-text a,
       .p-desc a:hover,
-      .info-text a:hover {
+      .info-text a:hover,
+      .p-desc a.wiggle-now,
+      .info-text a.wiggle-now {
         animation: none;
       }
     }
@@ -1706,10 +1729,30 @@
 
       /* "Info" im Titelblock: tauscht Gattung und Angaben gegen die
          Beschreibung und heisst dann "Schliessen". */
+      /* Links in einem gerade aufgeklappten Text einmal rütteln lassen.
+         Klasse neu setzen (mit Reflow dazwischen), damit die Animation
+         auch bei schnellem Zu- und Aufklappen wieder von vorn läuft. */
+      function wiggleLinks(box) {
+        if (!box) return;
+        box.querySelectorAll("a").forEach(function (a) {
+          a.classList.remove("wiggle-now");
+          a.getBoundingClientRect();
+          a.classList.add("wiggle-now");
+          a.addEventListener(
+            "animationend",
+            function () {
+              a.classList.remove("wiggle-now");
+            },
+            { once: true }
+          );
+        });
+      }
+
       document.querySelectorAll(".p-info").forEach(function (btn) {
         btn.addEventListener("click", function () {
           var head = btn.closest(".p-head");
-          head.classList.toggle("info-on");
+          var on = head.classList.toggle("info-on");
+          if (on) wiggleLinks(head.querySelector(".p-desc"));
         });
       });
 
@@ -1829,6 +1872,7 @@
         infoToggle.textContent = open ? "Schliessen" : "Info";
         document.documentElement.classList.toggle("lb-open", open);
         document.documentElement.classList.toggle("info-open", open);
+        if (open) wiggleLinks(info.querySelector(".info-text"));
         if (!open) onScroll();
       }
 
