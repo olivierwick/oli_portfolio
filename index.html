@@ -202,6 +202,24 @@
       animation: link-wiggle 7.5s ease-in-out infinite;
     }
 
+    /* Vor Email und Instagram derselbe Pfeil wie bei den Arbeiten
+       (pfeil2.png als Maske, siehe .p-info), hier nach rechts gedreht,
+       damit er auf den Link zeigt. Als ::before Teil des Links, damit er
+       mitrüttelt. Das Bild zeigt nach unten links, also -135°. */
+    .info-text a::before {
+      content: "";
+      --size: 0.6em;
+      display: inline-block;
+      width: var(--size);
+      height: var(--size);
+      vertical-align: 0;
+      margin-right: 0.35em;
+      background: currentColor;
+      -webkit-mask: url("pfeil2.png") no-repeat center / contain;
+      mask: url("pfeil2.png") no-repeat center / contain;
+      transform: rotate(-135deg);
+    }
+
     /* Email und Instagram nicht gleichzeitig: der zweite Link versetzt */
     .info-text a:nth-of-type(2) {
       animation-delay: 1.5s;
@@ -472,19 +490,25 @@
 
     .info.open {
       display: block;
+      /* Ist der Text höher als das Fenster, scrollt er hier drin – die
+         Kopfzeile mit "Schliessen" ist derweil fixiert (html.lb-open) */
+      overflow-y: auto;
     }
 
-    /* gleicher weichgezeichneter Hintergrund wie in der Lightbox */
+    /* gleicher weichgezeichneter Hintergrund wie in der Lightbox. fixed,
+       damit er beim Scrollen des Textes das ganze Fenster deckt und nicht
+       mit dem Text nach oben wandert. */
     .info-backdrop {
-      position: absolute;
+      position: fixed;
       inset: 0;
       background: rgba(255, 255, 255, 0.12);
       backdrop-filter: blur(2.5px);
       -webkit-backdrop-filter: blur(2.5px);
     }
 
-    /* Text linksbündig an der Kante, halb so breit wie das Fenster,
-       unterhalb der Kopfzeile – also unter "Schliessen" */
+    /* Text halb so breit wie das Fenster, unterhalb der Kopfzeile – also
+       unter "Schliessen". Auf dem Desktop in der rechten Hälfte (siehe
+       min-width-Regel beim Header), auf dem Handy links an der Kante. */
     .info-text {
       position: relative;
       z-index: 2;
@@ -509,6 +533,26 @@
 
     .info-text p:nth-child(3) {
       padding-left: 2em;
+    }
+
+    /* Lebenslauf: Jahreszahl bündig, der Eintrag direkt darunter mit dem
+       gleichen Einzug wie die Nummer bei den Arbeiten. Eine Leerzeile
+       Abstand zum Text und zwischen den Stationen. */
+    .cv {
+      margin: 1.5rem 0 0;
+    }
+
+    .cv dt {
+      margin-top: 1.5rem;
+    }
+
+    .cv dt:first-child {
+      margin-top: 0;
+    }
+
+    .cv dd {
+      margin: 0;
+      padding-left: 1em;
     }
 
     .h-info {
@@ -560,6 +604,13 @@
     /* Info: der Name ebenso, "Schliessen" bleibt klar und lesbar */
     html.info-open .h-name {
       filter: blur(2.5px) opacity(0.5);
+    }
+
+    /* Info: die Kopfzeile behält den Difference-Effekt – "Schliessen"
+       rechnet sich also weiss über dem Schleier und den Bildern darunter */
+    html.info-open .header {
+      mix-blend-mode: difference;
+      color: #fff;
     }
 
     /* Bei offener Lightbox die Seite dahinter festhalten */
@@ -714,8 +765,29 @@
     }
 
     .header .h-name {
-      /* nimmt das erste Viertel ein, dadurch beginnt "Info" bei 25% */
-      flex: 0 0 25%;
+      /* immer auf einer Zeile, auch auf dem Handy */
+      flex: 0 0 auto;
+      white-space: nowrap;
+    }
+
+    /* "Info" ganz rechts in der Kopfzeile, gleicher Randabstand wie der
+       Name links */
+    .header {
+      padding-right: 2px;
+    }
+
+    .h-info {
+      margin-left: auto;
+    }
+
+    /* Desktop: der Info-Text in der rechten Fensterhälfte. Auf dem Handy
+       bleibt er links über die ganze Breite. */
+    @media (min-width: 801px) {
+      .info-text {
+        margin-left: 50%;
+        padding-left: 0;
+        padding-right: 2px;
+      }
     }
 
     /* Nur auf echten Touch-Geräten (Handy, Tablet): kleinere Schrift und
@@ -757,9 +829,7 @@
       }
 
       /* Info-Text: hier über die ganze Breite und direkt unter
-         "Schliessen" – also eine Kopfzeile tief (1.5rem bei Zeilenhöhe 1)
-         statt unter der ganzen, zweizeiligen Kopfzeile ("Olivier / Wick").
-         "Wick" liegt damit weichgezeichnet über der ersten Textzeile. */
+         "Schliessen" – also eine Kopfzeile tief (1.5rem bei Zeilenhöhe 1) */
       .info-text {
         width: auto;
         padding-right: 2px;
@@ -939,8 +1009,20 @@
     <div class="info-backdrop" data-close-info></div>
     <div class="info-text">
       <p>Ich gestalte Webseiten, Filme oder 3D-Environments mit einem grafischen Auge und Interesse an Subkultur. Mich beschäftigt Gestaltung im lokalen Kontext.</p>
-      <p>Ich habe Grundkenntnisse in CSS, HTML und JavaScript, in verschiedenen Adobe-Programmen sowie in Blender und DaVinci Resolve.</p>
-      <p>Schreibe mir doch gerne eine Email oder auf Instagram<br /><a href="mailto:olivier.wick@yahoo.com">olivier.wick@yahoo.com</a><br /><a href="https://instagram.com/076_olivier" target="_blank">076_olivier</a></p>
+      <p>Ich habe Kenntnisse in CSS, HTML und JavaScript, in der Adobe Creative Cloud sowie in Blender, TouchDesigner und DaVinci Resolve.</p>
+      <p>Schreibe mir eine Email oder auf Instagram, wenn du etwas umsetzen möchtest.<br /><a href="mailto:olivier.wick@yahoo.com">olivier.wick@yahoo.com</a><br /><a href="https://instagram.com/076_olivier" target="_blank">076_olivier</a></p>
+      <dl class="cv">
+        <dt>2023—2026</dt>
+        <dd>Bachelor of Arts FHNW in Visueller Kommunikation und digitalen Räumen, HGK IDCE, Vertiefung Digitale Räume</dd>
+        <dt>2022—2023</dt>
+        <dd>1 Semester Biologie, Universität Basel<br />Velokurier, Velogourmet</dd>
+        <dt>2021—2022</dt>
+        <dd>Vorkurs für 1 Jahr, Schule für Gestaltung</dd>
+        <dt>2020—2021</dt>
+        <dd>Militärdienst und Zwischenjahr</dd>
+        <dt>2015—2020</dt>
+        <dd>Schwerpunkt Bildnerisches Gestalten, Gymnasium Leonhard</dd>
+      </dl>
     </div>
   </div>
 
