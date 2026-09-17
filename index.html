@@ -190,8 +190,9 @@
     /* Links im Text unauffällig, wie im Info-Text */
     /* Links im Text: kein Unterstrich; stattdessen rütteln sie alle
        7.5 Sekunden 0.45s lang leicht (2px) hin und her, ein Ausschlag
-       alle 75ms – und einmal sofort beim Hover sowie beim Aufklappen
-       des Textes (Klasse wiggle-now, setzt das Skript). Das periodische
+       alle 75ms – und einmal sofort beim Hover sowie eine Sekunde nach
+       dem Aufklappen des Textes (Klasse wiggle-now, setzt das Skript
+       verzögert). Das periodische
        Rütteln liegt am Ende des Zyklus, damit nach Hover/Aufklappen
        (die Animation startet dann neu) erst wieder Ruhe ist.
        inline-block, weil transform auf reinen Inline-Elementen nicht
@@ -523,18 +524,14 @@
       line-height: 1;
     }
 
-    /* Einzüge exakt wie bei den Arbeiten: Nummer leicht eingezogen,
-       Titel bündig, Angaben weit eingezogen. Keine Leerzeilen dazwischen. */
+    /* Vorstellung bündig, keine Leerzeilen dazwischen; nur der Kontakt
+       (zweiter Absatz) ist eingezogen wie die Lebenslauf-Einträge */
     .info-text p {
       margin: 0;
     }
 
-    .info-text p:nth-child(1) {
+    .info-text p:nth-child(2) {
       padding-left: 1em;
-    }
-
-    .info-text p:nth-child(3) {
-      padding-left: 2em;
     }
 
     /* Lebenslauf: Jahreszahl bündig, der Eintrag direkt darunter mit dem
@@ -1010,8 +1007,7 @@
   <div class="info" id="info" aria-hidden="true">
     <div class="info-backdrop" data-close-info></div>
     <div class="info-text">
-      <p>Ich gestalte Webseiten, Filme oder 3D-Environments mit einem grafischen Auge und Interesse an Subkultur. Mich beschäftigt Gestaltung im lokalen Kontext.</p>
-      <p>Ich habe Kenntnisse in CSS, HTML und JavaScript, in der Adobe Creative Cloud sowie in Blender, TouchDesigner und DaVinci Resolve.</p>
+      <p>Ich gestalte Webseiten, Filme oder 3D-Environments mit einem grafischen Auge und Interesse an Subkultur. Mich beschäftigt Gestaltung im lokalen Kontext. Ich habe Kenntnisse in CSS, HTML und JavaScript, in der Adobe Creative Cloud sowie in Blender, TouchDesigner und DaVinci Resolve.</p>
       <p>Schreibe mir eine Email oder auf Instagram, wenn du etwas umsetzen möchtest.<br /><a href="mailto:olivier.wick@yahoo.com">olivier.wick@yahoo.com</a><br /><a href="https://instagram.com/076_olivier" target="_blank">076_olivier</a></p>
       <dl class="cv">
         <dt>2023—2026</dt>
@@ -1819,8 +1815,18 @@
       /* Links in einem gerade aufgeklappten Text einmal rütteln lassen.
          Klasse neu setzen (mit Reflow dazwischen), damit die Animation
          auch bei schnellem Zu- und Aufklappen wieder von vorn läuft. */
+      /* Rütteln beim Aufklappen: erst eine Sekunde nachdem der Text
+         steht, nicht gleichzeitig mit dem Aufklappen. Ein noch laufender
+         Timer (schnell zu und wieder auf) wird verworfen. */
       function wiggleLinks(box) {
         if (!box) return;
+        clearTimeout(box._wiggleTimer);
+        box._wiggleTimer = setTimeout(function () {
+          wiggleLinksNow(box);
+        }, 1000);
+      }
+
+      function wiggleLinksNow(box) {
         box.querySelectorAll("a").forEach(function (a) {
           a.classList.remove("wiggle-now");
           a.getBoundingClientRect();
