@@ -907,6 +907,13 @@
         object-fit: cover;
       }
 
+      /* Plakate: auf dem Handy steht dieses Bild zuerst, am Desktop an
+         zweiter Stelle – so berühren sich die Flohmi-Plakate in keiner
+         der beiden Anordnungen */
+      .media-strip.two-up > .m-first {
+        order: -1;
+      }
+
       /* Lightbox: Medium oben, darunter Zurück/Weiter links und rechts.
          Als Grid, damit die Knöpfe direkt unter dem Medium sitzen statt
          am Bildschirmrand zu kleben. */
@@ -1064,10 +1071,13 @@
         <div class="p-head"><div class="p-num">3</div><span class="p-title">Fiktive Plakate</span><div class="p-kind">Freie Serie</div><div class="p-meta">seit 2025<br />Eigenes Projekt</div><div class="p-desc">Um mein grafisches Verständnis weiterzuentwickeln, gestalte ich seit 2025 spontane Plakate zu fiktiven Themen. Jedes entsteht unter Zeitdruck, in 30 Minuten bis einer Stunde: Die Beschränkung zwingt zu schnellen Entscheidungen und lässt keinen Raum für Perfektionismus. Die Serie wächst kontinuierlich weiter.</div><div class="p-info" aria-label="Info"></div></div>
         <div class="media-strip two-up">
           <img src="plakate/brunnen_web.webp" alt="" class="has-cursor" loading="lazy" decoding="async" />
-          <img src="plakate/plakate_verschiedenste_web.jpg" srcset="plakate/plakate_verschiedenste_web_600.jpg 600w, plakate/plakate_verschiedenste_web_1200.jpg 1200w, plakate/plakate_verschiedenste_web.jpg 1273w" sizes="(max-width: 800px) 50vw, 19vw" alt="" class="has-cursor" loading="lazy" decoding="async" />
+          <img src="plakate/flohmi_innerstadt_web.jpg" srcset="plakate/flohmi_innerstadt_web_600.jpg 600w, plakate/flohmi_innerstadt_web_1200.jpg 1200w, plakate/flohmi_innerstadt_web.jpg 1273w" sizes="(max-width: 800px) 50vw, 19vw" alt="" class="has-cursor m-first" loading="lazy" decoding="async" />
           <img src="plakate/caramelo_web.webp" alt="" class="has-cursor" loading="lazy" decoding="async" />
-          <img src="plakate/plakate_verschiedenste1_web.jpg" srcset="plakate/plakate_verschiedenste1_web_600.jpg 600w, plakate/plakate_verschiedenste1_web_1200.jpg 1200w, plakate/plakate_verschiedenste1_web.jpg 1273w" sizes="(max-width: 800px) 50vw, 19vw" alt="" class="has-cursor" loading="lazy" decoding="async" />
+          <img src="plakate/flohmi_stalban_web.jpg" srcset="plakate/flohmi_stalban_web_600.jpg 600w, plakate/flohmi_stalban_web_1200.jpg 1200w, plakate/flohmi_stalban_web.jpg 1273w" sizes="(max-width: 800px) 50vw, 19vw" alt="" class="has-cursor" loading="lazy" decoding="async" />
+          <img src="plakate/plakate_verschiedenste_web.jpg" srcset="plakate/plakate_verschiedenste_web_600.jpg 600w, plakate/plakate_verschiedenste_web_1200.jpg 1200w, plakate/plakate_verschiedenste_web.jpg 1273w" sizes="(max-width: 800px) 50vw, 19vw" alt="" class="has-cursor" loading="lazy" decoding="async" />
           <img src="plakate/hoffnung_web.jpg" srcset="plakate/hoffnung_web_600.jpg 600w, plakate/hoffnung_web_1200.jpg 1200w, plakate/hoffnung_web.jpg 1273w" sizes="(max-width: 800px) 50vw, 19vw" alt="" class="has-cursor" loading="lazy" decoding="async" />
+          <img src="plakate/plakate_verschiedenste1_web.jpg" srcset="plakate/plakate_verschiedenste1_web_600.jpg 600w, plakate/plakate_verschiedenste1_web_1200.jpg 1200w, plakate/plakate_verschiedenste1_web.jpg 1273w" sizes="(max-width: 800px) 50vw, 19vw" alt="" class="has-cursor" loading="lazy" decoding="async" />
+          <img src="plakate/flohmi_stjohann_web.jpg" srcset="plakate/flohmi_stjohann_web_600.jpg 600w, plakate/flohmi_stjohann_web_1200.jpg 1200w, plakate/flohmi_stjohann_web.jpg 1273w" sizes="(max-width: 800px) 50vw, 19vw" alt="" class="has-cursor" loading="lazy" decoding="async" />
         </div>      </div>
       <div class="text">
         <div class="t">Plakate</div>
