@@ -347,8 +347,9 @@
          passt den Inhalt dann innerhalb der Box ein */
       max-width: 100%;
       /* Höhe wächst und schrumpft mit der Fensterbreite, gedeckelt nach
-         unten und oben. 21vw trifft bei 1440px die bisherigen 300px. */
-      height: clamp(150px, 26vw, 375px);
+         unten und oben. Ab rund 1170px Fensterbreite gilt das Maximum,
+         in schmaleren Fenstern bleiben die Medien so noch gut gross. */
+      height: clamp(200px, 32vw, 375px);
       object-fit: contain;
       display: block;
     }
@@ -412,7 +413,7 @@
       flex: 0 0 auto;
       width: auto;
       max-width: none;
-      height: clamp(150px, 26vw, 375px);
+      height: clamp(200px, 32vw, 375px);
       margin-right: 0;
     }
 
