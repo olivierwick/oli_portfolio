@@ -320,8 +320,8 @@
       line-height: 1;
     }
 
-    /* Index: alle Medien nebeneinander, rechts neben dem Titel.
-       Feste Höhe pro Element, die Breite ergibt sich aus dem Seitenverhältnis.
+    /* Index: alle Medien nebeneinander unter dem Titel, linksbündig.
+       Alle gleich hoch, die Breite ergibt sich aus dem Seitenverhältnis.
        Passt eine Zeile nicht, bricht sie um. */
     .media-strip {
       /* in der Spalte nicht mitwachsen, sonst kollabiert die Höhe */
@@ -329,8 +329,8 @@
       width: 100%;
       display: flex;
       flex-wrap: wrap;
-      /* alle Medien am rechten Rand ausgerichtet */
-      justify-content: flex-end;
+      /* alle Medien am linken Rand ausgerichtet */
+      justify-content: flex-start;
       gap: 0.5rem;
       min-width: 0;
       /* fester Abstand vom rechten Rand, je Reihe im HTML als --inset
@@ -358,13 +358,86 @@
        eigene Zeile bildet, zählt der row-gap sonst zweimal – senkrecht
        stünde also der doppelte Abstand. Deshalb übernimmt der Umbruch
        den Abstand selbst und der row-gap fällt weg. */
-    /* einzelne Medien höher als der Rest (nur Desktop) */
-    .media-strip > .h-mid {
-      height: clamp(175px, 30vw, 430px);
+    /* Bildschirmaufnahme eines Browserfensters: die runden Fensterecken
+       sind hier statt im Video, damit es eine normale MP4 bleibt. Gilt
+       auch für die Kopie in der Lightbox. */
+    .win-corners {
+      aspect-ratio: 1920 / 1490;
+      border-radius: 2.84% / 3.66%;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
     }
 
-    .media-strip > .h-big {
-      height: clamp(200px, 35vw, 500px);
+    /* "Mehr" auf der Zeile des Pfeils, ganz rechts, gleicher Randabstand
+       wie "Info" in der Kopfzeile. Steht im HTML direkt vor dem Pfeil und
+       fliesst nach rechts – so bleibt es auf dessen Zeile, auch wenn die
+       Beschreibung aufgeklappt ist. Dafür geht der Titelblock hier über
+       die ganze Breite. */
+    .p-head:has(> .strip-more) {
+      align-self: stretch;
+    }
+
+    .strip-more {
+      float: right;
+      margin-top: 0.25em;
+      padding: 0 2px 0 0;
+      background: none;
+      border: none;
+      font-family: inherit;
+      font-size: inherit;
+      line-height: 1;
+      color: inherit;
+    }
+
+    /* Strip zum Wischen: alle Elemente in einer Zeile. Passen sie nicht
+       ins Fenster, scrollt der Strip seitlich. Das Polster fängt Schatten
+       und das Einblenden von unten auf, die der Strip sonst abschneiden
+       würde. */
+    .media-strip.swipe {
+      flex-wrap: nowrap;
+      justify-content: flex-start;
+      overflow-x: auto;
+      overflow-y: hidden;
+      scrollbar-width: none;
+      padding-top: 6px;
+      margin-top: -6px;
+      padding-bottom: 1.2rem;
+      margin-bottom: -1.2rem;
+    }
+
+    .media-strip.swipe::-webkit-scrollbar {
+      display: none;
+    }
+
+    .media-strip.swipe > * {
+      flex: 0 0 auto;
+      width: auto;
+      max-width: none;
+      height: clamp(150px, 26vw, 375px);
+      margin-right: 0;
+    }
+
+    /* feste Seitenverhältnisse: die Breite der Reihe steht damit schon,
+       bevor die Videos geladen sind. Bilder und Videos, die nicht 16:9
+       sind, bringen ihres über width und height im HTML mit. */
+    .media-strip.swipe > video:not([height]) {
+      aspect-ratio: 16 / 9;
+    }
+
+    .media-strip.swipe > video.win-corners {
+      aspect-ratio: 1920 / 1490;
+    }
+
+    /* "Mehr" zum Aufklappen nach dem zweiten Element und "Weniger" am
+       Ende: nur auf dem Handy */
+    .media-strip > .strip-open,
+    .media-strip > .strip-close {
+      display: none;
+    }
+
+    /* alles passt ins Fenster: nichts zu wischen. Unsichtbar statt
+       ausgeblendet, damit nichts springt. */
+    .strip-more.nothing-more {
+      visibility: hidden;
     }
 
     .media-strip > .row-break {
@@ -814,6 +887,7 @@
 
       .h-info,
       .header .h-name,
+      .strip-more,
       .lb-arrow {
         cursor: pointer;
       }
@@ -871,10 +945,9 @@
         margin-left: 0;
       }
 
-      /* klycheck-Plakat, die Bilder bei All along und Zwischen Asphalt
-         (img.w70) und das Hochkant-Video bei Überall bauen (video.h-big):
-         ein Drittel schmaler und mittig */
-      #kly-strip > img,
+      /* Die Bilder bei All along und Zwischen Asphalt (img.w70) und das
+         Hochkant-Video bei Überall bauen (video.h-big): ein Drittel
+         schmaler und mittig */
       .media-strip > img.w70,
       .media-strip > video.h-big {
         width: 66.67%;
@@ -887,6 +960,67 @@
         width: calc(100% - 4px);
         margin-left: 2px;
         margin-right: 2px;
+      }
+
+      /* Fotos in voller Breite ebenso. Die schmaleren, mittigen (w70) und
+         die Paare (two-up) haben ihre eigenen Regeln. */
+      .media-strip:not(.two-up) > img:not(.w70) {
+        width: calc(100% - 4px);
+        margin-left: 2px;
+        margin-right: 2px;
+      }
+
+      /* Strip zum Wischen: auf dem Handy untereinander wie die übrigen
+         Reihen. Zuerst nur zwei Elemente, "Mehr" darunter holt den Rest
+         hervor, "Weniger" am Ende klappt wieder zu. Der Knopf beim Pfeil
+         gehört zum Wischen und fällt weg. */
+      .media-strip.swipe {
+        flex-wrap: wrap;
+        overflow: visible;
+        padding: 0;
+        margin: 0;
+      }
+
+      .media-strip.swipe > * {
+        width: 100%;
+        height: auto;
+        max-width: 100%;
+        margin-left: 0;
+      }
+
+      .media-strip.swipe > video {
+        width: calc(100% - 4px);
+        margin-left: 2px;
+        margin-right: 2px;
+      }
+
+      .media-strip.swipe > img.w70,
+      .media-strip.swipe > video.w70 {
+        width: 66.67%;
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      .media-strip.swipe:not(.open) > .strip-open ~ * {
+        display: none;
+      }
+
+      .media-strip.swipe > .strip-open,
+      .media-strip.swipe > .strip-close {
+        display: block;
+        padding: 0 2px 0 0;
+        background: none;
+        border: none;
+        font-family: inherit;
+        font-size: 1.5rem;
+        line-height: 1;
+        color: inherit;
+        text-align: right;
+      }
+
+      .media-strip.swipe.open > .strip-open,
+      .p-head > .strip-more {
+        display: none;
       }
 
       /* Plakate und Napoli: enger Abstand wie nebeneinander, und wie
@@ -907,11 +1041,11 @@
         object-fit: cover;
       }
 
-      /* Plakate: auf dem Handy steht dieses Bild zuerst, am Desktop an
-         zweiter Stelle – so berühren sich die Flohmi-Plakate in keiner
-         der beiden Anordnungen */
-      .media-strip.two-up > .m-first {
-        order: -1;
+      /* Plakate: auf dem Handy steht dieses Bild zuletzt, am Desktop an
+         dritter Stelle – so berühren sich die Quartier-Plakate in keiner
+         der Anordnungen */
+      .media-strip.two-up > .m-last {
+        order: 1;
       }
 
       /* Lightbox: Medium oben, darunter Zurück/Weiter links und rechts.
@@ -1040,9 +1174,10 @@
       <div class="p-row">
         <div class="p-head"><div class="p-num">1</div><span class="p-title">klycheck.ch</span><div class="p-kind">Installation, Website</div><div class="p-meta">2026<br />Abschlussarbeit<br />Martin Fuchs<br />Annik Troxler</div><div class="p-desc">Das Klybeck in Basel ist das grösste Transformationsareal der Schweiz und wird bis 2050 neu gestaltet. Die Stimmen der Menschen, die dort leben, bleiben dabei meist unsichtbar. Auf einer Website konnten Anwohner:innen anonym ihre Haltung äussern; die Stimmen wurden mitten im Klybeck auf eine Fassade der ehemaligen Chemieindustrie projiziert. Besucher:innen markierten per Smartphone Wörter in ihrer eigenen Farbe, so entstand ein kollektives Stimmungsbild des Quartiers.</div><div class="p-info" aria-label="Info"></div></div>
         <div class="media-strip" id="kly-strip">
-          <img src="100.webp" alt="" class="has-cursor h-big" data-rotate="100.webp|400.webp|2.webp" />
+          <img src="100.webp" width="1080" height="1350" alt="" class="has-cursor w70" data-rotate="100.webp|400.webp|2.webp" />
           <video src="INSTALLATION_DOKUMENTATION.mp4" loop muted playsinline preload="metadata" class="has-cursor"></video>
-        </div>      </div>
+        </div>
+      </div>
       <div class="text">
         <div class="t">klycheck.ch</div>
         <div class="m">Jahr · Kategorie · Dozent*in</div>
@@ -1053,10 +1188,13 @@
     <!-- All along the white line -->
     <div class="project">
       <div class="p-row">
-        <div class="p-head"><div class="p-num">2</div><span class="p-title">All along the white line</span><div class="p-kind">Kurzfilm</div><div class="p-meta">2026<br />Critical Media<br />Berenice Serra</div><div class="p-desc">«All along the white line» gibt Einblick in die Subkultur illegaler Strassenrennen und Drifts und erzählt drei Geschichten aus Georgien, Nord-Amerika und Saudi-Arabien. Was bringt die Akteure dazu, sich selber und dritte Personen in Gefahr zu bringen? Der Film wurde im Rahmen der Ausstellung «tvnight» in der <a href="https://burgunderstrasse.ch" target="_blank">Burgunderstrasse</a> gezeigt.</div><div class="p-info" aria-label="Info"></div></div>
-        <div class="media-strip">
+        <div class="p-head"><div class="p-num">2</div><span class="p-title">All along the white line</span><div class="p-kind">Kurzfilm</div><div class="p-meta">2026<br />Critical Media<br />Berenice Serra</div><div class="p-desc">«All along the white line» gibt Einblick in die Subkultur illegaler Strassenrennen und Drifts und erzählt drei Geschichten aus Georgien, Nord-Amerika und Saudi-Arabien. Was bringt die Akteure dazu, sich selber und dritte Personen in Gefahr zu bringen? Der Film wurde im Rahmen der Ausstellung «tvnight» in der <a href="https://burgunderstrasse.ch" target="_blank">Burgunderstrasse</a> gezeigt.</div><button type="button" class="strip-more">Mehr</button><div class="p-info" aria-label="Info"></div></div>
+        <div class="media-strip swipe">
+          <img src="tvnight2_web.jpg" srcset="tvnight2_web_600.jpg 600w, tvnight2_web_1200.jpg 1200w, tvnight2_web.jpg 1650w" sizes="(max-width: 800px) 100vw, 47vw" width="1650" height="928" alt="" class="has-cursor" decoding="async" />
+          <video src="tvnight_screen_web.mp4" loop muted playsinline preload="metadata" class="has-cursor"></video>
+          <button type="button" class="strip-open">Mehr</button>
           <video src="all_along_the_white_line.mp4" loop muted playsinline preload="metadata" class="has-cursor"></video>
-          <img src="tvnight_web.jpeg" srcset="tvnight_web_600.jpeg 600w, tvnight_web_1200.jpeg 1200w, tvnight_web.jpeg 1350w" sizes="(max-width: 800px) 67vw, 26vw" alt="" class="has-cursor w70 h-big" loading="lazy" decoding="async" />
+          <button type="button" class="strip-close">Weniger</button>
         </div>      </div>
       <div class="text">
         <div class="t">All along the white line</div>
@@ -1070,14 +1208,14 @@
       <div class="p-row">
         <div class="p-head"><div class="p-num">3</div><span class="p-title">Fiktive Plakate</span><div class="p-kind">Freie Serie</div><div class="p-meta">seit 2025<br />Eigenes Projekt</div><div class="p-desc">Um mein grafisches Verständnis weiterzuentwickeln, gestalte ich seit 2025 spontane Plakate zu fiktiven Themen. Jedes entsteht unter Zeitdruck, in 30 Minuten bis einer Stunde: Die Beschränkung zwingt zu schnellen Entscheidungen und lässt keinen Raum für Perfektionismus. Die Serie wächst kontinuierlich weiter.</div><div class="p-info" aria-label="Info"></div></div>
         <div class="media-strip two-up">
+          <img src="plakate/flohmi_riehen_web.jpg" srcset="plakate/flohmi_riehen_web_600.jpg 600w, plakate/flohmi_riehen_web_1200.jpg 1200w, plakate/flohmi_riehen_web.jpg 1273w" sizes="(max-width: 800px) 50vw, 19vw" alt="" class="has-cursor" loading="lazy" decoding="async" />
           <img src="plakate/brunnen_web.webp" alt="" class="has-cursor" loading="lazy" decoding="async" />
-          <img src="plakate/flohmi_innerstadt_web.jpg" srcset="plakate/flohmi_innerstadt_web_600.jpg 600w, plakate/flohmi_innerstadt_web_1200.jpg 1200w, plakate/flohmi_innerstadt_web.jpg 1273w" sizes="(max-width: 800px) 50vw, 19vw" alt="" class="has-cursor m-first" loading="lazy" decoding="async" />
-          <img src="plakate/caramelo_web.webp" alt="" class="has-cursor" loading="lazy" decoding="async" />
-          <img src="plakate/flohmi_stalban_web.jpg" srcset="plakate/flohmi_stalban_web_600.jpg 600w, plakate/flohmi_stalban_web_1200.jpg 1200w, plakate/flohmi_stalban_web.jpg 1273w" sizes="(max-width: 800px) 50vw, 19vw" alt="" class="has-cursor" loading="lazy" decoding="async" />
+          <img src="plakate/flohmi_rosental_web.jpg" srcset="plakate/flohmi_rosental_web_600.jpg 600w, plakate/flohmi_rosental_web_1200.jpg 1200w, plakate/flohmi_rosental_web.jpg 1273w" sizes="(max-width: 800px) 50vw, 19vw" alt="" class="has-cursor m-last" loading="lazy" decoding="async" />
           <img src="plakate/plakate_verschiedenste_web.jpg" srcset="plakate/plakate_verschiedenste_web_600.jpg 600w, plakate/plakate_verschiedenste_web_1200.jpg 1200w, plakate/plakate_verschiedenste_web.jpg 1273w" sizes="(max-width: 800px) 50vw, 19vw" alt="" class="has-cursor" loading="lazy" decoding="async" />
-          <img src="plakate/hoffnung_web.jpg" srcset="plakate/hoffnung_web_600.jpg 600w, plakate/hoffnung_web_1200.jpg 1200w, plakate/hoffnung_web.jpg 1273w" sizes="(max-width: 800px) 50vw, 19vw" alt="" class="has-cursor" loading="lazy" decoding="async" />
+          <img src="plakate/flohmi_spalen_web.jpg" srcset="plakate/flohmi_spalen_web_600.jpg 600w, plakate/flohmi_spalen_web_1200.jpg 1200w, plakate/flohmi_spalen_web.jpg 1273w" sizes="(max-width: 800px) 50vw, 19vw" alt="" class="has-cursor" loading="lazy" decoding="async" />
+          <img src="plakate/caramelo_web.webp" alt="" class="has-cursor" loading="lazy" decoding="async" />
           <img src="plakate/plakate_verschiedenste1_web.jpg" srcset="plakate/plakate_verschiedenste1_web_600.jpg 600w, plakate/plakate_verschiedenste1_web_1200.jpg 1200w, plakate/plakate_verschiedenste1_web.jpg 1273w" sizes="(max-width: 800px) 50vw, 19vw" alt="" class="has-cursor" loading="lazy" decoding="async" />
-          <img src="plakate/flohmi_stjohann_web.jpg" srcset="plakate/flohmi_stjohann_web_600.jpg 600w, plakate/flohmi_stjohann_web_1200.jpg 1200w, plakate/flohmi_stjohann_web.jpg 1273w" sizes="(max-width: 800px) 50vw, 19vw" alt="" class="has-cursor" loading="lazy" decoding="async" />
+          <img src="plakate/hoffnung_web.jpg" srcset="plakate/hoffnung_web_600.jpg 600w, plakate/hoffnung_web_1200.jpg 1200w, plakate/hoffnung_web.jpg 1273w" sizes="(max-width: 800px) 50vw, 19vw" alt="" class="has-cursor" loading="lazy" decoding="async" />
         </div>      </div>
       <div class="text">
         <div class="t">Plakate</div>
@@ -1300,9 +1438,20 @@
           function (entries, obs) {
             entries.forEach(function (entry) {
               if (!entry.isIntersecting) return;
-              obs.unobserve(entry.target); /* einmal einblenden genügt */
-              reveal(entry.target, Number(entry.target.dataset.step || 0) * STEP);
-              preloadBig(entry.target);
+              /* Bei wischbaren Strips gleich die ganze Reihe einblenden,
+                 auch was rechts ausserhalb liegt oder auf dem Handy noch
+                 zugeklappt ist – nach "Mehr" steht dann alles schon da. */
+              var strip = entry.target.closest(".media-strip.swipe");
+              var els = strip
+                ? strip.querySelectorAll(":scope > img, :scope > video")
+                : [entry.target];
+              Array.prototype.forEach.call(els, function (el) {
+                if (el.dataset.revealed) return; /* einmal einblenden genügt */
+                el.dataset.revealed = "1";
+                obs.unobserve(el);
+                reveal(el, Number(el.dataset.step || 0) * STEP);
+                preloadBig(el);
+              });
             });
           },
           /* erst wenn das Element ein Stück im Bild ist */
@@ -1316,6 +1465,70 @@
           revealObserver.observe(el);
         });
       }
+
+      /* "Mehr" bei wischbaren Strips: rückt die Reihe um fast eine Fenster-
+         breite weiter, am Ende heisst der Knopf "Zurück" und führt an den
+         Anfang – sonst käme mit der Maus niemand mehr zurück. Passt alles
+         ins Fenster, gibt es nichts zu wischen und der Knopf verschwindet. */
+      Array.prototype.forEach.call(
+        document.querySelectorAll(".media-strip.swipe"),
+        function (strip) {
+          var more = strip.closest(".p-row").querySelector(".strip-more");
+          var smooth = window.matchMedia("(prefers-reduced-motion: reduce)")
+            .matches
+            ? "auto"
+            : "smooth";
+
+          function atEnd() {
+            return strip.scrollLeft >= strip.scrollWidth - strip.clientWidth - 2;
+          }
+
+          function update() {
+            more.classList.toggle(
+              "nothing-more",
+              strip.scrollWidth <= strip.clientWidth + 2
+            );
+            more.textContent = atEnd() ? "Zurück" : "Mehr";
+          }
+
+          more.addEventListener("click", function () {
+            if (atEnd()) {
+              strip.scrollTo({ left: 0, behavior: smooth });
+            } else {
+              strip.scrollBy({ left: strip.clientWidth * 0.8, behavior: smooth });
+            }
+          });
+
+          strip.addEventListener("scroll", update, { passive: true });
+          window.addEventListener("resize", update);
+          update();
+
+          /* Handy: "Mehr" nach dem zweiten Element klappt die übrigen auf.
+             Eingeblendet sind sie schon mit dem Rest der Reihe; falls die
+             Reihe noch nie im Bild war, hier ohne Übergang nachholen. */
+          var open = strip.querySelector(".strip-open");
+          var close = strip.querySelector(".strip-close");
+          open.addEventListener("click", function () {
+            strip.classList.add("open");
+            Array.prototype.forEach.call(
+              strip.querySelectorAll(":scope > img, :scope > video"),
+              function (el) {
+                el.dataset.revealed = "1";
+                el.classList.add("is-in", "settled");
+              }
+            );
+          });
+
+          /* Zuklappen: "Mehr" erscheint dort, wo eben "Weniger" stand. Die
+             Seite wird um den Rest kürzer, deshalb den Scrollstand so
+             nachführen, dass man nicht ins nächste Kapitel rutscht. */
+          close.addEventListener("click", function () {
+            var y = close.getBoundingClientRect().top;
+            strip.classList.remove("open");
+            window.scrollBy(0, open.getBoundingClientRect().top - y);
+          });
+        }
+      );
 
       /* Volle Deckkraft bekommt die Sparte, in der man sich gerade
          befindet – auf jedem Gerät gleich. Massstab ist die Bildschirm-
